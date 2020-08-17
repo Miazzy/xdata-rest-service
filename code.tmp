@@ -1,0 +1,1 @@
+$('#rightBox').find('#null_box').find('input[title="打印"]').after('<input type="button" class="e8_btn_top" value="下载" title="下载" style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">')
