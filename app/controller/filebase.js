@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable indent */
 /* eslint-disable eol-last */
 'use strict';
@@ -18,24 +19,24 @@ class FileBaseController extends Controller {
 
         const query = ctx.query;
         const file = query.file || ctx.params.file;
-        var path = query.path || ctx.params.path;
-        
+        let path = query.path || ctx.params.path;
+
         try {
             path = global.atob(path);
         } catch (error) {
-            console.log(` base64 decode error ` , error);
+            console.log(` base64 decode error `, error);
         }
-        
+
         const unzipfile = path.slice(0, -4);
         const filename = `${fileConfig.path}/unzip/${unzipfile}`;
-        const filepath = filename.slice(0,filename.lastIndexOf('/'));
+        const filepath = filename.slice(0, filename.lastIndexOf('/'));
 
         console.log(`filename: ${filename}`);
         console.log(`filepath: ${path}`);
         console.log(`filepath: ${filepath}`);
-        
+
         await compressing.zip.uncompress(`${fileConfig.path}/${path}`, `${filepath}`);
-        
+
         const fileSize = fs.statSync(filename).size;
 
         ctx.attachment(filename, {
