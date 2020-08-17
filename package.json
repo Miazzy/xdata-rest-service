@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "buffer": "^5.6.0",
+    "compressing": "^1.5.1",
     "egg": "^2.15.1",
     "egg-scripts": "^2.11.0",
     "mssql": "^6.2.1"

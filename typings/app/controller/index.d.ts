@@ -3,9 +3,11 @@
 
 import 'egg';
 import ExportDatabase = require('../../../app/controller/database');
+import ExportFilebase = require('../../../app/controller/filebase');
 
 declare module 'egg' {
   interface IController {
     database: ExportDatabase;
+    filebase: ExportFilebase;
   }
 }

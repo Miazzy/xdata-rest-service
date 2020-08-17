@@ -20,3 +20,6 @@
 7. wifi账户
     leading-office/leading123
 
+8. 查询文档
+    /api/v1/imagefile?_order=imagefileid&_where=(imagefileid,eq,1085461)~and(imagefilename,like,%27one.pdf%27)&_fields=TokenKey,fileSize,filerealpath,imagefilename,imagefileid,imagefiletype
+

@@ -3,6 +3,10 @@
 /* eslint-disable eol-last */
 'use strict';
 
+/**
+ * @function init
+ * @description Set up btoa/atob function with NodeJS
+ */
 const init = () => {
 
     global.Buffer = global.Buffer || require('buffer').Buffer;
@@ -35,5 +39,6 @@ module.exports = app => {
     router.get('/api/v1/:table', controller.database.index);
     router.get('/api/v1/:table/query', controller.database.query);
     router.get('/api/v1/:table/:order', controller.database.where);
+    router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
 
 };
