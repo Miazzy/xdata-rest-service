@@ -8,3 +8,5 @@ fetch('http://192.168.2.52:7001/api/v1/imagefile?_order=imagefileid&_where=(imag
   .then(function(response) {
     return response.json();
   })
+
+http://172.18.1.202:7001/api/v1/filebase/cesi.xlsx/MjAyMDA4L0wvYmI0ZTMwZTQtNjFjZi00ZWNkLWIyOWQtMGRhYmZkMjIwYWMwLnppcA==
