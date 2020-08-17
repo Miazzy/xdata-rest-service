@@ -3,3 +3,8 @@ $('#rightBox').find('#null_box').find('input[title="打印"]').after('<input typ
 $('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').find('div span a[onmouseover="changefileaon(this)"]').attr('title')
 
 $('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').find('div span a[onmouseover="changefileaon(this)"]').attr('onClick').split(';')[1].split(',')[2].replace(/\"|\'/g, "")
+
+fetch('http://192.168.2.52:7001/api/v1/imagefile?_order=imagefileid&_where=(imagefileid,eq,1085461)~and(imagefilename,like,%27one.pdf%27)&_fields=TokenKey,fileSize,filerealpath,imagefilename,imagefileid,imagefiletype')
+  .then(function(response) {
+    return response.json();
+  })
