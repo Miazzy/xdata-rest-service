@@ -18,12 +18,24 @@ class FileBaseController extends Controller {
 
         const query = ctx.query;
         const file = query.file || ctx.params.file;
-        const path = query.path || ctx.params.path;
+        var path = query.path || ctx.params.path;
+        
+        try {
+            path = global.atob(path);
+        } catch (error) {
+            console.log(` base64 decode error ` , error);
+        }
+        
         const unzipfile = path.slice(0, -4);
         const filename = `${fileConfig.path}/unzip/${unzipfile}`;
+        const filepath = filename.slice(0,filename.lastIndexOf('/'));
 
-        await compressing.zip.uncompress(`${fileConfig.path}/${path}`, `${fileConfig.path}/unzip`);
-
+        console.log(`filename: ${filename}`);
+        console.log(`filepath: ${path}`);
+        console.log(`filepath: ${filepath}`);
+        
+        await compressing.zip.uncompress(`${fileConfig.path}/${path}`, `${filepath}`);
+        
         const fileSize = fs.statSync(filename).size;
 
         ctx.attachment(filename, {
