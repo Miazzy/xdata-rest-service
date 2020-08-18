@@ -45,8 +45,9 @@ class DatabaseController extends Controller {
         const where = query.where || ctx.params.where;
         const order = query.order || query._order || query.orderby || query._orderby || ctx.params.order;
         const fields = query.fields || query._fields;
-        const page = query.page || query._page || query._p;
-        const size = query.size || query._size || query._s;
+        const page = query.page || query._page || query._p || 0;
+        const size = query.size || query._size || query._s || 20;
+        const top = query.top || query._top || query._t || 1001;
         const _where = query._where;
 
         let wheresql = '';
@@ -86,7 +87,7 @@ class DatabaseController extends Controller {
 
             console.log(` table : ${table} & columns : ${columns} & wheresql : ${wheresql} & orderby : ${orderby}`);
 
-            const sql = ` select TOP 1001 ${columns} from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} `;
+            const sql = ` select TOP ${top} ${columns} from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} `;
             const result = await this.pool.query(sql);
 
             console.log(` sql : ${sql} `);
