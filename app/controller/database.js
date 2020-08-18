@@ -98,6 +98,54 @@ class DatabaseController extends Controller {
     }
 
     /**
+     * @function 执行数据库查询存在操作
+     */
+    async exists() {
+
+        await this.init();
+
+        const { ctx } = this;
+        const query = ctx.query;
+        const table = query.table || ctx.params.table;
+        const page = query.page || query._page || query._p || 0;
+        const size = query.size || query._size || query._s || 20;
+        const _where = query._where;
+
+        let wheresql = '';
+        let orderby = '';
+        let columns = '*';
+        let limits = '';
+
+        if (query && !table) {
+
+            ctx.body = ' tablename is null ';
+
+        } else {
+
+            if (query && _where) {
+                wheresql = whereHelp.getWhereSQL(_where, ' where ');
+                console.log(` wheresql : ${JSON.stringify(wheresql)} `);
+            }
+
+            if (query && page && size) {
+                const offset = page * size + 1;
+                const next = (page + 1) * size;
+                limits = ` offset ${offset} row fetch next ${next} row `;
+            }
+
+            console.log(` table : ${table} & columns : ${columns} & wheresql : ${wheresql} & orderby : ${orderby}`);
+
+            const sql = ` select TOP 1 * from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} `;
+            const result = await this.pool.query(sql);
+
+            console.log(` sql : ${sql} `);
+
+            result && result.recordset && result.recordset.length > 0 ? ctx.body = { success: 'true', code: 1099 } : ctx.body = { success: 'false', code: 1001 };
+        }
+
+    }
+
+    /**
      * @function 执行数据库新增操作
      */
     async insert() {
