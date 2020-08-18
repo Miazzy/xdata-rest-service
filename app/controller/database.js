@@ -15,6 +15,9 @@ const config = dbconfig;
  */
 class DatabaseController extends Controller {
 
+    /**
+     * @function 初始化数据库连接池
+     */
     async init() {
         if (this.pool == null || typeof this.pool === 'undefined' || !this.pool) {
             this.pool = await new sql.ConnectionPool(config).connect();
@@ -22,14 +25,16 @@ class DatabaseController extends Controller {
         }
     }
 
-    async index() {
-        await this.where();
-    }
-
+    /**
+     * @function 执行数据库查询操作
+     */
     async query() {
         await this.where();
     }
 
+    /**
+     * @function 执行数据库查询操作
+     */
     async where() {
 
         await this.init();
@@ -90,6 +95,10 @@ class DatabaseController extends Controller {
         }
 
     }
+
+
+
+
 
 }
 

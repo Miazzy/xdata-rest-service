@@ -36,9 +36,12 @@ module.exports = app => {
 
     init();
 
-    router.get('/api/v1/:table', controller.database.index);
+    //查询MSSQL数据库信息
     router.get('/api/v1/:table/query', controller.database.query);
     router.get('/api/v1/:table/:order', controller.database.where);
+
+
+    //查询文件信息，并进行下载
     router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
 
 };
