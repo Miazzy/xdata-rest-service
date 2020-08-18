@@ -96,8 +96,165 @@ class DatabaseController extends Controller {
 
     }
 
+    /**
+     * @function 执行数据库新增操作
+     */
+    async insert() {
 
+        await this.init();
 
+        const { ctx } = this;
+        const query = ctx.query;
+        let table = query.table || ctx.params.table;
+        let node = query.node || ctx.params.node;
+
+        if (query && table) {
+            try {
+                table = global.atob(table);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        if (query && node) {
+            try {
+                node = JSON.parse(global.atob(node));
+            } catch (error) {
+                console.log('JSON.parse(global.atob(node)) : ', error);
+            }
+        }
+
+        //遍历node,获取keys字符串和values字符串
+        let keys = `(${Object.keys(node).toString()})`; //(column1, column2, column3, ...)
+        let values = `(${Object.values(node).toString()})`; //(value1, value2, value3, ...)
+
+        let sql = `INSERT INTO ${config.database}.dbo.${table} ${keys} values ${values} `;
+
+        const result = await this.pool.query(sql);
+
+        console.log(` sql : ${sql} `);
+
+        ctx.body = result;
+
+    }
+
+    /**
+     * @function 执行数据库更新操作
+     */
+    async update() {
+
+        await this.init();
+
+        const { ctx } = this;
+        const query = ctx.query;
+        let table = query.table || ctx.params.table;
+        let node = query.node || ctx.params.node;
+        const _where = query._where;
+
+        if (query && table) {
+            try {
+                table = global.atob(table);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        if (query && node) {
+            try {
+                node = JSON.parse(global.atob(node));
+            } catch (error) {
+                console.log('JSON.parse(global.atob(node)) : ', error);
+            }
+        }
+
+        if (query && _where) {
+            try {
+                wheresql = whereHelp.getWhereSQL(_where, ' where ');
+            } catch (error) {
+                console.log(`whereHelp.getWhereSQL(_where, ' where ')`, error);
+            }
+            console.log(` wheresql : ${JSON.stringify(wheresql)} `);
+        }
+
+        //SQL执行语句
+        let statement = ``; //column1 = value1, column2 = value2, ...
+        //SQL执行条件
+        let condition = _where; //where condition
+
+        //遍历待更新的对象属性
+        Object.entries(node).map((item) => {
+            statement += ` ${item[0]} = '${item[1]}' ,`;
+        })
+
+        //去掉结尾的逗号
+        statement = statement.slice(0, -1);
+
+        let sql = `UPDATE ${config.database}.dbo.${table} SET ${statement} ${condition} ; `
+
+        const result = await this.pool.query(sql);
+
+        console.log(` sql : ${sql} `);
+
+        ctx.body = result;
+    }
+
+    /**
+     * @function 执行数据库删除操作
+     */
+    async delete() {
+
+        await this.init();
+
+        const { ctx } = this;
+        const query = ctx.query;
+        let table = query.table || ctx.params.table;
+        let node = query.node || ctx.params.node;
+        const _where = query._where;
+
+        if (query && table) {
+            try {
+                table = global.atob(table);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        if (query && node) {
+            try {
+                node = JSON.parse(global.atob(node));
+            } catch (error) {
+                console.log('JSON.parse(global.atob(node)) : ', error);
+            }
+        }
+
+        if (query && _where) {
+            try {
+                wheresql = whereHelp.getWhereSQL(_where, ' where ');
+            } catch (error) {
+                console.log(`whereHelp.getWhereSQL(_where, ' where ')`, error);
+            }
+            console.log(` wheresql : ${JSON.stringify(wheresql)} `);
+        }
+
+        //SQL执行语句
+        let statement = ``; //column1 = value1, column2 = value2, ...
+        //SQL执行条件
+        let condition = _where; //where condition
+
+        //遍历待更新的对象属性
+        Object.entries(node).map((item) => {
+            statement += ` AND ${item[0]} = '${item[1]}' `;
+        })
+
+        let sql = `DELETE FROM ${config.database}.dbo.${table} ${condition} ${statement}  ; `
+
+        const result = await this.pool.query(sql);
+
+        console.log(` sql : ${sql} `);
+
+        ctx.body = result;
+
+    }
 
 
 }
