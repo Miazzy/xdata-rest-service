@@ -348,6 +348,8 @@ exports.getWhereSQL = function(whereInQueryParams, condType = ' where ') {
         obj.params.map((value, index) => {
             if (value === '#empty#') {
                 obj.query = obj.query.replace('?', ' ');
+            } else if (value === '#null#' || value === '#NULL#') {
+                obj.query = obj.query.replace('?', ' NULL ');
             } else {
                 obj.query = obj.query.replace('?', value);
             }
