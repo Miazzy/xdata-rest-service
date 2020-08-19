@@ -305,6 +305,75 @@ class DatabaseController extends Controller {
 
     }
 
+    async bulkDelete() {
+
+        await this.init();
+
+        const { ctx } = this;
+        const query = ctx.query;
+
+        const table = query.table || ctx.params.table;
+        const ids = query.ids || ctx.params.ids;
+        const column = query.column || ctx.params.column;
+
+        const sql = `DELETE FROM ${table} WHERE ${column} IN ( ${ids} )`;
+
+        const result = await this.pool.query(sql);
+
+        console.log(` sql : ${sql} `);
+
+        ctx.body = result;
+    }
+
+    async bulkRead(req, res) {
+
+        await this.init();
+
+        const { ctx } = this;
+        const query = ctx.query;
+
+        const table = query.table || ctx.params.table;
+        const ids = query.ids || ctx.params.ids;
+        const column = query.column || ctx.params.column;
+        const fields = query.fields || query._fields;
+
+        const sql = `SELECT ${fields} FROM ${table} WHERE ${column} IN ( ${ids} )`;
+
+        const result = await this.pool.query(sql);
+
+        console.log(` sql : ${sql} `);
+
+        ctx.body = result.recordset;
+
+    }
+
+    async count(req, res) {
+
+        await this.init();
+
+        const { ctx } = this;
+        const query = ctx.query;
+        const table = query.table || ctx.params.table;
+        const _where = query._where;
+
+        let wheresql = '';
+
+        if (query && _where) {
+            wheresql = whereHelp.getWhereSQL(_where, ' where ');
+            console.log(` wheresql : ${JSON.stringify(wheresql)} `);
+        }
+
+        const sql = `SELECT COUNT(1) AS no_of_rows FROM ${table} ${wheresql} `;
+
+        const result = await this.pool.query(sql);
+
+        console.log(` sql : ${sql} `);
+
+        ctx.body = result.recordset;
+
+    }
+
+
 
 }
 
