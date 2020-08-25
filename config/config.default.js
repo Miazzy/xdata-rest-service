@@ -25,9 +25,9 @@ module.exports = appInfo => {
     };
 
     config.dbconfig = {
-        user: 'sa',
-        password: '123',
-        server: '192.168.2.52',
+        user: 'meeting',
+        password: 'meeting',
+        server: '172.18.1.11',
         database: 'newecology',
         port: 1433,
         options: {
