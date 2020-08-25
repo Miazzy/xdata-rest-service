@@ -26,3 +26,10 @@
 9. switchhost
     https://github.com/oldj/SwitchHosts/releases
 
+10. 执行cmd下载文档服务
+    mkdir -p /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/;
+    mkdir -p /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/unzip/202008/S/;
+    curl -XGET http://172.18.1.202:8000/202008/S/c3581392-515d-4ac0-a87a-2e34b15e52e9.zip --output /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/c3581392-515d-4ac0-a87a-2e34b15e52e9.zip ;
+    unzip /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/c3581392-515d-4ac0-a87a-2e34b15e52e9.zip -d /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/;
+    mv /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/c3581392-515d-4ac0-a87a-2e34b15e52e9 /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/one.pptx;
+    cp /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/one.pptx /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/unzip/202008/S/one.pptx;
