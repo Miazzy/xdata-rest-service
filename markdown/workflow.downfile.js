@@ -7,9 +7,13 @@ var downApiURL = window.location.protocol + `//` + window.location.host.split(':
 //允许拦截视图标题 //允许拦截标题 const titleArray = ['通用审批单', '内部留言', '会议室申请单', '共享服务', '集团总裁工作部署通知'];
 const viewArray = ['【融量】通用审批', 'RC01.通用审批', 'RC02.内部留言', 'RC03.会议室申请', 'RC04.共享服务', 'RC05.集团总裁工作部署通知', 'RC06.行政处罚单批量发送', 'RC07.会议通知/纪要', 'RC08.工作联系函', 'RC09.工作说明/汇报(单职能)'];
 //是否开启检查标题 false: 开启 ， true: 所有标题都放行
-const checkTitleFlag = false;
+const checkTitleFlag = true;
+//标题验证标识
+const checkTitleChar = "加密";
 //流程标题
 const viewTitle = $('#view_page #view_title').html().trim();
+//流程子标题
+const requestName = $('#requestname').value().trim().slice(-4);
 //检查企业微信UA
 const userAgent = navigator.userAgent;
 
@@ -39,6 +43,13 @@ function isValidIP(ip) {
 }
 
 /**
+ * @function 检查文档是否需要进行代理下载函数
+ */
+function isTransDownFile() {
+    return (viewArray.includes(viewTitle) || checkTitleFlag) && requestName.includes(checkTitleChar);
+}
+
+/**
  * @function 添加下载按钮函数
  */
 function downloadButton() {
@@ -49,7 +60,8 @@ function downloadButton() {
     var wedownloadLength = $('#wework-download-button').length;
     var viewTitle = $('#view_page #view_title').html().trim(); //var titleName = $($('.excelMainTable tbody tr')[1]).find('td div span').html().trim();
 
-    if (viewArray.includes(viewTitle) || checkTitleFlag) {
+
+    if (isTransDownFile()) {
 
         if (bodyLength > 0 && downloadLength <= 0) {
             let title = $('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').find('div span a[onmouseover="changefileaon(this)"]').attr('title')
@@ -83,23 +95,23 @@ function downloadFile(title, fileID) {
 
     let viewTitle = $('#view_page #view_title').html().trim();
 
-    if (viewArray.includes(viewTitle) || checkTitleFlag) {
+    if (isTransDownFile()) {
 
         $('td[name="appendixDatasField"]').find('div span').each((item, elem) => {
             let args = $(elem).attr('onClick').replace(/toDownload|\'/g, '').slice(1, -2).split(',');
             let title = args[1];
             let fileID = args[0];
-            //downloadSingleFile(title, fileID);
             $(elem).click(function() {
                 downloadSingleFile(`` + title + ``, `` + fileID + ``);
             });
+            //downloadSingleFile(title, fileID);
         })
 
         //绑定执行下载函数（原OA下载函数）
         window.toDownload = (fileID, title) => {
             let viewTitle = $('#view_page #view_title').html().trim();
 
-            if (viewArray.includes(viewTitle) || checkTitleFlag) {
+            if (isTransDownFile()) {
                 downloadSingleFile(title, fileID);
             }
         }
@@ -107,7 +119,7 @@ function downloadFile(title, fileID) {
 }
 
 
-if (viewArray.includes(viewTitle) || checkTitleFlag) {
+if (isTransDownFile()) {
 
     /**
      * @function 执行下载函数（原OA下载函数）
@@ -116,7 +128,7 @@ if (viewArray.includes(viewTitle) || checkTitleFlag) {
      */
     function toDownload(fileID, title) {
         let viewTitle = $('#view_page #view_title').html().trim();
-        if (viewArray.includes(viewTitle) || checkTitleFlag) {
+        if (isTransDownFile()) {
             downloadSingleFile(title, fileID);
         }
     }
@@ -128,11 +140,11 @@ if (viewArray.includes(viewTitle) || checkTitleFlag) {
  * @param {*} title 
  * @param {*} fileID 
  */
-function downloadSingleFile(title, f 1992 ileID) {
+function downloadSingleFile(title, fileID) {
 
     let viewTitle = $('#view_page #view_title').html().trim();
 
-    if (viewArray.includes(viewTitle) || checkTitleFlag) {
+    if (isTransDownFile()) {
 
         var url = apiURL + `/imagefile?_order=imagefileid&_where=(imagefileid,eq,` + fileID + `)&_fields=TokenKey,fileSize,filerealpath,imagefilename,imagefileid,imagefiletype`;
 
