@@ -33,3 +33,42 @@
     unzip /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/c3581392-515d-4ac0-a87a-2e34b15e52e9.zip -d /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/;
     mv /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/c3581392-515d-4ac0-a87a-2e34b15e52e9 /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/one.pptx;
     cp /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/202008/S/one.pptx /Users/yunwisdom/Workspace/jeecg-boot-v2.1.3/unzip/202008/S/one.pptx;
+
+11. 执行附件下载前端
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Miazzy/yunwisdoms@v8.0.0/cdn/common/superagent.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Miazzy/yunwisdoms@v8.0.0/cdn/common/FileSaver.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Miazzy/yunwisdoms@r2.0.5/cdn/common/pinyinlite_full.min.js"></script>
+    <script type="text/javascript" src="https://book-hub.oss-cn-beijing.aliyuncs.com/cdn/workflow.downfile.js"></script>
+
+12.  数据库配置文件存放路径
+    ecology/web-inf/prop/weaver
+
+13.  nginx暴露文档配置
+    
+    server {
+        listen 8000;
+
+        root /usr/share/nginx/html;
+
+        gzip on;
+        gzip_min_length 1k;
+        gzip_comp_level 1;
+        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png application/vnd.ms-fontobject font/ttf font/opentype font/x-woff image/svg+xml;
+
+        gzip_vary on;
+        gzip_disable "MSIE [1-6]\.";
+        gzip_buffers 32 4k;
+        gzip_http_version 1.0;
+
+        location ^~ / {
+            root   /root/jeecg/upFiles/;
+            index  index.html index.htm;
+
+            add_header 'Access-Control-Allow-Credentials' 'true';
+            add_header 'Access-Control-Allow-Methods' 'OPTION, POST, GET, DELETE, PUT';
+            add_header 'Access-Control-Allow-Headers' 'X-Requested-With, Content-Type';
+
+        }	
+    }
+
