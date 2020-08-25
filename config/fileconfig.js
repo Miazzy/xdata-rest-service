@@ -3,7 +3,7 @@
 'use strict';
 
 const config = {
-    path: '/Users/yunwisdom/Desktop',
+    path: '/data/filesystem',
 };
 
 module.exports = {
