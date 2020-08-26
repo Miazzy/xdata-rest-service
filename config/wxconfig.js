@@ -4,7 +4,22 @@
 'use strict';
 
 const config = {
-
+    enterprise: {
+        id: 'ww24803738027151f0',
+        secret: {
+            contact: {
+                code: 'mGEK17_5izesuLkQCgcyNadqBLK3aeU71Kp39-hWTdM',
+            },
+            workflowTodoItem: {
+                agentid: 1000002,
+                code: 'I7vkZ5jmadrP8ILEIVq7RxTkSoh8uDlyph0ZWJoWoR4',
+            },
+            workflowDoingItem: {
+                agentid: 1000005,
+                code: 'LuDc7d8Sh_mYCSkvVlBS3xKyMaBZGSHNReobDX0Ng8w',
+            },
+        },
+    },
     seal: {
         group: {
             management: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=2da6821a-36d3-495b-8092-7220066a0cd8',
@@ -50,7 +65,7 @@ const config = {
                 name: '陈雅兰',
                 phone: '18628105773',
             }],
-        }
+        },
     },
 };
 
