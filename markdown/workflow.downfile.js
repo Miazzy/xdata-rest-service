@@ -180,7 +180,7 @@ function downloadAllFiles() {
 
         setTimeout(() => {
             downloadSingleFile(item.title, item.fileID);
-        }, 5000);
+        }, 10000);
 
         return 'success';
     });
