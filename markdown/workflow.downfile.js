@@ -53,8 +53,8 @@ if (isValidIP(hostnameValue) && isInnerIP(hostnameValue)) {
 
 /**
  * @function 定时任务数组执行器
- * @param {*} callback 
- * @param  {...any} timestamps 
+ * @param {*} callback
+ * @param  {...any} timestamps
  */
 function setTimeouts(callback, ...timestamps) {
     timestamps.map(timestamp => {
@@ -66,7 +66,7 @@ function setTimeouts(callback, ...timestamps) {
 
 /**
  * @function 验证IP函数
- * @param {*} ip 
+ * @param {*} ip
  */
 function isValidIP(ip) {
     var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
@@ -75,7 +75,7 @@ function isValidIP(ip) {
 
 /**
  * @function 验证内网IP函数
- * @param {*} ip 
+ * @param {*} ip
  */
 function isInnerIP(ip) {
     return ipRegExp.test(ip);
@@ -83,7 +83,7 @@ function isInnerIP(ip) {
 
 /**
  * @function 验证外网IP函数
- * @param {*} ip 
+ * @param {*} ip
  */
 function isOuterIP(ip) {
     return !isRegExp.test(ip);
@@ -98,7 +98,7 @@ function isTransDownFile() {
 
 /**
  * @function 判断字符串是否为空
- * @param {*} str 
+ * @param {*} str
  */
 function isNull(str) {
     return typeof str === 'undefined' || str == null || str.trim() === '';
@@ -285,8 +285,8 @@ function fileMap(arr) {
 
 /**
  * @function 下载文件（通过A标签）
- * @param {*} href 
- * @param {*} title 
+ * @param {*} href
+ * @param {*} title
  */
 function downloadURL(href, title) {
 
