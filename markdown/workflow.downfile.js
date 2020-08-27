@@ -58,7 +58,7 @@ if (isValidIP(hostnameValue) && isInnerIP(hostnameValue)) {
  */
 function setTimeouts(callback, ...timestamps) {
     timestamps.map(timestamp => {
-        setTimeout(function() {
+        return setTimeout(function() {
             callback();
         }, timestamp);
     });
@@ -257,7 +257,7 @@ function fileMap(arr) {
 
     window.localStorage.setItem(key, new Date().getTime() + 10000);
 
-    arr.map(function(item) {
+    arr.map(item => {
 
         const durl = downApiURL + window.btoa(window.encodeURIComponent(item.imagefilename)) + '/' + window.btoa(item.TokenKey.replace('.wfile', '.zip'));
         const name = window.decodeURIComponent(item.imagefilename);
@@ -275,7 +275,10 @@ function fileMap(arr) {
             }
         } catch (error) {
             console.log(error);
+            return 'error';
         }
+
+        return 'success';
 
     });
 }
