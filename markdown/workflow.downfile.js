@@ -102,7 +102,7 @@ function isTransDownFile() {
 
 /**
  * @function 提示消息
- * @param {*} message 
+ * @param {*} message
  */
 function messaging(message) {
     if (isTransDownFile() && isWindows) {
@@ -172,10 +172,18 @@ function downloadButton() {
  * @function 下载所有文件
  */
 function downloadAllFiles() {
-    fileArray.map(item => {
-        return setTimeout(() => {
+    fileArray.map((item, index) => {
+
+        if (index === 0) {
+            return downloadSingleFile(item.title, item.fileID);
+        }
+
+        setTimeout(() => {
             downloadSingleFile(item.title, item.fileID);
         }, 1500);
+
+        return 'success';
+
     });
 }
 
