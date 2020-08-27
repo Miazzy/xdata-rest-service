@@ -24,7 +24,7 @@ const checkTitleChar = "加密";
 //检查企业微信UA
 const userAgent = navigator.userAgent.toLowerCase();
 //检查是否是Windows环境
-const isWindows = uagent.includes('windows');
+const isWindows = userAgent.includes('windows');
 //待下载文件信息
 const fileArray = [];
 //IP RegExp
