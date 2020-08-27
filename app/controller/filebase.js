@@ -75,6 +75,8 @@ class FileBaseController extends Controller {
         const fileID = query.file || ctx.params.file;
         const sql = `select imagefileid id , imagefilename name , TokenKey path from ${config.database}.dbo.ImageFile where imagefileid = ${fileID};`;
 
+        console.log('fileID : ' + fileID);
+
         const result = await this.pool.query(sql);
 
         console.log(JSON.stringify(result));
@@ -91,6 +93,7 @@ class FileBaseController extends Controller {
         console.log(`filename: ${filename}`);
         console.log(`filepath: ${path}`);
         console.log(`filepath: ${filepath}`);
+        console.log(`file origin: ${fileConfig.path}/${path}`);
 
         await compressing.zip.uncompress(`${fileConfig.path}/${path}`, `${filepath}`);
 
@@ -101,7 +104,7 @@ class FileBaseController extends Controller {
             type: 'attachment', // [string] attachment/inline
         });
         ctx.set('Content-Length', fileSize);
-        ctx.set('Content-Disposition', `attachment; filename=${file}`);
+        ctx.set('Content-Disposition', `attachment; filename=${global.encodeURIComponent(file)}`);
         ctx.body = fs.createReadStream(filename);
 
     }

@@ -47,12 +47,14 @@ try {
 if (isValidIP(hostnameValue) && isOuterIP(hostnameValue)) {
     apiURL = "http://qy.leading-group.com:8082/jeecg-boot/api/v1";
     downApiURL = "http://qy.leading-group.com:8082/jeecg-boot/api/v1/filebase/";
+    fileApiURL = "http://qy.leading-group.com:8082/jeecg-boot/api/v1/file/query/";
 }
 
 //如果是IP,则换成域名
 if (isValidIP(hostnameValue) && isInnerIP(hostnameValue)) {
     apiURL = "http://wework.yunwisdom.club:8083/jeecg-boot/api/v1";
     downApiURL = "http://wework.yunwisdom.club:8083/jeecg-boot/api/v1/filebase/";
+    fileApiURL = "http://wework.yunwisdom.club:8083/jeecg-boot/api/v1/file/query/";
 }
 
 /**
@@ -188,7 +190,7 @@ function downloadAllFiles() {
 
         setTimeout(() => {
             downloadSingleFile(element.title, element.fileID);
-        }, 7000 * index + Math.random() * 3000);
+        }, 9000 * index + Math.random() * 1000);
 
         return 'success';
     });
@@ -200,8 +202,6 @@ function downloadAllFiles() {
  * @param {*} fileID
  */
 function downloadFile(title, fileID) {
-
-    //const viewTitle = $('#view_page #view_title').html().trim();
 
     if (isTransDownFile()) {
 
@@ -227,9 +227,12 @@ function downloadFile(title, fileID) {
 
         //绑定执行下载函数（原OA下载函数）
         window.toDownload = (fileID, title) => {
-            //const viewTitle = $('#view_page #view_title').html().trim();
 
-            if (isTransDownFile()) {
+            if (isTransDownFile() && isWindows) {
+                window.open(fileApiURL + fileID, '_blank');
+            }
+
+            if (isTransDownFile() && !isWindows) {
                 downloadSingleFile(title, fileID);
             }
         };
@@ -248,8 +251,12 @@ if (isTransDownFile()) {
      * @param {*} title
      */
     function toDownload(fileID, title) {
-        //const viewTitle = $('#view_page #view_title').html().trim();
-        if (isTransDownFile()) {
+
+        if (isTransDownFile() && isWindows) {
+            window.open(fileApiURL + fileID, '_blank');
+        }
+
+        if (isTransDownFile() && !isWindows) {
             downloadSingleFile(title, fileID);
         }
     }
@@ -262,8 +269,6 @@ if (isTransDownFile()) {
  * @param {*} fileID
  */
 function downloadSingleFile(title, fileID) {
-
-    //const viewTitle = $('#view_page #view_title').html().trim();
 
     //messaging(' enter downloadSingleFile : title is ' + title + ' fileID is ' + fileID);
 
