@@ -86,7 +86,7 @@ function isInnerIP(ip) {
  * @param {*} ip
  */
 function isOuterIP(ip) {
-    return !isRegExp.test(ip);
+    return !ipRegExp.test(ip);
 }
 
 /**
