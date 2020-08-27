@@ -25,6 +25,8 @@ const checkTitleChar = "加密";
 const userAgent = navigator.userAgent.toLowerCase();
 //检查是否是Windows环境
 const isWindows = uagent.includes('windows');
+//待下载文件信息
+const fileArray = [];
 //IP RegExp
 const ipRegExp = /^(127\.0\.0\.1)|(localhost)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$/;
 //流程标题
@@ -150,16 +152,29 @@ function downloadButton() {
             const title = args[1];
             const fileID = args[0];
 
+            //是否显示下载按钮
+            const isDisplay = isWindows ? '' : "display:none;";
+
+
             $($('.excelMainTable tbody tr')[1]).find('td div').css('position', 'relative')
                 .css('font-size', '14px!important');
-            $($('.excelMainTable tbody tr')[1]).find('td div').append('<input id="wework-download-button" type="button" class="e8_btn_top" style="display:none;float:right;max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;font-size:12px!important;transform: scale(0.8); position: absolute;right: -10px!important; background: #007AFF;color: #fefefe!important;border: 0px solid #fefefe;border-radius: 5px; top: 15px;" value="下载" title="下载" onclick="downloadFile(\'' + title + '\',' + fileID + ')" />');
+            $($('.excelMainTable tbody tr')[1]).find('td div').append('<input id="wework-download-button" type="button" class="e8_btn_top" style="' + isDisplay + 'float:right;max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;font-size:12px!important;transform: scale(0.8); position: absolute;right: -10px!important; background: #007AFF;color: #fefefe!important;border: 0px solid #fefefe;border-radius: 5px; top: 15px;" value="下载" title="下载" onclick="downloadAllFiles()" />');
 
-            setTimeout(function() {
+            setTimeouts(function() {
                 downloadFile('', '');
-            }, 0);
+            }, 0, 500, 900, 1500, 3000, 5000);
         }
     }
 
+}
+
+/**
+ * @function 下载所有文件
+ */
+function downloadAllFiles() {
+    fileArray.map(item => {
+        return downloadSingleFile(item.title, item.fileID);
+    });
 }
 
 /**
@@ -180,6 +195,7 @@ function downloadFile(title, fileID) {
             const title = args[1];
             const fileID = args[0];
             $(elem).click(function() {
+                fileArray.push({ title, fileID });
                 downloadSingleFile(`` + title + ``, `` + fileID + ``);
                 messaging('downloadSingleFile(title, fileID)' + title + ` : ` + fileID);
             });
@@ -256,6 +272,8 @@ function downloadSingleFile(title, fileID) {
 
         console.log(`title: , fileID:`);
     }
+
+    return 'success';
 
 }
 
