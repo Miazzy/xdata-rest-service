@@ -73,12 +73,16 @@ class FileBaseController extends Controller {
 
         const query = ctx.query;
         const fileID = query.file || ctx.params.file;
-        const sql = `select imagefileid id , imagefilename name , TokenKey path from ImageFile where imagefileid = ${fileID};`;
+        const sql = `select imagefileid id , imagefilename name , TokenKey path from ${config.database}.dbo.ImageFile where imagefileid = ${fileID};`;
 
         const result = await this.pool.query(sql);
 
+        console.log(JSON.stringify(result));
+
         const file = result.recordset[0].name;
-        const path = result.recordset[0].path;
+        const path = result.recordset[0].path.replace('.wfile', '.zip');
+
+        console.log(JSON.stringify({ file, path }));
 
         const unzipfile = path.slice(0, -4);
         const filename = `${fileConfig.path}/unzip/${unzipfile}`;
