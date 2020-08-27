@@ -172,15 +172,19 @@ function downloadButton() {
  * @function 下载所有文件
  */
 function downloadAllFiles() {
-    fileArray.map((item, index) => {
 
-        if (index === 0) {
-            return downloadSingleFile(item.title, item.fileID);
-        }
+    const files = fileArray.filter((item, index) => {
+        const nindex = fileArray.findIndex(elem => { return elem.fileID == item.fileID });
+        return nindex === index;
+    });
+
+    files.map((item, index) => {
+
+        const element = JSON.parse(JSON.stringify(item));
 
         setTimeout(() => {
-            downloadSingleFile(item.title, item.fileID);
-        }, 10000);
+            downloadSingleFile(element.title, element.fileID);
+        }, 3000 * index);
 
         return 'success';
     });
@@ -306,7 +310,7 @@ function fileMap(arr) {
         return;
     }
 
-    window.localStorage.setItem(key, new Date().getTime() + 10000);
+    window.localStorage.setItem(key, new Date().getTime() + 5000);
 
     arr.map(item => {
 
