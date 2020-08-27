@@ -194,12 +194,14 @@ function downloadFile(title, fileID) {
                 .split(',');
             const title = args[1];
             const fileID = args[0];
+
+            fileArray.push({ title, fileID });
+
             $(elem).click(function() {
-                fileArray.push({ title, fileID });
                 downloadSingleFile(`` + title + ``, `` + fileID + ``);
-                messaging('downloadSingleFile(title, fileID)' + title + ` : ` + fileID);
+                //messaging('downloadSingleFile(title, fileID)' + title + ` : ` + fileID);
             });
-            messaging('downloadSingleFile(title, fileID)');
+            //messaging('downloadSingleFile(title, fileID)');
             //downloadSingleFile(title, fileID);
         });
 
@@ -246,7 +248,7 @@ function downloadSingleFile(title, fileID) {
 
     //const viewTitle = $('#view_page #view_title').html().trim();
 
-    messaging(' enter downloadSingleFile : title is ' + title + ' fileID is ' + fileID);
+    //messaging(' enter downloadSingleFile : title is ' + title + ' fileID is ' + fileID);
 
     if (isTransDownFile()) {
 
@@ -310,10 +312,10 @@ function fileMap(arr) {
         try {
             if (pcflag) {
                 downloadURL(durl, item.imagefilename);
-                messaging(' enter pc downloading file : name is ' + item.imagefilename + ' url is ' + durl);
+                //messaging(' enter pc downloading file : name is ' + item.imagefilename + ' url is ' + durl);
             } else {
                 window.saveAs(durl, item.imagefilename);
-                messaging(' enter mobile downloading file : name is ' + item.imagefilename + ' url is ' + durl);
+                //messaging(' enter mobile downloading file : name is ' + item.imagefilename + ' url is ' + durl);
             }
         } catch (error) {
             console.log(error);
