@@ -97,6 +97,16 @@ function isTransDownFile() {
 }
 
 /**
+ * @function 提示消息
+ * @param {*} message 
+ */
+function messaging(message) {
+    if (isTransDownFile()) {
+        window.alert(message);
+    }
+}
+
+/**
  * @function 判断字符串是否为空
  * @param {*} str
  */
@@ -173,6 +183,9 @@ function downloadFile(title, fileID) {
             //downloadSingleFile(title, fileID);
         });
 
+        //设置下载函数
+        window.toDownloadOrigin = window.toDownload;
+
         //绑定执行下载函数（原OA下载函数）
         window.toDownload = (fileID, title) => {
             //const viewTitle = $('#view_page #view_title').html().trim();
@@ -186,6 +199,9 @@ function downloadFile(title, fileID) {
 
 
 if (isTransDownFile()) {
+
+    //设置下载函数
+    window.toDownloading = window.toDownload;
 
     /**
      * @function 执行下载函数（原OA下载函数）
