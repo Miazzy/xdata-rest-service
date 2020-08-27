@@ -51,4 +51,7 @@ module.exports = app => {
     //查询文件信息，并进行下载
     router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
 
+    //查询文件信息，并进行下载(根据FileID)
+    router.get('/api/v1/filebase/:file', controller.filebase.queryByFileID);
+
 };
