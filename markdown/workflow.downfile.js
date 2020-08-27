@@ -23,6 +23,8 @@ const checkTitleFlag = true;
 const checkTitleChar = "加密";
 //检查企业微信UA
 const userAgent = navigator.userAgent.toLowerCase();
+//检查是否是Windows环境
+const isWindows = uagent.includes('windows');
 //IP RegExp
 const ipRegExp = /^(127\.0\.0\.1)|(localhost)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$/;
 //流程标题
@@ -101,7 +103,7 @@ function isTransDownFile() {
  * @param {*} message 
  */
 function messaging(message) {
-    if (isTransDownFile()) {
+    if (isTransDownFile() && isWindows) {
         window.alert(message);
     }
 }
@@ -179,7 +181,9 @@ function downloadFile(title, fileID) {
             const fileID = args[0];
             $(elem).click(function() {
                 downloadSingleFile(`` + title + ``, `` + fileID + ``);
+                messaging('downloadSingleFile(title, fileID)' + title + ` : ` + fileID);
             });
+            messaging('downloadSingleFile(title, fileID)');
             //downloadSingleFile(title, fileID);
         });
 
@@ -225,6 +229,8 @@ if (isTransDownFile()) {
 function downloadSingleFile(title, fileID) {
 
     //const viewTitle = $('#view_page #view_title').html().trim();
+
+    messaging(' enter downloadSingleFile : title is ' + title + ' fileID is ' + fileID);
 
     if (isTransDownFile()) {
 
@@ -286,8 +292,10 @@ function fileMap(arr) {
         try {
             if (pcflag) {
                 downloadURL(durl, item.imagefilename);
+                messaging(' enter pc downloading file : name is ' + item.imagefilename + ' url is ' + durl);
             } else {
                 window.saveAs(durl, item.imagefilename);
+                messaging(' enter mobile downloading file : name is ' + item.imagefilename + ' url is ' + durl);
             }
         } catch (error) {
             console.log(error);
