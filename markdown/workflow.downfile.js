@@ -173,7 +173,9 @@ function downloadButton() {
  */
 function downloadAllFiles() {
     fileArray.map(item => {
-        return downloadSingleFile(item.title, item.fileID);
+        return setTimeout(() => {
+            downloadSingleFile(item.title, item.fileID);
+        }, 1500);
     });
 }
 
