@@ -112,37 +112,28 @@ function isTransDownFile() {
  * @function 检查文档是否需要进行代理下载函数(标题含有加密即需要代理)
  */
 function isProxyDownFile() {
-
-    //流程标题
-    let viewTitle = null;
-    //流程子标题
-    let requestName = null;
-
+    let viewTitle = null; //流程标题
+    let requestName = null; //流程子标题
     try {
-        //流程标题
-        viewTitle = ($('#view_page #view_title') && $('#view_page #view_title').html()) ? $('#view_page #view_title').html().trim() : '';
-        //流程子标题
-        requestName = ($('#requestnamespan') && $('#requestnamespan').html() && $('#requestnamespan').html().trim()) ? $('#requestnamespan').html().trim().slice(-4) : '';
+        viewTitle = ($('#view_page #view_title') && $('#view_page #view_title').html()) ? $('#view_page #view_title').html().trim() : ''; //流程标题
+        requestName = ($('#requestnamespan') && $('#requestnamespan').html() && $('#requestnamespan').html().trim()) ? $('#requestnamespan').html().trim().slice(-4) : ''; //流程子标题
     } catch (error) {
         console.log(error);
     }
-
     const flag = (isNull(requestName) || requestName.includes('加密'));
-
     return flag;
-
 }
-
 /**
  * @function 检查当前是否是Windows系统
  */
 function isWindowsNT() {
+    const isWindows = navigator.userAgent.toLowerCase().includes('windows nt'); //检查是否是Windows环境
+    return isWindows; //返回检查Windows系统结果
+}
 
-    //检查是否是Windows环境
-    const isWindows = navigator.userAgent.toLowerCase().includes('windows nt');
-
-    //返回检查Windows系统结果
-    return isWindows;
+function isMacOSX() {
+    const isMacOSX = navigator.userAgent.toLowerCase().includes('mac os x'); //检查是否是MacOSX环境
+    return isMacOSX; //返回检查MacOSX系统结果
 }
 
 /**
