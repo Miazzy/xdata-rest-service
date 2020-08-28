@@ -40,7 +40,7 @@ class FileBaseController extends Controller {
             file = global.atob(file);
             path = global.atob(path);
         } catch (error) {
-            console.log(` base64 decode error `, error);
+            console.log(' base64 decode error ', error);
         }
 
         const unzipfile = path.slice(0, -4);

@@ -3,28 +3,16 @@
 /* eslint-disable eol-last */
 'use strict';
 
+const base64Config = require('../config/base64config');
+const dbConfig = require('../config/dbconfig');
+
 /**
- * @function init
+ * @function init 执行初始化
  * @description Set up btoa/atob function with NodeJS
  */
 const init = () => {
-
-    global.Buffer = global.Buffer || require('buffer').Buffer;
-
-    if (typeof btoa === 'undefined') {
-        global.btoa = function(str) {
-            return new Buffer(str, 'binary').toString('base64');
-        };
-    }
-
-    if (typeof atob === 'undefined') {
-        global.atob = function(b64Encoded) {
-            return new Buffer(b64Encoded, 'base64').toString('binary');
-        };
-    }
-
-    console.log(` global install btoa and atob function ... `);
-
+    base64Config.init();
+    dbConfig.init();
 };
 
 /**
@@ -34,6 +22,7 @@ module.exports = app => {
 
     const { router, controller } = app;
 
+    //执行初始化
     init();
 
     //查询MSSQL数据库信息
