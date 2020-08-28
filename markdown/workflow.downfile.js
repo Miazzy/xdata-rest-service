@@ -188,8 +188,7 @@ function downloadButton() {
             const fileID = args[0];
 
             //是否显示下载按钮
-            const isDisplay = isWindows ? '' : "display:none;";
-
+            const isDisplay = isWindows ? 'display:none;' : "display:none;";
 
             $($('.excelMainTable tbody tr')[1]).find('td div').css('position', 'relative')
                 .css('font-size', '14px!important');
