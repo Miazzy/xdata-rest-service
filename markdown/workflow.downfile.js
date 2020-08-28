@@ -11,10 +11,14 @@
 const port = window.location.port ? window.location.port : window.location.protocol === 'https:' ? 443 : 80;
 //获取主机域名或IP
 const hostnameValue = window.location.host.split(':')[0];
+
 //API调用接口
 var apiURL = window.location.protocol + `//` + hostnameValue + `:` + port + `/jeecg-boot/api/v1`;
 //下载调用通用接口
 var downApiURL = window.location.protocol + `//` + hostnameValue + `:` + port + `/jeecg-boot/api/v1/filebase/`;
+//文件下载调用接口
+var fileApiURL = window.location.protocol + `//` + hostnameValue + `:` + port + `/jeecg-boot/api/v1/file/query/`;
+
 //允许拦截视图标题 //允许拦截标题 const titleArray = ['通用审批单', '内部留言', '会议室申请单', '共享服务', '集团总裁工作部署通知'];
 const viewArray = ['【融量】通用审批', 'RC01.通用审批', 'RC02.内部留言', 'RC03.会议室申请', 'RC04.共享服务', 'RC05.集团总裁工作部署通知', 'RC06.行政处罚单批量发送', 'RC07.会议通知/纪要', 'RC08.工作联系函', 'RC09.工作说明/汇报(单职能)'];
 //是否开启检查标题 false: 开启 ， true: 所有标题都放行
@@ -99,7 +103,46 @@ function isOuterIP(ip) {
  * @function 检查文档是否需要进行代理下载函数
  */
 function isTransDownFile() {
+
     return (viewArray.includes(viewTitle) || checkTitleFlag) && (isNull(requestName) || requestName.includes(checkTitleChar));
+
+}
+
+/**
+ * @function 检查文档是否需要进行代理下载函数(标题含有加密即需要代理)
+ */
+function isProxyDownFile() {
+
+    //流程标题
+    let viewTitle = null;
+    //流程子标题
+    let requestName = null;
+
+    try {
+        //流程标题
+        viewTitle = ($('#view_page #view_title') && $('#view_page #view_title').html()) ? $('#view_page #view_title').html().trim() : '';
+        //流程子标题
+        requestName = ($('#requestnamespan') && $('#requestnamespan').html() && $('#requestnamespan').html().trim()) ? $('#requestnamespan').html().trim().slice(-4) : '';
+    } catch (error) {
+        console.log(error);
+    }
+
+    const flag = (isNull(requestName) || requestName.includes('加密'));
+
+    return flag;
+
+}
+
+/**
+ * @function 检查当前是否是Windows系统
+ */
+function isWindowsNT() {
+
+    //检查是否是Windows环境
+    const isWindows = navigator.userAgent.toLowerCase().includes('windows nt');
+
+    //返回检查Windows系统结果
+    return isWindows;
 }
 
 /**
@@ -129,7 +172,6 @@ function downloadButton() {
     var downloadLength = $('#rightBox').find('#null_box').find('input[title="下载"]').length;
     var fileinfo = $('td[name="appendixDatasField"]').find('div span').attr('onClick');
     var wedownloadLength = $('#wework-download-button').length;
-    //var viewTitle = $('#view_page #view_title').html().trim(); //var titleName = $($('.excelMainTable tbody tr')[1]).find('td div span').html().trim();
 
     if (isTransDownFile()) {
 
@@ -164,7 +206,7 @@ function downloadButton() {
 
             setTimeouts(function() {
                 downloadFile('', '');
-            }, 0, 500, 900, 1500, 3000, 5000);
+            }, 300);
         }
     }
 
@@ -272,7 +314,7 @@ function downloadSingleFile(title, fileID) {
 
     //messaging(' enter downloadSingleFile : title is ' + title + ' fileID is ' + fileID);
 
-    if (isTransDownFile()) {
+    if (isTransDownFile() && !isWindows) {
 
         var url = apiURL + `/imagefile/imagefileid?_order=imagefileid&_where=(imagefileid,eq,` + fileID + `)&_fields=TokenKey,fileSize,filerealpath,imagefilename,imagefileid,imagefiletype`;
 
@@ -362,6 +404,24 @@ function downloadURL(href, title) {
     a.href = href;
     a.download = title;
     a.click();
+
+}
+
+/**
+ * @function 执行快速下载功能
+ * @param {*} fileID 
+ */
+function downloadFileQuick(fileID) {
+    //文件下载调用接口
+    var fileApiURL = window.location.protocol + `//` + hostnameValue + `:` + port + `/jeecg-boot/api/v1/file/query/`;
+
+    //如果是IP,则换成域名
+    if (isValidIP(hostnameValue) && isOuterIP(hostnameValue)) {
+        fileApiURL = "http://qy.leading-group.com:8082/jeecg-boot/api/v1/file/query/";
+    }
+
+    //打开页面
+    window.open(fileApiURL + fileID, '_blank');
 
 }
 
