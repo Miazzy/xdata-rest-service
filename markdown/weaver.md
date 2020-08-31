@@ -72,3 +72,8 @@
         }	
     }
 
+14. mysql8.0创建账户
+
+    create user 'zhaoziyun'@'%' identified WITH mysql_native_password by 'ziyequma';
+    grant all privileges on `jeecg-boot`.* to 'zhaoziyun'@'%';
+    flush privileges; 
