@@ -24,6 +24,19 @@ module.exports = appInfo => {
         // myAppName: 'egg',
     };
 
+    config.security = {
+        csrf: {
+            enable: false,
+            ignoreJSON: true,
+        },
+        domainWhiteList: ['*'],
+    };
+
+    config.cors = {
+        origin: '*',
+        allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+    };
+
     config.dbconfig = {
         user: 'meeting',
         password: 'meeting',
