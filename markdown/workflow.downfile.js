@@ -419,3 +419,76 @@ function downloadFileQuick(fileID) {
 setTimeouts(function() {
     downloadButton();
 }, 300, 500, 700, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 21000, 22000, 23000, 24000, 25000, 26000, 27000, 28000, 29000, 30000);
+
+
+curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b69342-4b35-4b2e-ad69-249e23c57c21'\ -
+    H 'Content-Type: application/json'\ -
+    d '{
+"msgtype": "news",
+"news": {
+    "articles": [{
+        "title": "用印资料归档处理",
+        "description": "@财务同事 @档案同事 领取已用印资料进行归档处理！",
+        "url": "www.qq.com",
+        "picurl": "https://pan.yunwisdom.club:30443/api/alien/download/780a213c-47dd-41e7-48b1-276d42f96998/message-background.jpg"
+    }]
+}
+}
+'
+
+curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b69342-4b35-4b2e-ad69-249e23c57c21'\ -
+    H 'Content-Type: application/json'\ -
+    d '{
+"msgtype": "news",
+"news": {
+    "articles": [{
+        "title": "用印申请处理",
+        "description": "@印章管理员 @陈乐丽 已提交用印登记信息，请及时处理用印申请！",
+        "url": "www.qq.com",
+        "picurl": "https://pan.yunwisdom.club:30443/api/alien/download/780a213c-47dd-41e7-48b1-276d42f96998/message-background.jpg"
+    }]
+}
+}
+'
+
+curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=2da6821a-36d3-495b-8092-7220066a0cd8'\ -
+    H 'Content-Type: application/json'\ -
+    d '{
+"msgtype": "news",
+"news": {
+    "articles": [{
+        "title": "用印申请处理",
+        "description": "@印章管理员 @陈乐丽 已提交用印登记信息，请及时处理用印申请！",
+        "url": "www.qq.com",
+        "picurl": "https://pan.yunwisdom.club:30443/api/alien/download/780a213c-47dd-41e7-48b1-276d42f96998/message-background.jpg"
+    }]
+}
+}
+'
+
+
+
+curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b69342-4b35-4b2e-ad69-249e23c57c21'\ -
+    H 'Content-Type: application/json'\ -
+    d '{
+"msgtype": "news",
+"news": {
+    "articles": [{
+        "title": "用印资料移交处理",
+        "description": "@前台同事 @周雪丽 用印资料已被领取，即将移交至前台，请及时处理用印资料的移交申请！",
+        "url": "www.qq.com",
+        "picurl": "https://pan.yunwisdom.club:30443/api/alien/download/780a213c-47dd-41e7-48b1-276d42f96998/message-background.jpg"
+    }]
+}
+}
+'
+
+curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b69342-4b35-4b2e-ad69-249e23c57c21'\ -
+    H 'Content-Type: application/json'\ -
+    d '{
+"msgtype": "text",
+"text": {
+    "content": "好的，已经采集到您的建议，‘小章’，很好的名字！"
+}
+}
+'

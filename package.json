@@ -7,6 +7,7 @@
     "declarations": true
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "buffer": "^5.6.0",
     "compressing": "^1.5.1",
     "egg": "^2.15.1",

@@ -4,10 +4,12 @@
 import 'egg';
 import ExportDatabase = require('../../../app/controller/database');
 import ExportFilebase = require('../../../app/controller/filebase');
+import ExportWework = require('../../../app/controller/wework');
 
 declare module 'egg' {
   interface IController {
     database: ExportDatabase;
     filebase: ExportFilebase;
+    wework: ExportWework;
   }
 }

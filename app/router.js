@@ -3,8 +3,9 @@
 /* eslint-disable eol-last */
 'use strict';
 
-const base64Config = require('../config/base64config');
+const base64Config = require('../config/base64.config');
 const dbConfig = require('../config/dbconfig');
+
 
 /**
  * @function init 执行初始化
@@ -42,5 +43,8 @@ module.exports = app => {
 
     //查询文件信息，并进行下载(根据FileID)
     router.get('/api/v1/file/query/:file', controller.filebase.queryByFileID);
+
+    //推送企业微信机器消息
+    router.get('/api/v1/wework/:title/:description', controller.wework.send);
 
 };
