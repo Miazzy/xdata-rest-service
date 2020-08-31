@@ -21,11 +21,16 @@ class WeworkController extends Controller {
         const description = query.description || ctx.params.description;
         const id = query.id || ctx.params.id;
         const userid = query.userid || ctx.params.userid;
+        const redirectUrl = query.rurl || ctx.params.rurl;
         const type = query.type || ctx.params.type;
+        const flag = redirectUrl.includes('?') ? '&' : '?';
+        const url = redirectUrl + `${flag}id=${id}&userid=${userid}`;
 
         const messageurl = {
             ...fileConfig,
         };
+
+        console.log(url);
 
         const node = {
             msgtype: 'news',
@@ -33,7 +38,7 @@ class WeworkController extends Controller {
                 articles: [{
                     title,
                     description,
-                    url: 'www.qq.com',
+                    url,
                     picurl: fileConfig.imageurl,
                 }],
             },
