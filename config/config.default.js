@@ -55,12 +55,12 @@ module.exports = appInfo => {
     };
 
     config.mailer = {
-        host: 'smtp.163.com',
+        host: 'smtp.exmail.qq.com',
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
-            user: 'qq695926920@163.com', // generated ethereal user
-            pass: 'ziyequma', // generated ethereal password
+            user: 'zhaoziyu@yunwisdom.club', // generated ethereal user
+            pass: 'Miazzy@163.com', // generated ethereal password
         },
     };
 
