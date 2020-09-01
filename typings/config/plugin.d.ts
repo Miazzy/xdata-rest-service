@@ -16,7 +16,6 @@ import 'egg-jsonp';
 import 'egg-view';
 import 'egg-cors';
 import 'egg-mailer';
-import 'egg-oss';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {

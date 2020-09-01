@@ -20,7 +20,7 @@ module.exports = {
     },
 
     oss: {
-        enable: true,
+        enable: false,
         package: 'egg-oss',
     },
 };
