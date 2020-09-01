@@ -64,6 +64,16 @@ module.exports = appInfo => {
         },
     };
 
+    config.oss = {
+        client: {
+            accessKeyId: 'your access key',
+            accessKeySecret: 'your access secret',
+            bucket: 'your bucket name',
+            endpoint: 'oss-cn-hongkong.aliyuncs.com',
+            timeout: '60s',
+        },
+    };
+
     return {
         ...config,
         ...userConfig,

@@ -18,4 +18,9 @@ module.exports = {
         enable: true,
         package: 'egg-mailer',
     },
+
+    oss: {
+        enable: true,
+        package: 'egg-oss',
+    },
 };

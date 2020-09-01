@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 /* eslint-disable eol-last */
 'use strict';
@@ -112,8 +113,8 @@ class DatabaseController extends Controller {
         const _where = query._where;
 
         let wheresql = '';
-        let orderby = '';
-        let columns = '*';
+        const orderby = '';
+        const columns = '*';
         let limits = '';
 
         if (query && !table) {
@@ -173,11 +174,11 @@ class DatabaseController extends Controller {
             }
         }
 
-        //遍历node,获取keys字符串和values字符串
-        let keys = `(${Object.keys(node).toString()})`; //(column1, column2, column3, ...)
-        let values = `(${Object.values(node).toString()})`; //(value1, value2, value3, ...)
+        // 遍历node,获取keys字符串和values字符串
+        const keys = `(${Object.keys(node).toString()})`; // (column1, column2, column3, ...)
+        const values = `(${Object.values(node).toString()})`; // (value1, value2, value3, ...)
 
-        let sql = `INSERT INTO ${config.database}.dbo.${table} ${keys} values ${values} `;
+        const sql = `INSERT INTO ${config.database}.dbo.${table} ${keys} values ${values} `;
 
         const result = await this.pool.query(sql);
 
@@ -199,6 +200,7 @@ class DatabaseController extends Controller {
         let table = query.table || ctx.params.table;
         let node = query.node || ctx.params.node;
         const _where = query._where;
+        let wheresql = null;
 
         if (query && table) {
             try {
@@ -220,25 +222,25 @@ class DatabaseController extends Controller {
             try {
                 wheresql = whereHelp.getWhereSQL(_where, ' where ');
             } catch (error) {
-                console.log(`whereHelp.getWhereSQL(_where, ' where ')`, error);
+                console.log('whereHelp.getWhereSQL(_where, \' where \')', error);
             }
             console.log(` wheresql : ${JSON.stringify(wheresql)} `);
         }
 
-        //SQL执行语句
-        let statement = ``; //column1 = value1, column2 = value2, ...
-        //SQL执行条件
-        let condition = _where; //where condition
+        // SQL执行语句
+        let statement = ''; // column1 = value1, column2 = value2, ...
+        // SQL执行条件
+        const condition = wheresql; // where condition
 
-        //遍历待更新的对象属性
-        Object.entries(node).map((item) => {
+        // 遍历待更新的对象属性
+        Object.entries(node).map(item => {
             statement += ` ${item[0]} = '${item[1]}' ,`;
-        })
+        });
 
-        //去掉结尾的逗号
+        // 去掉结尾的逗号
         statement = statement.slice(0, -1);
 
-        let sql = `UPDATE ${config.database}.dbo.${table} SET ${statement} ${condition} ; `
+        const sql = `UPDATE ${config.database}.dbo.${table} SET ${statement} ${condition} ; `;
 
         const result = await this.pool.query(sql);
 
@@ -259,6 +261,7 @@ class DatabaseController extends Controller {
         let table = query.table || ctx.params.table;
         let node = query.node || ctx.params.node;
         const _where = query._where;
+        let wheresql = null;
 
         if (query && table) {
             try {
@@ -280,22 +283,22 @@ class DatabaseController extends Controller {
             try {
                 wheresql = whereHelp.getWhereSQL(_where, ' where ');
             } catch (error) {
-                console.log(`whereHelp.getWhereSQL(_where, ' where ')`, error);
+                console.log('whereHelp.getWhereSQL(_where, \' where \')', error);
             }
             console.log(` wheresql : ${JSON.stringify(wheresql)} `);
         }
 
-        //SQL执行语句
-        let statement = ``; //column1 = value1, column2 = value2, ...
-        //SQL执行条件
-        let condition = _where; //where condition
+        // SQL执行语句
+        let statement = ''; // column1 = value1, column2 = value2, ...
+        // SQL执行条件
+        const condition = wheresql; // where condition
 
-        //遍历待更新的对象属性
-        Object.entries(node).map((item) => {
+        // 遍历待更新的对象属性
+        Object.entries(node).map(item => {
             statement += ` AND ${item[0]} = '${item[1]}' `;
-        })
+        });
 
-        let sql = `DELETE FROM ${config.database}.dbo.${table} ${condition} ${statement}  ; `
+        const sql = `DELETE FROM ${config.database}.dbo.${table} ${condition} ${statement}  ; `;
 
         const result = await this.pool.query(sql);
 
@@ -372,7 +375,6 @@ class DatabaseController extends Controller {
         ctx.body = result.recordset;
 
     }
-
 
 
 }
