@@ -8,8 +8,14 @@ module.exports = {
     // static: {
     //   enable: true,
     // }
+
     cors: {
         enable: true,
         package: 'egg-cors',
-    }
+    },
+
+    mailer: {
+        enable: true,
+        package: 'egg-mailer',
+    },
 };

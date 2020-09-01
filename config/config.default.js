@@ -45,11 +45,22 @@ module.exports = appInfo => {
         port: 1433,
         options: {
             encrypt: false,
+            enableArithAbort: false,
         },
         pool: {
             min: 0,
             max: 10,
             idleTimeoutMillis: 3000,
+        },
+    };
+
+    config.mailer = {
+        host: 'smtp.163.com',
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+            user: 'qq695926920@163.com', // generated ethereal user
+            pass: 'ziyequma', // generated ethereal password
         },
     };
 

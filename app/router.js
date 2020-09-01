@@ -6,7 +6,6 @@
 const base64Config = require('../config/base64.config');
 const dbConfig = require('../config/dbconfig');
 
-
 /**
  * @function init 执行初始化
  * @description Set up btoa/atob function with NodeJS
@@ -23,28 +22,31 @@ module.exports = app => {
 
     const { router, controller } = app;
 
-    //执行初始化
+    // 执行初始化
     init();
 
-    //查询MSSQL数据库信息
+    // 查询MSSQL数据库信息
     router.get('/api/v1/:table/:order', controller.database.where);
 
-    //新增MSSQL数据库记录
+    // 新增MSSQL数据库记录
     router.post('/api/v1/:table/:node', controller.database.insert);
 
-    //更新MSSQL数据库记录
+    // 更新MSSQL数据库记录
     router.patch('/api/v1/:table/:node', controller.database.update);
 
-    //删除MSSQL数据库记录
+    // 删除MSSQL数据库记录
     router.delete('/api/v1/:table/:node', controller.database.delete);
 
-    //查询文件信息，并进行下载
+    // 查询文件信息，并进行下载
     router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
 
-    //查询文件信息，并进行下载(根据FileID)
+    // 查询文件信息，并进行下载(根据FileID)
     router.get('/api/v1/file/query/:file', controller.filebase.queryByFileID);
 
-    //推送企业微信机器消息
+    // 推送企业微信机器消息
     router.get('/api/v1/wework/:title/:description', controller.wework.send);
+
+    // 推送EMAIL机器消息
+    router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
 
 };
