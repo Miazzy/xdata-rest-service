@@ -46,6 +46,9 @@ module.exports = app => {
     // 推送企业微信机器消息
     router.get('/api/v1/wework/:title/:description', controller.wework.send);
 
+    // 推送企业微信应用消息
+    router.get('/api/v1/weappms/:userid/:message', controller.wework.send);
+
     // 推送EMAIL机器消息
     router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
 
