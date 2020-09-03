@@ -88,6 +88,8 @@ class WeworkController extends Controller {
         // 消息中的链接消息
         let messageurl = '';
 
+        console.log(token);
+
         // 检查token是否存在，如果不存在，则刷新token
         if (!token) {
             const result = await axios.get(tokenAPI);
@@ -99,20 +101,29 @@ class WeworkController extends Controller {
             console.log('get token from redis :' + token);
         }
 
+        console.log('redirect');
+
         // 如果存在回调URL，则编辑消息中的链接信息
         if (redirectUrl) {
             messageurl = `，链接: <a href="${redirectUrl}">详情</a>`;
         }
 
+        const users = userid.split(',').map(item => { return `'${item}'`; }).join(',');
+
         // 根据userid(OA账户)获取对应企业微信ID
-        const sql = `select id , loginid , lastname from ${config.database}.dbo.hrmresource where loginid = '${userid}';`;
+        const sql = `select id , loginid , lastname from ${config.database}.dbo.hrmresource where loginid in (${users});`;
+
+        console.log(`appmessage generated sql : ${sql}`);
+
         // 获取查询后的用户ID
         const resdata = await this.pool.query(sql);
         // userID
         let userID = userid;
 
-        if (resdata && resdata.recordset && resdata.recordset.length > 0) {
+        if (resdata && resdata.recordset && resdata.recordset.length === 1) {
             userID = resdata.recordset[0].id;
+        } else if (resdata && resdata.recordset && resdata.recordset.length > 1) {
+            userID = resdata.recordset.map(obj => { return obj.id; }).join('|');
         }
 
         // 发送信息URL
