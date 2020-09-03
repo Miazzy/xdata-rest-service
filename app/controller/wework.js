@@ -13,6 +13,7 @@ const dbconfig = require('../../config/dbconfig');
 // 设置数据库连接地址
 const config = dbconfig;
 
+
 /**
  * @abstract 定义数据库相关处理类
  */
@@ -67,9 +68,12 @@ class WeworkController extends Controller {
 
     async appmessage() {
 
-        const { ctx } = this;
+        const { ctx, app } = this;
 
         await this.init();
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
 
         const query = ctx.query;
         const message = query.message || ctx.params.message;
@@ -80,7 +84,7 @@ class WeworkController extends Controller {
         // 获取TokenURL
         const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
         // 获取动态token
-        let token = query.token || ctx.params.token;
+        let token = await store.get(`wxConfig.enterprise.access_token@${agentid}`);
         // 消息中的链接消息
         let messageurl = '';
 
@@ -88,6 +92,11 @@ class WeworkController extends Controller {
         if (!token) {
             const result = await axios.get(tokenAPI);
             token = result.data.access_token;
+            store.set(`wxConfig.enterprise.access_token@${agentid}`, token, 3600);
+            console.log('get token from wechat rest api :' + token);
+        } else {
+            // 打印token值
+            console.log('get token from redis :' + token);
         }
 
         // 如果存在回调URL，则编辑消息中的链接信息

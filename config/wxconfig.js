@@ -23,6 +23,7 @@ const config = {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
             api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
         },
+        access_token: null,
     },
     seal: {
         group: {
