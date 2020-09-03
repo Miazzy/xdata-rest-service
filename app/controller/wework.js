@@ -64,7 +64,7 @@ class WeworkController extends Controller {
         // 获取动态token
         let token = query.token || ctx.params.token;
         // 消息中的链接消息
-        let messageurl = null;
+        let messageurl = '';
 
         // 检查token是否存在，如果不存在，则刷新token
         if (!token) {

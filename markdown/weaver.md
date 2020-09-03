@@ -42,7 +42,7 @@
     <script type="text/javascript" src="https://book-hub.oss-cn-beijing.aliyuncs.com/cdn/workflow.downfile.js"></script>
 
 12.  数据库配置文件存放路径
-    ecology/web-inf/prop/weaver
+    ecology/web-inf/prop/weaver.properties
 
 13.  nginx暴露文档配置
     
@@ -77,3 +77,8 @@
     create user 'zhaoziyun'@'%' identified WITH mysql_native_password by 'ziyequma';
     grant all privileges on `jeecg-boot`.* to 'zhaoziyun'@'%';
     flush privileges; 
+
+15. 泛微ecology数据库配置文件
+    
+    ecology/web-inf/prop/weaver.properties
+

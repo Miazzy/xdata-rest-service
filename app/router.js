@@ -47,7 +47,7 @@ module.exports = app => {
     router.get('/api/v1/wework/:title/:description', controller.wework.send);
 
     // 推送企业微信应用消息
-    router.get('/api/v1/weappms/:userid/:message', controller.wework.send);
+    router.get('/api/v1/weappms/:userid/:message', controller.wework.appmessage);
 
     // 推送EMAIL机器消息
     router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
