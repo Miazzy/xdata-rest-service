@@ -4,14 +4,29 @@
 
 const Controller = require('egg').Controller;
 const axios = require('axios');
+const sql = require('mssql');
+
 const fileConfig = require('../../config/fileconfig');
 const wxConfig = require('../../config/wxconfig');
+const dbconfig = require('../../config/dbconfig');
 
+// 设置数据库连接地址
+const config = dbconfig;
 
 /**
  * @abstract 定义数据库相关处理类
  */
 class WeworkController extends Controller {
+
+    /**
+     * @function 初始化数据库连接池
+     */
+    async init() {
+        if (this.pool == null || typeof this.pool === 'undefined' || !this.pool) {
+            this.pool = await new sql.ConnectionPool(config).connect();
+            console.log('connect pool init over ... ');
+        }
+    }
 
     async send() {
 
@@ -54,11 +69,14 @@ class WeworkController extends Controller {
 
         const { ctx } = this;
 
+        await this.init();
+
         const query = ctx.query;
         const message = query.message || ctx.params.message;
         const userid = query.userid || ctx.params.userid;
         const agentid = query.agentid || ctx.params.agentid || wxConfig.enterprise.agentid;
         const redirectUrl = query.rurl || ctx.params.rurl;
+
         // 获取TokenURL
         const tokenAPI = `https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
         // 获取动态token
@@ -77,13 +95,24 @@ class WeworkController extends Controller {
             messageurl = `，链接: <a href="${redirectUrl}">详情</a>`;
         }
 
+        // 根据userid(OA账户)获取对应企业微信ID
+        const sql = `select id , loginid , lastname from ${config.database}.dbo.hrmresource where loginid = '${userid}';`;
+        // 获取查询后的用户ID
+        const resdata = await this.pool.query(sql);
+        // userID
+        let userID = userid;
+
+        if (resdata && resdata.recordset && resdata.recordset.length > 0) {
+            userID = resdata.recordset[0].id;
+        }
+
         // 发送信息URL
         const queryAPI = wxConfig.enterprise.message.api + token;
 
         console.log(`${message}:${userid}:${redirectUrl}`);
 
         const node = {
-            touser: userid,
+            touser: userID,
             msgtype: 'text',
             agentid,
             text: {

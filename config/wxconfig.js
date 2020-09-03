@@ -5,24 +5,19 @@
 
 const config = {
     enterprise: {
-        id: 'ww24803738027151f0',
-        agentid: 1000002,
+        id: 'wx3b01d8bf4c588933',
+        agentid: 1000077,
         secret: {
             contact: {
                 code: 'mGEK17_5izesuLkQCgcyNadqBLK3aeU71Kp39-hWTdM',
             },
             workflowTodoItem: {
-                agentid: 1000002,
-                code: 'I7vkZ5jmadrP8ILEIVq7RxTkSoh8uDlyph0ZWJoWoR4',
-            },
-            workflowDoingItem: {
-                agentid: 1000005,
-                code: 'LuDc7d8Sh_mYCSkvVlBS3xKyMaBZGSHNReobDX0Ng8w',
+                agentid: 1000077,
+                code: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
             },
         },
         agent: {
-            1000002: 'I7vkZ5jmadrP8ILEIVq7RxTkSoh8uDlyph0ZWJoWoR4',
-            1000005: 'LuDc7d8Sh_mYCSkvVlBS3xKyMaBZGSHNReobDX0Ng8w',
+            1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
         },
         message: {
             api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
