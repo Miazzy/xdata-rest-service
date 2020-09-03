@@ -3,6 +3,8 @@
 /* eslint-disable eol-last */
 'use strict';
 
+const redisStore = require('cache-manager-ioredis');
+
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -71,6 +73,26 @@ module.exports = appInfo => {
             bucket: 'your bucket name',
             endpoint: 'oss-cn-hongkong.aliyuncs.com',
             timeout: '60s',
+        },
+    };
+
+    config.cache = {
+        default: 'memory',
+        stores: {
+            memory: {
+                driver: 'memory',
+                max: 100,
+                ttl: 0,
+            },
+            redis: { // full config: https://github.com/dabroek/node-cache-manager-ioredis#single-store
+                driver: redisStore,
+                host: '172.18.254.95',
+                port: 6379,
+                password: '',
+                db: 0,
+                ttl: 600,
+                valid: _ => _ !== null,
+            },
         },
     };
 

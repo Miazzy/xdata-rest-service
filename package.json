@@ -9,8 +9,10 @@
   "dependencies": {
     "axios": "^0.20.0",
     "buffer": "^5.6.0",
+    "cache-manager-ioredis": "^2.1.0",
     "compressing": "^1.5.1",
     "egg": "^2.15.1",
+    "egg-cache": "0.0.7",
     "egg-cors": "^2.2.3",
     "egg-mailer": "^1.1.0",
     "egg-oss": "^2.0.0",

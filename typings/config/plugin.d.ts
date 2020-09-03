@@ -16,6 +16,7 @@ import 'egg-jsonp';
 import 'egg-view';
 import 'egg-cors';
 import 'egg-mailer';
+import 'egg-cache';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -34,5 +35,6 @@ declare module 'egg' {
     cors?: EggPluginItem;
     mailer?: EggPluginItem;
     oss?: EggPluginItem;
+    cache?: EggPluginItem;
   }
 }

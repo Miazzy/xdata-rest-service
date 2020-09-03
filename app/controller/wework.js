@@ -78,7 +78,7 @@ class WeworkController extends Controller {
         const redirectUrl = query.rurl || ctx.params.rurl;
 
         // 获取TokenURL
-        const tokenAPI = `https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
+        const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
         // 获取动态token
         let token = query.token || ctx.params.token;
         // 消息中的链接消息

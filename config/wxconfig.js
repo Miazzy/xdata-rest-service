@@ -20,6 +20,7 @@ const config = {
             1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
         },
         message: {
+            gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
             api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
         },
     },

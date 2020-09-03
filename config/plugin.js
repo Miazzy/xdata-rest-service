@@ -23,4 +23,10 @@ module.exports = {
         enable: false,
         package: 'egg-oss',
     },
+
+    cache: {
+        enable: true,
+        package: 'egg-cache',
+    },
+
 };
