@@ -76,6 +76,7 @@ module.exports = appInfo => {
         },
     };
 
+    // 缓存配置
     config.cache = {
         default: 'memory',
         stores: {
@@ -94,6 +95,96 @@ module.exports = appInfo => {
                 valid: _ => _ !== null,
             },
         },
+    };
+
+    // oracle数据库连接配置
+    config.oracle = {
+        client: {
+            user: 'user',
+            password: 'password',
+            connectString: 'localhost/orcl',
+        },
+    };
+
+    // mysql数据库连接配置
+    config.mysql = {
+        // database configuration
+        client: {
+            // host
+            host: '172.18.254.95',
+            // port
+            port: '3309',
+            // username
+            user: 'root',
+            // password
+            password: 'root',
+            // database
+            database: 'jeecg-boot',
+        },
+        // load into app, default is open
+        app: true,
+        // load into agent, default is close
+        agent: false,
+    };
+
+    // mssql数据库连接配置
+    config.mssql = {
+
+        // Single Database
+        client: {
+            server: '172.18.1.11',
+            port: '1433',
+            user: 'meeting',
+            password: 'meeting',
+            database: 'newecology',
+        },
+
+        // Multi Databases
+        // clients: {
+        //   db1: {
+        //     server: 'host',
+        //     port: 'port',
+        //     user: 'user',
+        //     password: 'password',
+        //     database: 'database',
+        //   },
+        //   db2: {
+        //     server: 'host',
+        //     user: 'user',
+        //     password: 'password',
+        //     database: 'database',
+        //   },
+        // },
+    };
+
+    // 反向代理配置
+    // config.proxy = [{
+    //     host: 'host1',
+    //     match: /\/assets1/,
+    // }, {
+    //     host: 'host2',
+    //     match: /\/assets2/,
+    // }];
+
+    // 网关代理配置
+    config.httpProxy = {
+        '/api': {
+            target: 'http://www.example.org',
+            pathRewrite: { '^/api': '/api' },
+        },
+    };
+
+    // 网关代理配置
+    config.httpproxy = {
+        proxyTable: [{
+                path: '/risws/',
+                proxy: { target: 'http://t.vy01.com/MedTechWebService/', changeOrigin: true },
+            },
+            {
+                path: '/zsapi/',
+                proxy: { target: 'http://a.vy01.com/api/', changeOrigin: true },
+            },
+        ],
     };
 
     return {

@@ -29,4 +29,35 @@ module.exports = {
         package: 'egg-cache',
     },
 
+    mysql: {
+        enable: true,
+        package: 'egg-mysql',
+    },
+
+    oracle: {
+        enable: false,
+        package: 'egg-oracle',
+    },
+
+    mssql: {
+        enable: true,
+        package: 'egg-mssql',
+    },
+
+    proxy: {
+        enable: false,
+        package: 'egg-proxy',
+    },
+
+    httpProxy: {
+        enable: true,
+        package: 'egg-http-proxy',
+    },
+
+    httpproxy: {
+        enable: true,
+        package: 'egg-http-proxy2',
+    },
+
+
 };
