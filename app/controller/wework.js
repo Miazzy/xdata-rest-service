@@ -13,7 +13,6 @@ const dbconfig = require('../../config/dbconfig');
 // 设置数据库连接地址
 const config = dbconfig;
 
-
 /**
  * @abstract 定义数据库相关处理类
  */
@@ -118,9 +117,9 @@ class WeworkController extends Controller {
         const resdata = await this.pool.query(sql);
 
         // 查询MySQL, 排出由于OA与企业微信不匹配的异常
-        const msql = `select account id , name , mobile , loginid from v_resource where loginid in (${users});`; 
+        const msql = `select account id , name , mobile , loginid from v_resource where loginid in (${users});`;
         // 获取查询返回结果
-        const resinfo = await app.mysql.query(msql , null); 
+        const resinfo = await app.mysql.query(msql, null);
 
         console.log(`message: ` + JSON.stringify(resinfo));
 
@@ -128,7 +127,7 @@ class WeworkController extends Controller {
         let userID = userid;
         let userlist = [];
 
-        if (resdata && resdata.recordset && resdata.recordset.length > 0){
+        if (resdata && resdata.recordset && resdata.recordset.length > 0) {
             userlist = userlist.concat(resdata.recordset);
         }
 
