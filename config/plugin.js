@@ -35,7 +35,7 @@ module.exports = {
     },
 
     oracle: {
-        enable: false,
+        enable: true,
         package: 'egg-oracle',
     },
 
@@ -50,12 +50,12 @@ module.exports = {
     },
 
     httpProxy: {
-        enable: true,
+        enable: false,
         package: 'egg-http-proxy',
     },
 
     httpproxy: {
-        enable: true,
+        enable: false,
         package: 'egg-http-proxy2',
     },
 

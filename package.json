@@ -14,6 +14,7 @@
     "egg": "^2.15.1",
     "egg-cache": "0.0.7",
     "egg-cors": "^2.2.3",
+    "egg-http-proxy": "^1.0.1",
     "egg-http-proxy2": "^1.0.4",
     "egg-mailer": "^1.1.0",
     "egg-mssql": "^1.0.2",

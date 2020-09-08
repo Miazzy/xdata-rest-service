@@ -36,5 +36,11 @@ declare module 'egg' {
     mailer?: EggPluginItem;
     oss?: EggPluginItem;
     cache?: EggPluginItem;
+    mysql?: EggPluginItem;
+    oracle?: EggPluginItem;
+    mssql?: EggPluginItem;
+    proxy?: EggPluginItem;
+    httpProxy?: EggPluginItem;
+    httpproxy?: EggPluginItem;
   }
 }

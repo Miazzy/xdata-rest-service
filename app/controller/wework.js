@@ -129,8 +129,6 @@ class WeworkController extends Controller {
         // 发送信息URL
         const queryAPI = wxConfig.enterprise.message.api + token;
 
-        console.log(`${message}:${userid}:${redirectUrl}`);
-
         const node = {
             touser: userID,
             msgtype: 'text',
@@ -143,6 +141,8 @@ class WeworkController extends Controller {
             enable_duplicate_check: 0,
             duplicate_check_interval: 1800,
         };
+
+        console.log(`${queryAPI}:${message}:${userid}:${userID}:${redirectUrl}:${JSON.stringify(node)}`);
 
         const result = await axios.post(queryAPI, node);
 
