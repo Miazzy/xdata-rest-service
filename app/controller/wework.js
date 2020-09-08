@@ -112,19 +112,37 @@ class WeworkController extends Controller {
 
         // 根据userid(OA账户)获取对应企业微信ID
         const sql = `select id , loginid , lastname from ${config.database}.dbo.hrmresource where loginid in (${users});`;
-
+        // 打印日志信息
         console.log(`appmessage generated sql : ${sql}`);
-
         // 获取查询后的用户ID
         const resdata = await this.pool.query(sql);
+
+        // 查询MySQL, 排出由于OA与企业微信不匹配的异常
+        const msql = `select account id , name , mobile , loginid from v_resource where loginid in (${users});`; 
+        // 获取查询返回结果
+        const resinfo = await app.mysql.query(msql , null); 
+
+        console.log(`message: ` + JSON.stringify(resinfo));
+
         // userID
         let userID = userid;
+        let userlist = [];
 
-        if (resdata && resdata.recordset && resdata.recordset.length === 1) {
-            userID = resdata.recordset[0].id;
-        } else if (resdata && resdata.recordset && resdata.recordset.length > 1) {
-            userID = resdata.recordset.map(obj => { return obj.id; }).join('|');
+        if (resdata && resdata.recordset && resdata.recordset.length > 0){
+            userlist = userlist.concat(resdata.recordset);
         }
+
+        if (resinfo && resinfo.length > 0) {
+            userlist = userlist.concat(resinfo);
+        }
+
+        if (userlist && userlist.length === 1) {
+            userID = userlist[0].id;
+        } else if (userlist && userlist.length > 1) {
+            userID = userlist.map(obj => { return obj.id; }).join('|');
+        }
+
+        console.log(`userid : ${userID}`);
 
         // 发送信息URL
         const queryAPI = wxConfig.enterprise.message.api + token;

@@ -17,6 +17,7 @@ import 'egg-view';
 import 'egg-cors';
 import 'egg-mailer';
 import 'egg-cache';
+import 'egg-mysql';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {

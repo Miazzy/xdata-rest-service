@@ -35,12 +35,12 @@ module.exports = {
     },
 
     oracle: {
-        enable: true,
+        enable: false,
         package: 'egg-oracle',
     },
 
     mssql: {
-        enable: true,
+        enable: false,
         package: 'egg-mssql',
     },
 

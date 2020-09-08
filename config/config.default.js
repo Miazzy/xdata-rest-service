@@ -115,9 +115,9 @@ module.exports = appInfo => {
             // port
             port: '3309',
             // username
-            user: 'root',
+            user: 'zhaoziyun',
             // password
-            password: 'root',
+            password: 'ziyequma',
             // database
             database: 'jeecg-boot',
         },
