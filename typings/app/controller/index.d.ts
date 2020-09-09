@@ -6,6 +6,7 @@ import ExportDatabase = require('../../../app/controller/database');
 import ExportFilebase = require('../../../app/controller/filebase');
 import ExportMail = require('../../../app/controller/mail');
 import ExportRedis = require('../../../app/controller/redis');
+import ExportUpload = require('../../../app/controller/upload');
 import ExportWework = require('../../../app/controller/wework');
 
 declare module 'egg' {
@@ -14,6 +15,7 @@ declare module 'egg' {
     filebase: ExportFilebase;
     mail: ExportMail;
     redis: ExportRedis;
+    upload: ExportUpload;
     wework: ExportWework;
   }
 }

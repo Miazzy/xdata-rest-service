@@ -52,4 +52,7 @@ module.exports = app => {
     // 推送EMAIL机器消息
     router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
 
+    // 上传文档附件
+    router.post('/api/v1/upload', controller.upload.upload);
+
 };
