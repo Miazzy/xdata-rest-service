@@ -187,6 +187,13 @@ module.exports = appInfo => {
         ],
     };
 
+    config.multipart = {
+        // 设置支持的上传文件类型
+        whitelist: ['.apk', '.pptx', '.docx', '.xlsx', '.csv', '.doc', '.ppt', '.xls', '.pdf', '.pages', '.wav', '.mov', '.txt', '.png', '.jpeg', '.jpg', '.gif', '.tar.gz', '.tar', '.zip', '.mp3', '.mp4', '.avi'],
+        // 设置最大可以上传300M
+        fileSize: '300mb',
+    };
+
     return {
         ...config,
         ...userConfig,
