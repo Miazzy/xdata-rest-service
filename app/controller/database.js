@@ -46,9 +46,9 @@ class DatabaseController extends Controller {
         const where = query.where || ctx.params.where;
         const order = query.order || query._order || query.orderby || query._orderby || ctx.params.order;
         const fields = query.fields || query._fields;
-        const page = query.page || query._page || query._p || 0;
-        const size = query.size || query._size || query._s || 20;
-        let top = query.top || query._top || query._t || 100001;
+        const page = query.page || query._page || query._p;
+        const size = query.size || query._size || query._s;
+        let top = query.top || query._top || query._t || 10000;
         const _where = query._where;
 
         let wheresql = '';
@@ -80,7 +80,7 @@ class DatabaseController extends Controller {
                 columns = ` ${fields} `;
             }
 
-            if (page === 0 && size === 20) {
+            if (!page && !size) {
                 top = ` top ${top} `;
             } else {
                 top = '';
@@ -89,12 +89,12 @@ class DatabaseController extends Controller {
             if (query && page && size) {
                 const offset = page * size + 1;
                 const next = (page + 1) * size;
-                limits = ` offset ${offset} row fetch next ${next} row `;
+                limits = ` offset ${offset} row fetch next ${next} row only `;
             }
 
             console.log(` table : ${table} & columns : ${columns} & wheresql : ${wheresql} & orderby : ${orderby}`);
 
-            const sql = ` select  ${top} ${columns} from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} only`;
+            const sql = ` select ${top} ${columns} from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} `;
 
             console.log(' sql: ' + sql);
 
@@ -105,7 +105,7 @@ class DatabaseController extends Controller {
             // 如果数据为空，则查询数据库
             if (!result) {
                 result = await this.pool.query(sql);
-                await app.cache.store('redis').set(sql, JSON.stringify(result), 3600 * 24);
+                await app.cache.store('redis').set(sql, JSON.stringify(result), 10);
             } else {
                 result = JSON.parse(result);
                 console.log('query sql result :' + result.recordset.length);
