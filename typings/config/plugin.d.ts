@@ -18,6 +18,7 @@ import 'egg-cors';
 import 'egg-mailer';
 import 'egg-cache';
 import 'egg-mysql';
+import 'egg-redis';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -43,5 +44,6 @@ declare module 'egg' {
     proxy?: EggPluginItem;
     httpProxy?: EggPluginItem;
     httpproxy?: EggPluginItem;
+    redis?: EggPluginItem;
   }
 }

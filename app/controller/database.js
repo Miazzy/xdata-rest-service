@@ -92,12 +92,15 @@ class DatabaseController extends Controller {
 
             let result = null;
 
-            result = await app.redis.get(sql);
+            result = await app.cache.store('redis').get(sql);
 
             // 如果数据为空，则查询数据库
             if (!result) {
                 result = await this.pool.query(sql);
-                await app.redis.set(sql, result, 3600 * 24);
+                await app.cache.store('redis').set(sql, JSON.stringify(result), 3600 * 24);
+            } else {
+                console.log('query sql result :' + result);
+                result = JSON.parse(result);
             }
 
             console.log(` sql : ${sql} `);

@@ -59,5 +59,10 @@ module.exports = {
         package: 'egg-http-proxy2',
     },
 
+    redis: {
+        enable: true,
+        package: 'egg-redis',
+    },
+
 
 };

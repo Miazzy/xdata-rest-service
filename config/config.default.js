@@ -194,6 +194,15 @@ module.exports = appInfo => {
         fileSize: '1024mb',
     };
 
+    config.redis = {
+        client: {
+            port: 6379, // Redis port
+            host: '172.18.254.95', // Redis host
+            password: '',
+            db: 0,
+        },
+    };
+
     return {
         ...config,
         ...userConfig,
