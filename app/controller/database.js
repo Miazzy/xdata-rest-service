@@ -40,7 +40,7 @@ class DatabaseController extends Controller {
 
         await this.init();
 
-        const { ctx } = this;
+        const { ctx, app } = this;
         const query = ctx.query;
         const table = query.table || ctx.params.table;
         const where = query.where || ctx.params.where;
@@ -48,7 +48,7 @@ class DatabaseController extends Controller {
         const fields = query.fields || query._fields;
         const page = query.page || query._page || query._p || 0;
         const size = query.size || query._size || query._s || 20;
-        const top = query.top || query._top || query._t || 1001;
+        const top = query.top || query._top || query._t || 100001;
         const _where = query._where;
 
         let wheresql = '';
@@ -89,7 +89,16 @@ class DatabaseController extends Controller {
             console.log(` table : ${table} & columns : ${columns} & wheresql : ${wheresql} & orderby : ${orderby}`);
 
             const sql = ` select TOP ${top} ${columns} from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} `;
-            const result = await this.pool.query(sql);
+
+            let result = null;
+
+            result = await app.redis.get(sql);
+
+            // 如果数据为空，则查询数据库
+            if (!result) {
+                result = await this.pool.query(sql);
+                await app.redis.set(sql, result, 3600 * 24);
+            }
 
             console.log(` sql : ${sql} `);
 
