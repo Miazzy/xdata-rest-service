@@ -99,8 +99,8 @@ class DatabaseController extends Controller {
                 result = await this.pool.query(sql);
                 await app.cache.store('redis').set(sql, JSON.stringify(result), 3600 * 24);
             } else {
-                console.log('query sql result :' + result);
                 result = JSON.parse(result);
+                console.log('query sql result :' + result.recordset.length);
             }
 
             console.log(` sql : ${sql} `);
