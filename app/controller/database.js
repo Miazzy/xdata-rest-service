@@ -88,7 +88,7 @@ class DatabaseController extends Controller {
 
             if (query && page && size) {
                 const offset = page * size + 1;
-                const next = (page + 1) * size;
+                const next = (parseInt(page) + 1) * size;
                 limits = ` offset ${offset} row fetch next ${next} row only `;
             }
 
