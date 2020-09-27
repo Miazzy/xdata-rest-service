@@ -48,7 +48,7 @@ class DatabaseController extends Controller {
         const fields = query.fields || query._fields;
         const page = query.page || query._page || query._p || 0;
         const size = query.size || query._size || query._s || 20;
-        const top = query.top || query._top || query._t || 100001;
+        let top = query.top || query._top || query._t || 100001;
         const _where = query._where;
 
         let wheresql = '';
@@ -80,6 +80,12 @@ class DatabaseController extends Controller {
                 columns = ` ${fields} `;
             }
 
+            if (page === 0 && size === 20) {
+                top = ` top ${top} `;
+            } else {
+                top = '';
+            }
+
             if (query && page && size) {
                 const offset = page * size + 1;
                 const next = (page + 1) * size;
@@ -88,7 +94,9 @@ class DatabaseController extends Controller {
 
             console.log(` table : ${table} & columns : ${columns} & wheresql : ${wheresql} & orderby : ${orderby}`);
 
-            const sql = ` select TOP ${top} ${columns} from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} `;
+            const sql = ` select  ${top} ${columns} from ${config.database}.dbo.${table} ${wheresql} ${orderby} ${limits} only`;
+
+            console.log(' sql: ' + sql);
 
             let result = null;
 
