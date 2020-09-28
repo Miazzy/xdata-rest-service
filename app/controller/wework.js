@@ -426,6 +426,10 @@ class WeworkController extends Controller {
             const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
             // 获取返回结果
             const result = await axios.get(queryURL);
+            // 获取动态token
+            result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+            //  解析字符串为json对象
+            result.data.userinfo = JSON.parse(result.data.userinfo);
             // 保存用户信息
             store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
             // 设置返回信息
