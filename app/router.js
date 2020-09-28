@@ -52,6 +52,24 @@ module.exports = app => {
     // 推送EMAIL机器消息
     router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
 
+    // 查询企业微信用户信息
+    router.get('/api/v2/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
+
+    // 查询企业微信部门成员信息
+    router.get('/api/v2/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser);
+
+    // 查询企业微信部门成员信息(simple)
+    router.get('/api/v2/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser);
+
+    // 查询企业微信部门列表信息
+    router.get('/api/v2/wework_depart_list/:departid', controller.wework.queryWeWorkDepartlist);
+
+    // 查询企业微信部门列表信息
+    router.get('/api/v2/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo);
+
+    // 查询企业微信用户信息
+    router.get('/api/v2/wework_user_code/:code', controller.wework.queryWeWorkUserByCode);
+
     // 上传文档附件
     router.post('/api/v1/upload', controller.upload.upload);
 

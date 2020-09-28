@@ -28,6 +28,9 @@ class WeworkController extends Controller {
         }
     }
 
+    /**
+     * @function 发送群机器人消息
+     */
     async send() {
 
         const { ctx } = this;
@@ -65,6 +68,9 @@ class WeworkController extends Controller {
         ctx.body = result.data;
     }
 
+    /**
+     * @function 发送message消息
+     */
     async appmessage() {
 
         const { ctx, app } = this;
@@ -121,7 +127,7 @@ class WeworkController extends Controller {
         // 获取查询返回结果
         const resinfo = await app.mysql.query(msql, null);
 
-        console.log(`message: ` + JSON.stringify(resinfo));
+        console.log('message: ' + JSON.stringify(resinfo));
 
         // userID
         let userID = userid;
@@ -164,6 +170,268 @@ class WeworkController extends Controller {
         const result = await axios.post(queryAPI, node);
 
         ctx.body = result.data;
+    }
+
+    /**
+     * @function 获取企业微信token
+     */
+    async queryToken() {
+
+        const { ctx, app } = this;
+
+        await this.init();
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        const query = ctx.query;
+        const agentid = query.agentid || ctx.params.agentid || wxConfig.enterprise.agentid;
+
+        // 获取TokenURL
+        const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
+        // 获取动态token
+        let token = await store.get(`wxConfig.enterprise.access_token@${agentid}`);
+
+        // 检查token是否存在，如果不存在，则刷新token
+        if (!token) {
+            const result = await axios.get(tokenAPI);
+            token = result.data.access_token;
+            store.set(`wxConfig.enterprise.access_token@${agentid}`, token, 3600);
+            console.log('get token from wechat rest api :' + token);
+        } else {
+            // 打印token值
+            console.log('get token from redis :' + token);
+        }
+
+        return token;
+    }
+
+    /**
+     * @function 获取用户信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID
+     */
+    async queryWeWorkUserInfo() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        const userid = ctx.query.userid || ctx.params.userid;
+
+        console.log(` userid : ${userid} `);
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${userid}`);
+
+        if (userinfo) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userinfo);
+        } else {
+            // 获取token
+            const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.user.queryAPI.replace('ACCESS_TOKEN', token).replace('USERID', userid);
+            // 获取返回结果
+            const result = await axios.get(queryURL);
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.user.userinfo@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
+    }
+
+    /**
+     * @function 获取用户信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
+     */
+    async queryWeWorkDepartUser() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        const departid = ctx.query.departid || ctx.params.departid;
+        const fetch = ctx.query.fetch || ctx.params.fetch;
+
+        console.log(` departid : ${departid} fetch : ${fetch}`);
+
+        // 获取动态token
+        const userlist = await store.get(`wxConfig.enterprise.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`);
+
+        if (userlist) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userlist);
+        } else {
+            // 获取token
+            const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
+            // 获取返回结果
+            const result = await axios.get(queryURL);
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+
+            // 遍历数据，每个用户ID，存一个用户信息
+            result.data.userlist.map(item => {
+                return store.set(`wxConfig.enterprise.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
+            });
+
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
+    }
+
+    /**
+     * @function 获取用户信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
+     */
+    async queryWeWorkSimpleDepartUser() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        const departid = ctx.query.departid || ctx.params.departid;
+        const fetch = ctx.query.fetch || ctx.params.fetch;
+
+        console.log(` departid : ${departid} fetch : ${fetch}`);
+
+        // 获取动态token
+        const userlist = await store.get(`wxConfig.enterprise.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`);
+
+        if (userlist) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userlist);
+        } else {
+            // 获取token
+            const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.user.querySimpleDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
+            // 获取返回结果
+            const result = await axios.get(queryURL);
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            // 遍历数据，每个用户ID，存一个用户信息
+            result.data.userlist.map(item => {
+                return store.set(`wxConfig.enterprise.user.userinfo.simple@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
+            });
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
+    }
+
+    /**
+     * @function 获取用户信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN
+     */
+    async queryWeWorkDepartlist() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        let departid = ctx.query.departid || ctx.params.departid || '';
+        let params = '';
+
+        departid = departid === '-1' ? '' : departid;
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.department.queryALL@${departid}`);
+
+        if (departid) {
+            params = `&id=${departid}`;
+        }
+
+        console.log(` departid : ${departid} params : ${params}`);
+
+        if (userinfo) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userinfo);
+        } else {
+            // 获取token
+            const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.department.queryALL.replace('ACCESS_TOKEN', token) + params;
+            // 获取返回结果
+            const result = await axios.get(queryURL);
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.department.queryALL@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+
+            // 遍历数据，每个用户ID，存一个用户信息
+            result.data.department.map(item => {
+                return store.set(`wxConfig.enterprise.department.single@${item.id}`, JSON.stringify(item), 3600 * 24 * 3);
+            });
+
+            // 打印字符串
+            console.log('queryURL : ' + queryURL);
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
+    }
+
+    /**
+     * @function 获取部门信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN
+     */
+    async queryWeWorkDepartInfo() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        // 获取部门编号
+        const departid = ctx.query.departid || ctx.params.departid || '1';
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.department.single@${departid}`);
+
+        if (userinfo) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userinfo);
+        } else {
+            // 设置返回信息
+            await this.queryWeWorkDepartlist();
+        }
+
+    }
+
+    /**
+     * @function 获取部门信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN
+     */
+    async queryWeWorkUserByCode() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        // 获取部门编号
+        const code = ctx.query.code || ctx.params.code || '';
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
+
+        if (userinfo) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userinfo);
+        } else {
+            // 获取token
+            const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
+            // 获取返回结果
+            const result = await axios.get(queryURL);
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
     }
 
 }
