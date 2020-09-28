@@ -430,6 +430,11 @@ class WeworkController extends Controller {
             result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
             //  解析字符串为json对象
             result.data.userinfo = JSON.parse(result.data.userinfo);
+
+            result.data.userinfo.username = result.data.userinfo.userid;
+            result.data.userinfo.realname = result.data.userinfo.name;
+            result.data.userinfo.phone = result.data.userinfo.mobile;
+
             // 保存用户信息
             store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
             // 设置返回信息
