@@ -67,7 +67,7 @@ module.exports = app => {
     // 查询企业微信部门列表信息
     router.get('/api/v2/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo);
 
-    // 查询企业微信用户信息
+    // 查询企业微信用户信息(网页授权)
     router.get('/api/v2/wework_user_code/:code', controller.wework.queryWeWorkUserByCode);
 
     // 上传文档附件
