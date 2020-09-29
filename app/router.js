@@ -73,6 +73,9 @@ module.exports = app => {
     // 查询企业微信用户信息(网页授权)
     router.get('/api/v2/wework_user_code/:code', controller.wework.queryWeWorkUserByCode);
 
+    // 查询企业微信用户信息(网页授权)
+    router.get('/api/v2/wework_ip_list', controller.wework.queryIpList);
+
     // 上传文档附件
     router.post('/api/v1/upload', controller.upload.upload);
 

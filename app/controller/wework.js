@@ -445,7 +445,7 @@ class WeworkController extends Controller {
 
     /**
      * @function 获取企业微信服务器IP列表信息 queryIpList
-     * @description https://qyapi.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=ACCESS_TOKEN 
+     * @description https://qyapi.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=ACCESS_TOKEN
      */
     async queryIpList() {
 
@@ -453,11 +453,9 @@ class WeworkController extends Controller {
 
         // 缓存控制器
         const store = app.cache.store('redis');
-        // 获取部门编号
-        const code = ctx.query.code || ctx.params.code || '';
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
+        const userinfo = await store.get('wxConfig.enterprise.ip.queryIpListAPI');
 
         if (userinfo) {
             // console.log(` userinfo : ${userinfo}`);
@@ -466,20 +464,11 @@ class WeworkController extends Controller {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
+            const queryURL = wxConfig.enterprise.ip.queryIpListAPI.replace('ACCESS_TOKEN', token);
             // 获取返回结果
             const result = await axios.get(queryURL);
-            // 获取动态token
-            result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
-            //  解析字符串为json对象
-            result.data.userinfo = JSON.parse(result.data.userinfo);
-
-            result.data.userinfo.username = result.data.userinfo.userid;
-            result.data.userinfo.realname = result.data.userinfo.name;
-            result.data.userinfo.phone = result.data.userinfo.mobile;
-
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set('wxConfig.enterprise.ip.queryIpListAPI', JSON.stringify(result.data), 3600 * 24 * 3);
             // 设置返回信息
             ctx.body = result.data;
         }
