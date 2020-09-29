@@ -76,8 +76,11 @@ module.exports = app => {
     // 查询企业微信用户信息(网页授权)
     router.get('/api/v2/wework_ip_list', controller.wework.queryIpList);
 
-    // 查询企业微信用户信息(网页授权)
+    // 数据库表serialid自动排序
     router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
+
+    // 数据库表serialid自动排序(增量)
+    router.get('/api/v2/mysql/patchserial/:tablename/:fieldid/:id', controller.mysql.patchSerialID);
 
     // 上传文档附件
     router.post('/api/v1/upload', controller.upload.upload);
