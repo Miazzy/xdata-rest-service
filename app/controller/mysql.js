@@ -13,12 +13,14 @@ class MySQLController extends Controller {
         // 获取部门编号
         const tablename = ctx.query.tablename || ctx.params.tablename || '';
         // 获取部门编号
-        const fieldID = ctx.query.fieldID || ctx.params.fieldID || '';
+        const fieldID = ctx.query.fieldid || ctx.params.fieldid || '';
         // 获取部门编号
         const id = ctx.query.id || ctx.params.id || '';
 
-        const response = await app.mysql.query(`set @rank= 0;
-                        update ${tablename} t set t.${fieldID} = @rank:=@rank + 1 order by t.${id} asc;`, []); // you can access to simple database instance by using app.mysql.
+        // 设置排序号
+        await app.mysql.query('set @rank= 0;', []);
+        // 执行排序过程
+        const response = await app.mysql.query(`update ${tablename} t set t.${fieldID} = @rank:=@rank + 1 order by t.${id} asc;`, []);
 
         ctx.body = response;
     }
