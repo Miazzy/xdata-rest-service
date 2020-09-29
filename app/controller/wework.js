@@ -435,6 +435,8 @@ class WeworkController extends Controller {
             result.data.userinfo.realname = result.data.userinfo.name;
             result.data.userinfo.phone = result.data.userinfo.mobile;
 
+            // 查询数据库，获取userid对应的OA账户
+
             // 保存用户信息
             store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
             // 设置返回信息

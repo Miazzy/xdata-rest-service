@@ -37,6 +37,9 @@ module.exports = app => {
     // 删除MSSQL数据库记录
     router.delete('/api/v1/:table/:node', controller.database.delete);
 
+    // 查询员工数据
+    router.get('/api/v2/employee', controller.database.employee);
+
     // 查询文件信息，并进行下载
     router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
 

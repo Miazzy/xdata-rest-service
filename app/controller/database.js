@@ -396,6 +396,45 @@ class DatabaseController extends Controller {
 
     }
 
+    /**
+     * @function 查询所有员工数据，并保持至数据库中
+     * @param {*} req
+     * @param {*} res
+     */
+    async employee(req, res) {
+
+        await this.init();
+
+        const { ctx, app } = this;
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        const sql = 'select id , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , dsporder wid  from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 1 row fetch next 10000 row only;';
+
+        // 获取动态token
+        const userlist = await store.get('wxConfig.enterprise.user.systemuserlist');
+
+        if (userlist) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userlist);
+        } else {
+            const result = await this.pool.query(sql);
+
+            await store.set('wxConfig.enterprise.user.systemuserlist', JSON.stringify(result.recordset), 3600 * 24 * 3);
+
+            // 遍历数据，每个用户ID，存一个用户信息
+            result.recordset.map(item => {
+                return store.set(`wxConfig.enterprise.user.sysuserinfo@${item.username}`, JSON.stringify(item), 3600 * 24 * 3);
+            });
+
+            console.log(` sql : ${sql} `);
+
+            ctx.body = result.recordset;
+
+        }
+
+    }
+
 
 }
 
