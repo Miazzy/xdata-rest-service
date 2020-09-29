@@ -23,6 +23,9 @@ const config = {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
             api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
         },
+        ip: {
+            queryIpListAPI: 'https://qyapi.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=ACCESS_TOKEN ',
+        },
         user: {
             queryAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID',
             queryCodeAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=ACCESS_TOKEN&code=CODE',
