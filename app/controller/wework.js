@@ -449,8 +449,8 @@ class WeworkController extends Controller {
                     if (result.data.userinfo.userid) {
                         // 获取用户信息
                         const user = await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${result.data.userinfo.userid}`);
-                        result.data.userinfo.systemuserinfo = user;
-                        result.data.userinfo.username = user.username;
+                        result.data.userinfo.systemuserinfo = JSON.parse(user);
+                        result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
                     }
                 }
 
