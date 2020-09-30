@@ -9,16 +9,6 @@ const Controller = require('egg').Controller;
  */
 class BussinessController extends Controller {
 
-    /**
-     * @function 初始化数据库连接池
-     */
-    async init() {
-        if (this.pool == null || typeof this.pool === 'undefined' || !this.pool) {
-            this.pool = await new sql.ConnectionPool(config).connect();
-            console.log('connect pool init over ... ');
-        }
-    }
-
     async queryGroupLimits() {
 
         const { ctx, app } = this;
