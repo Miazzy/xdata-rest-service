@@ -428,17 +428,19 @@ class WeworkController extends Controller {
             const result = await axios.get(queryURL);
             // 获取动态token
             result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
-            //  解析字符串为json对象
+            // 解析字符串为json对象
             result.data.userinfo = JSON.parse(result.data.userinfo);
+            // 获取用户信息
+            const user = await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${result.data.userinfo.userid}`);
 
-            result.data.userinfo.username = result.data.userinfo.userid;
+            result.data.userinfo.username = user.username;
             result.data.userinfo.realname = result.data.userinfo.name;
             result.data.userinfo.phone = result.data.userinfo.mobile;
-
-            // 查询数据库，获取userid对应的OA账户
+            result.data.userinfo.systemuserinfo = user;
 
             // 保存用户信息
             store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+
             // 设置返回信息
             ctx.body = result.data;
         }
