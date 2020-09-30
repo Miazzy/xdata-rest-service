@@ -7,6 +7,10 @@ const Service = require('egg').Service;
 
 class BussinessService extends Service {
 
+    /**
+     * @function 获取用户管理组信息
+     * @param {*} username
+     */
     async queryGroupLimits(username) {
 
         const { ctx, app } = this;

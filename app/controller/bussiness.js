@@ -5,7 +5,7 @@
 const Controller = require('egg').Controller;
 
 /**
- * @abstract 定义数据库相关处理类
+ * @abstract 定义前端业务处理相关Controller
  */
 class BussinessController extends Controller {
 
