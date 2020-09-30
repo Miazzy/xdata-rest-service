@@ -426,20 +426,37 @@ class WeworkController extends Controller {
             const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
             // 获取返回结果
             const result = await axios.get(queryURL);
-            // 获取动态token
-            result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
-            // 解析字符串为json对象
-            result.data.userinfo = JSON.parse(result.data.userinfo);
-            // 获取用户信息
-            const user = await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${result.data.userinfo.userid}`);
 
-            result.data.userinfo.username = user.username;
-            result.data.userinfo.realname = result.data.userinfo.name;
-            result.data.userinfo.phone = result.data.userinfo.mobile;
-            result.data.userinfo.systemuserinfo = user;
+            console.log(JSON.stringify(result.data));
 
-            // 保存用户信息
-            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            if (result.data.UserId) {
+
+                // 获取动态token
+                result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+
+                if (!result.data.userinfo) {
+                    await this.queryWeWorkDepartUser();
+                    result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+                }
+
+                // 解析字符串为json对象
+                if (result.data.userinfo) {
+                    result.data.userinfo = JSON.parse(result.data.userinfo);
+                    result.data.userinfo.username = result.data.userinfo.userid;
+                    result.data.userinfo.realname = result.data.userinfo.name;
+                    result.data.userinfo.phone = result.data.userinfo.mobile;
+
+                    if (result.data.userinfo.userid) {
+                        // 获取用户信息
+                        const user = await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${result.data.userinfo.userid}`);
+                        result.data.userinfo.systemuserinfo = user;
+                        result.data.userinfo.username = user.username;
+                    }
+                }
+
+                // 保存用户信息
+                store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            }
 
             // 设置返回信息
             ctx.body = result.data;
