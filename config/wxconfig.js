@@ -32,6 +32,9 @@ const config = {
             queryDepartUserAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD',
             querySimpleDepartUserAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD',
         },
+        openid: {
+            queryOpenIDByUserIdAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid?access_token=ACCESS_TOKEN',
+        },
         department: {
             queryALL: 'https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN',
             queryAPI: 'https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN&id=ID',

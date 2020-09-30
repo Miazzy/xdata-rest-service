@@ -435,6 +435,7 @@ class WeworkController extends Controller {
                 await this.queryWeWorkDepartlist();
                 await this.queryWeWorkSimpleDepartUser();
                 await this.queryWeWorkDepartUser();
+                const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
 
                 // 获取动态token
                 result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
@@ -449,6 +450,7 @@ class WeworkController extends Controller {
                     result.data.userinfo.username = result.data.userinfo.userid;
                     result.data.userinfo.realname = result.data.userinfo.name;
                     result.data.userinfo.phone = result.data.userinfo.mobile;
+                    result.data.userinfo.openid = openinfo.openid;
 
                     if (result.data.userinfo.userid) {
                         // 获取用户信息
@@ -460,6 +462,9 @@ class WeworkController extends Controller {
 
                 // 保存用户信息
                 store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+
+                // 保存用户信息
+                store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
             }
 
             // 设置返回信息
@@ -498,6 +503,45 @@ class WeworkController extends Controller {
             ctx.body = result.data;
         }
 
+    }
+
+    /**
+     * @function 获取企业微信服务器IP列表信息 queryIpList
+     * @description https://qyapi.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=ACCESS_TOKEN
+     * @param {*} id
+     */
+    async queryOpenIDByUserID(id) {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        // 获取部门编号
+        const userid = ctx.query.userid || ctx.params.userid || id || '';
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.openid#userid#@${userid}`);
+
+        if (userinfo) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userinfo);
+        } else {
+            // 获取token
+            const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.openid.queryOpenIDByUserIdAPI.replace('ACCESS_TOKEN', token);
+            // 获取返回结果
+            const result = await axios.post(queryURL, { userid });
+
+            console.log(`queryURL: ${queryURL} \n\r result: ` + JSON.stringify(result.data));
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.openid#userid#@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
+        return ctx.body;
     }
 
 }

@@ -40,6 +40,9 @@ module.exports = app => {
     // 查询员工数据
     router.get('/api/v2/employee', controller.database.employee);
 
+    // 查询员工OpenID
+    router.get('/api/v2/wework/openid/:userid', controller.wework.queryOpenIDByUserID);
+
     // 查询员工数据
     router.get('/api/v2/queryemployee/:id', controller.database.queryEmployeeByID);
 
