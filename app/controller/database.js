@@ -402,35 +402,65 @@ class DatabaseController extends Controller {
      * @param {*} res
      */
     async employee(req, res) {
+        const { ctx } = this;
+        // 查询所有用户数据
+        const userlist = await this.queryEmployeeAll();
+        // 返回用户数据集
+        ctx.body = userlist;
+    }
+
+    /**
+     * @function 查询员工数据（通过员工ID）
+     * @param {*} req
+     * @param {*} res
+     */
+    async queryEmployeeByID(req, res) {
+
+        const { ctx, app } = this;
+        const id = ctx.query.id || ctx.params.id;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        // 查询用户信息
+        const user = (await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${id}`)) || (await store.get(`wxConfig.enterprise.user.sysuserinfo@${id}`));
+        // 返回用户信息
+        ctx.body = user;
+    }
+
+    /**
+     * @function 查询所有员工数据，并保持至数据库中
+     */
+    async queryEmployeeAll() {
 
         await this.init();
 
         const { ctx, app } = this;
+
         // 缓存控制器
         const store = app.cache.store('redis');
 
-        const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , createdate from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 1 row fetch next 10000 row only;';
+        const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , createdate from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 1 row fetch next 10000 row only ';
 
         // 获取动态token
         const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist@${sql}`);
 
         if (userlist) {
-            // console.log(` userinfo : ${userinfo}`);
-            ctx.body = JSON.parse(userlist);
-        } else {
-            const result = await this.pool.query(sql);
-
-            await store.set(`wxConfig.enterprise.user.systemuserlist@${sql}`, JSON.stringify(result.recordset), 3600 * 24 * 3);
-
-            // 遍历数据，每个用户ID，存一个用户信息
-            result.recordset.map(item => {
-                return store.set(`wxConfig.enterprise.user.sysuserinfo@${item.username}`, JSON.stringify(item), 3600 * 24 * 3);
-            });
-
-            console.log(` sql : ${sql} `);
-
-            ctx.body = result.recordset;
+            // ctx.body = JSON.parse(userlist);
+            return JSON.parse(userlist);
         }
+
+        const result = await this.pool.query(sql);
+
+        await store.set(`wxConfig.enterprise.user.systemuserlist@${sql}`, JSON.stringify(result.recordset), 3600 * 24 * 3);
+
+        // 遍历数据，每个用户ID，存一个用户信息
+        result.recordset.map(item => {
+            store.set(`wxConfig.enterprise.user.sysuserinfo#id@${item.wid}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo@${item.username}`, JSON.stringify(item), 3600 * 24 * 31);
+            return true;
+        });
+
+        return result.recordset;
 
     }
 
