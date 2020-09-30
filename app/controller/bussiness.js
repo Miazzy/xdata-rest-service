@@ -23,8 +23,8 @@ class BussinessController extends Controller {
         const userinfo = await store.get(`wxConfig.enterprise.grouplimits.username@${username}`);
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
-            ctx.body = JSON.parse(userinfo);
+            // 设置返回结果
+            ctx.body = userinfo;
         } else {
             // 构建查询SQL
             const sealmansql = ` select distinct seal_man from bs_seal_regist where seal_man is not null and seal_man != '' and seal_man like '%${username}%'  ; `;
@@ -43,7 +43,6 @@ class BussinessController extends Controller {
             // 设置返回结果
             ctx.body = result;
         }
-
 
     }
 

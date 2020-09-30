@@ -91,6 +91,9 @@ module.exports = app => {
     // 数据库表serialid自动排序(增量)
     router.get('/api/v2/mysql/patchserial/:tablename/:fieldid/:id', controller.mysql.patchSerialID);
 
+    // 查询用印管理用户管理组信息
+    router.get('/api/v2/bussiness/grouplimits/:username', controller.bussiness.queryGroupLimits);
+
     // 上传文档附件
     router.post('/api/v1/upload', controller.upload.upload);
 

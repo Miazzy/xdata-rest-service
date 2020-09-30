@@ -2,6 +2,7 @@
 // Do not modify this file!!!!!!!!!
 
 import 'egg';
+import ExportBussiness = require('../../../app/controller/bussiness');
 import ExportDatabase = require('../../../app/controller/database');
 import ExportFilebase = require('../../../app/controller/filebase');
 import ExportMail = require('../../../app/controller/mail');
@@ -12,6 +13,7 @@ import ExportWework = require('../../../app/controller/wework');
 
 declare module 'egg' {
   interface IController {
+    bussiness: ExportBussiness;
     database: ExportDatabase;
     filebase: ExportFilebase;
     mail: ExportMail;
