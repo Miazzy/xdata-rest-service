@@ -409,10 +409,10 @@ class DatabaseController extends Controller {
         // 缓存控制器
         const store = app.cache.store('redis');
 
-        const sql = 'select id , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , dsporder wid  from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 1 row fetch next 10000 row only;';
+        const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , createdate from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 1 row fetch next 10000 row only;';
 
         // 获取动态token
-        const userlist = await store.get('wxConfig.enterprise.user.systemuserlist');
+        const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist@${sql}`);
 
         if (userlist) {
             // console.log(` userinfo : ${userinfo}`);
@@ -420,7 +420,7 @@ class DatabaseController extends Controller {
         } else {
             const result = await this.pool.query(sql);
 
-            await store.set('wxConfig.enterprise.user.systemuserlist', JSON.stringify(result.recordset), 3600 * 24 * 3);
+            await store.set(`wxConfig.enterprise.user.systemuserlist@${sql}`, JSON.stringify(result.recordset), 3600 * 24 * 3);
 
             // 遍历数据，每个用户ID，存一个用户信息
             result.recordset.map(item => {
@@ -430,7 +430,6 @@ class DatabaseController extends Controller {
             console.log(` sql : ${sql} `);
 
             ctx.body = result.recordset;
-
         }
 
     }
