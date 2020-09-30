@@ -94,6 +94,9 @@ module.exports = app => {
     // 查询用印管理用户管理组信息
     router.get('/api/v2/bussiness/grouplimits/:username', controller.bussiness.queryGroupLimits);
 
+    // 查询用印管理用户管理组信息
+    router.get('/api/v2/bussiness/grouplimitsbyid/:username', controller.bussiness.queryGroupLimitsByID);
+
     // 上传文档附件
     router.post('/api/v1/upload', controller.upload.upload);
 
