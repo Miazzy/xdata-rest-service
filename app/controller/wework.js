@@ -216,7 +216,7 @@ class WeworkController extends Controller {
 
         // 缓存控制器
         const store = app.cache.store('redis');
-        const userid = ctx.query.userid || ctx.params.userid;
+        const userid = ctx.query.userid || ctx.params.userid || '';
 
         console.log(` userid : ${userid} `);
 
@@ -251,8 +251,8 @@ class WeworkController extends Controller {
 
         // 缓存控制器
         const store = app.cache.store('redis');
-        const departid = ctx.query.departid || ctx.params.departid;
-        const fetch = ctx.query.fetch || ctx.params.fetch;
+        const departid = ctx.query.departid || ctx.params.departid || '2';
+        const fetch = ctx.query.fetch || ctx.params.fetch || '1';
 
         console.log(` departid : ${departid} fetch : ${fetch}`);
 
@@ -293,8 +293,8 @@ class WeworkController extends Controller {
 
         // 缓存控制器
         const store = app.cache.store('redis');
-        const departid = ctx.query.departid || ctx.params.departid;
-        const fetch = ctx.query.fetch || ctx.params.fetch;
+        const departid = ctx.query.departid || ctx.params.departid || '2';
+        const fetch = ctx.query.fetch || ctx.params.fetch || '1';
 
         console.log(` departid : ${departid} fetch : ${fetch}`);
 
@@ -430,12 +430,16 @@ class WeworkController extends Controller {
             console.log(JSON.stringify(result.data));
 
             if (result.data.UserId) {
+                await this.queryIpList();
+                await this.queryWeWorkDepartInfo();
+                await this.queryWeWorkDepartlist();
+                await this.queryWeWorkSimpleDepartUser();
+                await this.queryWeWorkDepartUser();
 
                 // 获取动态token
                 result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
 
                 if (!result.data.userinfo) {
-                    await this.queryWeWorkDepartUser();
                     result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
                 }
 
