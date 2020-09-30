@@ -9,13 +9,14 @@ const Controller = require('egg').Controller;
  */
 class BussinessController extends Controller {
 
+    /**
+     * @function 获取用户管理组信息
+     */
     async queryGroupLimits() {
-
-        const { ctx } = this;
         // 获取用户信息
-        const username = ctx.query.username || ctx.params.username || '';
+        const username = this.ctx.query.username || this.ctx.params.username || '';
         // 设置返回结果
-        ctx.body = await ctx.service.bussiness.queryGroupLimits(username);
+        this.ctx.body = await this.ctx.service.bussiness.queryGroupLimits(username);
     }
 
 }
