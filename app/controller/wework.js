@@ -429,39 +429,50 @@ class WeworkController extends Controller {
 
             console.log(JSON.stringify(result.data));
 
-            if (result.data.UserId) {
-                await this.queryIpList();
-                await this.queryWeWorkDepartInfo();
-                await this.queryWeWorkDepartlist();
-                await this.queryWeWorkSimpleDepartUser();
-                await this.queryWeWorkDepartUser();
-                const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
+            try {
 
-                // 获取动态token
-                result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
-
-                // 解析字符串为json对象
-                if (result.data.userinfo) {
-                    result.data.userinfo = JSON.parse(result.data.userinfo);
-                    result.data.userinfo.realname = result.data.userinfo.name;
-                    result.data.userinfo.phone = result.data.userinfo.mobile;
-                    result.data.userinfo.openid = openinfo.openid;
-
-                    if (result.data.userinfo.userid) {
-                        // 获取用户信息
-                        const user = await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${result.data.userinfo.userid}`);
-                        result.data.userinfo.systemuserinfo = JSON.parse(user);
-                        result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                        result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                if (result.data.UserId) {
+                    try {
+                        // await this.queryIpList();
+                        await this.queryWeWorkDepartInfo();
+                        await this.queryWeWorkDepartlist();
+                        await this.queryWeWorkSimpleDepartUser();
+                        await this.queryWeWorkDepartUser();
+                    } catch (error) {
+                        console.log(error);
                     }
+
+                    const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
+
+                    // 获取动态token
+                    result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+
+                    // 解析字符串为json对象
+                    if (result.data.userinfo) {
+                        result.data.userinfo = JSON.parse(result.data.userinfo);
+                        result.data.userinfo.realname = result.data.userinfo.name;
+                        result.data.userinfo.phone = result.data.userinfo.mobile;
+                        result.data.userinfo.openid = openinfo.openid;
+
+                        if (result.data.userinfo.userid) {
+                            // 获取用户信息
+                            const user = await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${result.data.userinfo.userid}`);
+                            result.data.userinfo.systemuserinfo = JSON.parse(user);
+                            result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
+                            result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                        }
+                    }
+
+                    // 保存用户信息
+                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
                 }
 
-                // 保存用户信息
-                store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
-
-                // 保存用户信息
-                store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            } catch (error) {
+                console.log(error);
             }
+
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
 
             // 设置返回信息
             ctx.body = result.data;
