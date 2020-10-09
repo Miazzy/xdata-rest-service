@@ -475,9 +475,7 @@ class DatabaseController extends Controller {
 
         // 设置返回结果
         this.ctx.body = await this.ctx.service.bussiness.queryEmployeeByID(id);
-
     }
-
 
 }
 
