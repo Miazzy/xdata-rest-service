@@ -46,6 +46,9 @@ module.exports = app => {
     // 查询员工数据
     router.get('/api/v2/queryemployee/:id', controller.database.queryEmployeeByID);
 
+    // 查询员工数据
+    router.get('/api/v2/employeewid/:id', controller.database.queryEmployeeByWID);
+
     // 查询文件信息，并进行下载
     router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
 
