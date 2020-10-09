@@ -427,11 +427,15 @@ class WeworkController extends Controller {
             // 获取返回结果
             const result = await axios.get(queryURL);
 
-            console.log(JSON.stringify(result.data));
+            console.log('result : ' + JSON.stringify(result.data));
 
             try {
 
                 if (result.data.UserId) {
+                    // 查询OpenID
+                    const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
+
+                    // 查询基础数据
                     try {
                         // await this.queryIpList();
                         await this.queryWeWorkDepartInfo();
@@ -442,25 +446,27 @@ class WeworkController extends Controller {
                         console.log(error);
                     }
 
-                    const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
-
                     // 获取动态token
                     result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
 
                     // 解析字符串为json对象
-                    if (result.data.userinfo) {
-                        result.data.userinfo = JSON.parse(result.data.userinfo);
-                        result.data.userinfo.realname = result.data.userinfo.name;
-                        result.data.userinfo.phone = result.data.userinfo.mobile;
-                        result.data.userinfo.openid = openinfo.openid;
+                    try {
+                        if (result.data.userinfo) {
+                            result.data.userinfo = JSON.parse(result.data.userinfo);
+                            result.data.userinfo.realname = result.data.userinfo.name;
+                            result.data.userinfo.phone = result.data.userinfo.mobile;
+                            result.data.userinfo.openid = openinfo.openid;
 
-                        if (result.data.userinfo.userid) {
-                            // 获取用户信息
-                            const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid);
-                            result.data.userinfo.systemuserinfo = user;
-                            result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                            result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                            if (result.data.userinfo.userid) {
+                                // 获取用户信息
+                                const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid);
+                                result.data.userinfo.systemuserinfo = user;
+                                result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
+                                result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                            }
                         }
+                    } catch (error) {
+                        console.log(error);
                     }
 
                     // 保存用户信息
