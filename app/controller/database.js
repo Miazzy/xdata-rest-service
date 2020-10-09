@@ -465,6 +465,35 @@ class DatabaseController extends Controller {
 
     }
 
+    /**
+     * @function 查询所有员工数据，并保持至数据库中
+     * @param {*} id
+     */
+    async queryEmployeeByWID(id) {
+
+        await this.init();
+
+        const { app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , createdate from newecology.dbo.hrmresource  where (status != 5) and  id = ${id} order by id asc offset 0 row fetch next 10000 row  only  `;
+
+        const result = await this.pool.query(sql);
+
+        // 遍历数据，每个用户ID，存一个用户信息
+        result.recordset.map(item => {
+            store.set(`wxConfig.enterprise.user.sysuserinfo#id@${item.id}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo#wid@${item.wid}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo@${item.username}`, JSON.stringify(item), 3600 * 24 * 31);
+            return true;
+        });
+
+        return result.recordset[0];
+
+    }
+
 
 }
 

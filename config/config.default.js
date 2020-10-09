@@ -131,30 +131,31 @@ module.exports = appInfo => {
     config.mssql = {
 
         // Single Database
-        client: {
-            server: '172.18.1.11',
-            port: '1433',
-            user: 'meeting',
-            password: 'meeting',
-            database: 'newecology',
-        },
+        // client: {
+        //     server: '172.18.1.11',
+        //     port: '1433',
+        //     user: 'meeting',
+        //     password: 'meeting',
+        //     database: 'newecology',
+        // },
 
         // Multi Databases
-        // clients: {
-        //   db1: {
-        //     server: 'host',
-        //     port: 'port',
-        //     user: 'user',
-        //     password: 'password',
-        //     database: 'database',
-        //   },
-        //   db2: {
-        //     server: 'host',
-        //     user: 'user',
-        //     password: 'password',
-        //     database: 'database',
-        //   },
-        // },
+        clients: {
+            db1: {
+                server: '172.18.1.11',
+                port: '1433',
+                user: 'meeting',
+                password: 'meeting',
+                database: 'newecology',
+            },
+            db2: {
+                server: '172.168.1.60',
+                port: '1433',
+                user: 'sa',
+                password: 'Leading888',
+                database: 'ecology',
+            },
+        },
     };
 
     // 反向代理配置
