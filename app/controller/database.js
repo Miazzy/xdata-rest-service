@@ -439,7 +439,7 @@ class DatabaseController extends Controller {
         // 缓存控制器
         const store = app.cache.store('redis');
 
-        const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , createdate from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 1 row fetch next 10000 row only ';
+        const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , createdate from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 0 row fetch next 10000 row  only  ';
 
         // 获取动态token
         const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist@${sql}`);
@@ -455,7 +455,8 @@ class DatabaseController extends Controller {
 
         // 遍历数据，每个用户ID，存一个用户信息
         result.recordset.map(item => {
-            store.set(`wxConfig.enterprise.user.sysuserinfo#id@${item.wid}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo#id@${item.id}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo#wid@${item.wid}`, JSON.stringify(item), 3600 * 24 * 31);
             store.set(`wxConfig.enterprise.user.sysuserinfo@${item.username}`, JSON.stringify(item), 3600 * 24 * 31);
             return true;
         });
