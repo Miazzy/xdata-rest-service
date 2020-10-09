@@ -40,7 +40,7 @@ module.exports = {
     },
 
     mssql: {
-        enable: false,
+        enable: true,
         package: 'egg-mssql',
     },
 

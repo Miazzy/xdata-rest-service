@@ -4,9 +4,20 @@
 'use strict';
 
 const mssql = require('mssql');
+const dbconfig = require('../../config/dbconfig');
 const Service = require('egg').Service;
 
 class BussinessService extends Service {
+
+    /**
+     * @function 初始化数据库连接池
+     */
+    async init() {
+        if (this.pool == null || typeof this.pool === 'undefined' || !this.pool) {
+            this.pool = await new mssql.ConnectionPool(dbconfig).connect();
+            console.log('connect pool init over ... ');
+        }
+    }
 
     /**
      * @function 获取用户管理组信息
@@ -94,27 +105,24 @@ class BussinessService extends Service {
 
         await this.init();
 
-        const { app } = this;
+        const { ctx, app } = this;
 
         // 缓存控制器
         const store = app.cache.store('redis');
 
-        // use db1
-        const request = new mssql.Request((await this.app.mssql.get('db1')));
-
         const sql = `select id , dsporder wid , loginid username , lastname realname , sex , birthday , telephone , mobile , joblevel , textfield1 , certificatenum , status , createdate from newecology.dbo.hrmresource  where (status != 5) and  id = ${id} order by id asc offset 0 row fetch next 10000 row  only  `;
 
-        const rows = await request.query(sql);
+        const result = await this.pool.query(sql);
 
         // 遍历数据，每个用户ID，存一个用户信息
-        rows.map(item => {
+        result.recordset.map(item => {
             store.set(`wxConfig.enterprise.user.sysuserinfo#id@${item.id}`, JSON.stringify(item), 3600 * 24 * 31);
             store.set(`wxConfig.enterprise.user.sysuserinfo#wid@${item.wid}`, JSON.stringify(item), 3600 * 24 * 31);
             store.set(`wxConfig.enterprise.user.sysuserinfo@${item.username}`, JSON.stringify(item), 3600 * 24 * 31);
             return true;
         });
 
-        return rows[0];
+        return result.recordset[0];
 
     }
 }

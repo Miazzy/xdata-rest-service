@@ -149,7 +149,7 @@ module.exports = appInfo => {
                 database: 'newecology',
             },
             db2: {
-                server: '172.168.1.60',
+                server: '172.18.1.60',
                 port: '1433',
                 user: 'sa',
                 password: 'Leading888',
