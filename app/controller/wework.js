@@ -456,11 +456,8 @@ class WeworkController extends Controller {
 
                         if (result.data.userinfo.userid) {
                             // 获取用户信息
-                            let user = await store.get(`wxConfig.enterprise.user.sysuserinfo#id@${result.data.userinfo.userid}`);
-                            if (!user) {
-                                user = await store.get(`wxConfig.enterprise.user.sysuserinfo#wid@${result.data.userinfo.userid}`);
-                            }
-                            result.data.userinfo.systemuserinfo = JSON.parse(user);
+                            const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid);
+                            result.data.userinfo.systemuserinfo = user;
                             result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
                             result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
                         }
