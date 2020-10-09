@@ -426,12 +426,12 @@ class WeworkController extends Controller {
             const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
             // 获取返回结果
             const result = await axios.get(queryURL);
-
+            // 打印查询结果信息
             console.log('result : ' + JSON.stringify(result.data));
-
+            // 如果存在用户UserID信息，则进一步查询用户信息
             try {
-
                 if (result.data.UserId) {
+
                     // 查询OpenID
                     const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
 
@@ -447,7 +447,11 @@ class WeworkController extends Controller {
                     }
 
                     // 获取动态token
-                    result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+                    try {
+                        result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+                    } catch (error) {
+                        console.log(error);
+                    }
 
                     // 解析字符串为json对象
                     try {
