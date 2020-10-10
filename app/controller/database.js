@@ -451,7 +451,6 @@ class DatabaseController extends Controller {
 
         const result = await this.pool.query(sql);
 
-        await store.set(`wxConfig.enterprise.user.systemuserlist#sort#@${sql}`, JSON.stringify(result.recordset), 3600 * 24 * 3);
 
         // 遍历数据，每个用户ID，存一个用户信息
         result.recordset.map(item => {
@@ -462,8 +461,14 @@ class DatabaseController extends Controller {
         });
 
         const list = result.recordset.sort((n1, n2) => {
-            return n1.username.localeCompare(n2.username);
+            try {
+                return n1.username.localeCompare(n2.username);
+            } catch (error) {
+                return n1.id.localeCompare(n2.id);
+            }
         });
+
+        await store.set(`wxConfig.enterprise.user.systemuserlist#sort#@${sql}`, JSON.stringify(list), 3600 * 24 * 3);
 
         return list;
 
