@@ -73,6 +73,9 @@ module.exports = app => {
     // 查询企业微信部门成员信息
     router.get('/api/v2/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser);
 
+    // 查询企业微信部门成员信息
+    router.get('/api/v3/employee', controller.wework.queryWeWorkDepartUserSim);
+
     // 查询企业微信部门成员信息(simple)
     router.get('/api/v2/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser);
 

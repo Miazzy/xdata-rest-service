@@ -10,6 +10,8 @@ const fileConfig = require('../../config/fileconfig');
 const wxConfig = require('../../config/wxconfig');
 const dbconfig = require('../../config/dbconfig');
 
+const tools = require('../utils/tools');
+
 // 设置数据库连接地址
 const config = dbconfig;
 
@@ -276,6 +278,52 @@ class WeworkController extends Controller {
             result.data.userlist.map(item => {
                 return store.set(`wxConfig.enterprise.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
             });
+
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
+    }
+
+    /**
+     * @function 获取用户信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
+     */
+    async queryWeWorkDepartUserSim() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        const departid = ctx.query.departid || ctx.params.departid || '2';
+        const fetch = ctx.query.fetch || ctx.params.fetch || '1';
+
+        console.log(` departid : ${departid} fetch : ${fetch}`);
+
+        // 获取动态token
+        const userlist = await store.get(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`);
+
+        if (userlist) {
+            // console.log(` userinfo : ${userinfo}`);
+            ctx.body = JSON.parse(userlist);
+        } else {
+            // 获取token
+            const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
+            // 获取返回结果
+            const result = await axios.get(queryURL);
+
+            const templist = result.data.userlist;
+
+
+            // 遍历数据，每个用户ID，存一个用户信息
+            templist.map(item => {
+                return (item = tools.pick(item, ['thumb_avatar', 'name', 'userid']));
+            });
+
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
 
             // 设置返回信息
             ctx.body = result.data;
