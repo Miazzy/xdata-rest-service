@@ -301,7 +301,7 @@ class WeworkController extends Controller {
         console.log(` departid : ${departid} fetch : ${fetch}`);
 
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#Sort#_FETCH_CHILD#${fetch}@${departid}`);
+        const userlist = await store.get(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`);
 
         if (userlist) {
             ctx.body = JSON.parse(userlist);
@@ -320,11 +320,11 @@ class WeworkController extends Controller {
             });
 
             list = list.sort((n1, n2) => {
-                return n1.id.localeCompare(n2.id);
+                return n1.name.localeCompare(n2.name);
             });
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#Sort#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), 3600 * 24 * 3);
 
             // 设置返回信息
             ctx.body = list;

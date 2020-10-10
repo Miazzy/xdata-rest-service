@@ -442,7 +442,7 @@ class DatabaseController extends Controller {
         const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 0 row fetch next 10000 row  only  ';
 
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist@${sql}`);
+        const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist#sort#@${sql}`);
 
         if (userlist) {
             // ctx.body = JSON.parse(userlist);
@@ -451,7 +451,7 @@ class DatabaseController extends Controller {
 
         const result = await this.pool.query(sql);
 
-        await store.set(`wxConfig.enterprise.user.systemuserlist@${sql}`, JSON.stringify(result.recordset), 3600 * 24 * 3);
+        await store.set(`wxConfig.enterprise.user.systemuserlist#sort#@${sql}`, JSON.stringify(result.recordset), 3600 * 24 * 3);
 
         // 遍历数据，每个用户ID，存一个用户信息
         result.recordset.map(item => {
@@ -461,7 +461,11 @@ class DatabaseController extends Controller {
             return true;
         });
 
-        return result.recordset;
+        const list = result.recordset.sort((n1, n2) => {
+            return n1.username.localeCompare(n2.username);
+        });
+
+        return list;
 
     }
 
