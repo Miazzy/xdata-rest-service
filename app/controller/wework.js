@@ -320,7 +320,7 @@ class WeworkController extends Controller {
             });
 
             list = list.sort((n1, n2) => {
-                return n1.name.localeCompare(n2.name);
+                return n1.id.localeCompare(n2.id);
             });
 
             // 保存用户信息
