@@ -301,34 +301,40 @@ class WeworkController extends Controller {
         console.log(` departid : ${departid} fetch : ${fetch}`);
 
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#Array#Sort#_FETCH_CHILD#${fetch}@${departid}`);
+        // const userlist = await store.get(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#Array#Sort#_FETCH_CHILD#${fetch}@${departid}`);
 
-        if (userlist) {
-            ctx.body = JSON.parse(userlist);
-        } else {
-            // 获取token
-            const token = await this.queryToken();
-            // 获取URL
-            const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
-            // 获取返回结果
-            const result = await axios.get(queryURL);
+        // if (userlist) {
+        //     ctx.body = JSON.parse(userlist);
+        // } else {
+        // 获取token
+        const token = await this.queryToken();
+        // 获取URL
+        const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
+        // 获取返回结果
+        const result = await axios.get(queryURL);
 
-            // 遍历数据，每个用户ID，存一个用户信息
-            let list = result.data.userlist.map(item => {
-                item = tools.pick(item, ['thumb_avatar', 'name', 'userid']);
-                return (item = { avatar: item.thumb_avatar, name: item.name, id: item.userid });
-            });
+        // 遍历数据，每个用户ID，存一个用户信息
+        let list = result.data.userlist.map(item => {
+            item = tools.pick(item, ['thumb_avatar', 'name', 'userid']);
+            return (item = { avatar: item.thumb_avatar, name: item.name, id: item.userid });
+        });
 
-            list = list.sort((n1, n2) => {
-                return n2.id > n1.id;
-            });
+        list = list.sort((n1, n2) => {
+            try {
+                return n2.name < n1.name ? 1 : -1;
+            } catch (error) {
+                return 1;
+            }
+        });
 
-            // 保存用户信息
-            store.set(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#Array#Sort#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), 3600 * 24 * 3);
+        // console.log(JSON.stringify(list));
 
-            // 设置返回信息
-            ctx.body = list;
-        }
+        // 保存用户信息
+        store.set(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#Array#Sort#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), 3600 * 24 * 3);
+
+        // 设置返回信息
+        ctx.body = list;
+        // }
 
     }
 
