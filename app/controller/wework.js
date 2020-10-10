@@ -301,12 +301,13 @@ class WeworkController extends Controller {
         console.log(` departid : ${departid} fetch : ${fetch}`);
 
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`);
+        //const userlist = await store.get(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`);
 
-        if (userlist) {
-            // console.log(` userinfo : ${userinfo}`);
-            ctx.body = JSON.parse(userlist);
-        } else {
+        // if (userlist) {
+        //     // console.log(` userinfo : ${userinfo}`);
+        //     ctx.body = JSON.parse(userlist);
+        // } else 
+        {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
@@ -316,17 +317,19 @@ class WeworkController extends Controller {
 
             const templist = result.data.userlist;
 
-
             // 遍历数据，每个用户ID，存一个用户信息
-            templist.map(item => {
-                return (item = tools.pick(item, ['thumb_avatar', 'name', 'userid']));
+            const list = templist.map(item => {
+                item = tools.pick(item, ['thumb_avatar', 'name', 'userid']);
+                return (item = { avatar: item.thumb_avatar, name: item.name, id: item.userid });
             });
+
+            console.log('list:' + list);
 
             // 保存用户信息
             store.set(`wxConfig.enterprise.user.queryDepartUserAPI#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
 
             // 设置返回信息
-            ctx.body = result.data;
+            ctx.body = list;
         }
 
     }
