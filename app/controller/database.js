@@ -442,7 +442,7 @@ class DatabaseController extends Controller {
         const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 0 row fetch next 10000 row  only  ';
 
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist#sort#@${sql}`);
+        const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist#sort##@${sql}`);
 
         if (userlist) {
             // ctx.body = JSON.parse(userlist);
@@ -464,11 +464,11 @@ class DatabaseController extends Controller {
             try {
                 return n1.username.localeCompare(n2.username);
             } catch (error) {
-                return n1.id.localeCompare(n2.id);
+                return n1.id - (n2.id);
             }
         });
 
-        await store.set(`wxConfig.enterprise.user.systemuserlist#sort#@${sql}`, JSON.stringify(list), 3600 * 24 * 3);
+        await store.set(`wxConfig.enterprise.user.systemuserlist#sort##@${sql}`, JSON.stringify(list), 3600 * 24 * 3);
 
         return list;
 
