@@ -439,7 +439,7 @@ class DatabaseController extends Controller {
         // 缓存控制器
         const store = app.cache.store('redis');
 
-        const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5)  order by id asc offset 0 row fetch next 10000 row  only  ';
+        const sql = 'select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and username != "" order by id asc offset 0 row fetch next 10000 row  only  ';
 
         // 获取动态token
         const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist#sort##@${sql}`);
