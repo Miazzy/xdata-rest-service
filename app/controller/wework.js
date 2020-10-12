@@ -523,9 +523,18 @@ class WeworkController extends Controller {
                                 const department = await ctx.service.bussiness.queryDepartmentByID(result.data.userinfo.main_department);
                                 result.data.userinfo.department = department;
                                 console.log(JSON.stringify(department));
+                                // 查询公司信息
                                 const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
                                 result.data.userinfo.company = company;
                                 console.log(JSON.stringify(company));
+                                // 查询上级公司信息
+                                const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                                result.data.userinfo.parent_company = parent_company;
+                                console.log(JSON.stringify(parent_company));
+                                // 查询顶级公司信息
+                                const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                                result.data.userinfo.top_company = top_company;
+                                console.log(JSON.stringify(top_company));
                             }
                         }
                     } catch (error) {
