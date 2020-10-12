@@ -171,10 +171,14 @@ class BussinessService extends Service {
             return store.set(`wxConfig.enterprise.department.single@${item.id}`, JSON.stringify(item), 3600 * 24 * 3);
         });
 
-        // 打印字符串
-        console.log('queryURL : ' + queryURL);
+        const resp = result.data.department.find(item => {
+            return item.id === departid;
+        });
+
+        console.log(`departid : ${departid} #resp: ${JSON.stringify(resp)}`);
+
         // 设置返回信息
-        return result.data;
+        return resp;
 
     }
 }

@@ -520,6 +520,12 @@ class WeworkController extends Controller {
 
                             if (result.data.userinfo.main_department) {
                                 // 查询部门信息
+                                const department = await ctx.service.bussiness.queryDepartmentByID(result.data.userinfo.main_department);
+                                result.data.userinfo.department = department;
+                                console.log(JSON.stringify(department));
+                                const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                                result.data.userinfo.company = company;
+                                console.log(JSON.stringify(company));
                             }
                         }
                     } catch (error) {
