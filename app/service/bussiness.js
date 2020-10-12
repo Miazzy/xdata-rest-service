@@ -144,7 +144,7 @@ class BussinessService extends Service {
         departid = departid === '-1' ? '' : departid;
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.department.queryALL@${departid}`);
+        const userinfo = await store.get(`wxConfig.enterprise.department.single@${departid}`);
 
         if (departid) {
             params = `&id=${departid}`;
@@ -154,27 +154,28 @@ class BussinessService extends Service {
 
         if (userinfo) {
             // console.log(` userinfo : ${userinfo}`);
-            ctx.body = JSON.parse(userinfo);
-        } else {
-            // 获取token
-            const token = await this.queryToken();
-            // 获取URL
-            const queryURL = wxConfig.enterprise.department.queryALL.replace('ACCESS_TOKEN', token) + params;
-            // 获取返回结果
-            const result = await axios.get(queryURL);
-            // 保存用户信息
-            store.set(`wxConfig.enterprise.department.queryALL@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
-
-            // 遍历数据，每个用户ID，存一个用户信息
-            result.data.department.map(item => {
-                return store.set(`wxConfig.enterprise.department.single@${item.id}`, JSON.stringify(item), 3600 * 24 * 3);
-            });
-
-            // 打印字符串
-            console.log('queryURL : ' + queryURL);
-            // 设置返回信息
-            ctx.body = result.data;
+            return JSON.parse(userinfo);
         }
+
+        // 获取token
+        const token = await this.queryToken();
+        // 获取URL
+        const queryURL = wxConfig.enterprise.department.queryALL.replace('ACCESS_TOKEN', token) + params;
+        // 获取返回结果
+        const result = await axios.get(queryURL);
+        // 保存用户信息
+        store.set(`wxConfig.enterprise.department.queryALL@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+
+        // 遍历数据，每个用户ID，存一个用户信息
+        result.data.department.map(item => {
+            return store.set(`wxConfig.enterprise.department.single@${item.id}`, JSON.stringify(item), 3600 * 24 * 3);
+        });
+
+        // 打印字符串
+        console.log('queryURL : ' + queryURL);
+        // 设置返回信息
+        return result.data;
+
     }
 }
 
