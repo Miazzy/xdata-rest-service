@@ -210,6 +210,41 @@ class BussinessService extends Service {
         return resp;
 
     }
+
+    /**
+     * @function 获取企业微信token
+     */
+    async queryToken() {
+
+        const { ctx, app } = this;
+
+        await this.init();
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        const query = ctx.query;
+        const agentid = query.agentid || ctx.params.agentid || wxConfig.enterprise.agentid;
+
+        // 获取TokenURL
+        const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
+        // 获取动态token
+        let token = await store.get(`wxConfig.enterprise.access_token@${agentid}`);
+
+        // 检查token是否存在，如果不存在，则刷新token
+        if (!token) {
+            const result = await axios.get(tokenAPI);
+            token = result.data.access_token;
+            store.set(`wxConfig.enterprise.access_token@${agentid}`, token, 3600);
+            console.log('get token from wechat rest api :' + token);
+        } else {
+            // 打印token值
+            console.log('get token from redis :' + token);
+        }
+
+        return token;
+    }
+
 }
 
 

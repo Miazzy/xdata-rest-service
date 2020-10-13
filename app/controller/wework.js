@@ -496,7 +496,8 @@ class WeworkController extends Controller {
 
                     // 获取动态token
                     try {
-                        result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+                        result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
+                        // result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
                     } catch (error) {
                         console.log(error);
                     }
