@@ -72,7 +72,7 @@ class BussinessService extends Service {
         const store = app.cache.store('redis');
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.grouplimits.username#userid#@${username}`);
+        const userinfo = await store.get(`wxConfig.enterprise.grouplimits.username#userid#v1#@${username}`);
 
         // 如果获取到缓存数据，设置返回结果
         if (userinfo) {
@@ -93,7 +93,7 @@ class BussinessService extends Service {
         // 设置结果
         const result = { seal, front, archive };
         // 设置缓存
-        await store.set(`wxConfig.enterprise.grouplimits.username#userid#@${username}`, result, 3600 * 24 * 3);
+        await store.set(`wxConfig.enterprise.grouplimits.username#userid#v1#@${username}`, result, 3600 * 24 * 3);
 
         // 设置返回结果
         return result;
