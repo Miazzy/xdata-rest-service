@@ -116,7 +116,7 @@ class BussinessService extends Service {
 
         console.log('queryEmployeeByID userid : ' + id);
 
-        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  (id = ${id} or name = '${name}' or mobile = '${mobile}' )order by id asc offset 0 row fetch next 10000 row  only  `;
+        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  (id = ${id} or lastname = '${name}' or mobile = '${mobile}' )order by id asc offset 0 row fetch next 10000 row  only  `;
 
         console.log('queryEmployeeByID sql : ' + sql);
 
