@@ -486,7 +486,6 @@ class WeworkController extends Controller {
 
                     // 查询基础数据
                     try {
-                        // await this.queryIpList();
                         await this.queryWeWorkDepartInfo();
                         await this.queryWeWorkDepartlist();
                         await this.queryWeWorkSimpleDepartUser();
