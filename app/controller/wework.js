@@ -223,7 +223,8 @@ class WeworkController extends Controller {
         console.log(` userid : ${userid} `);
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${userid}`);
+        const userinfo = await ctx.service.bussiness.queryUserInfoByID(userid);
+        // const userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${userid}`);
 
         if (userinfo) {
             // console.log(` userinfo : ${userinfo}`);
