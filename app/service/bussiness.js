@@ -112,9 +112,13 @@ class BussinessService extends Service {
         // 缓存控制器
         const store = app.cache.store('redis');
 
+        console.log('queryEmployeeByID userid : ' + id);
+
         const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  id = ${id} order by id asc offset 0 row fetch next 10000 row  only  `;
 
         const result = await this.pool.query(sql);
+
+        console.log('queryEmployeeByID result : ' + JSON.stringify(result));
 
         // 遍历数据，每个用户ID，存一个用户信息
         result.recordset.map(item => {
