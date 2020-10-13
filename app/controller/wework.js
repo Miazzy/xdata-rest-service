@@ -506,7 +506,7 @@ class WeworkController extends Controller {
                     // 解析字符串为json对象
                     try {
                         if (result.data.userinfo) {
-                            result.data.userinfo = JSON.parse(result.data.userinfo);
+                            // result.data.userinfo = JSON.parse(result.data.userinfo);
                             result.data.userinfo.orgin_userid = result.data.UserId;
                             result.data.userinfo.realname = result.data.userinfo.name;
                             result.data.userinfo.phone = result.data.userinfo.mobile;
