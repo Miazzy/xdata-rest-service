@@ -128,6 +128,35 @@ class BussinessService extends Service {
 
     }
 
+    async queryUserInfoByID(userid) {
+
+        const { app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${userid}`);
+
+        // 如果获取到用户信息，则直接返回数据
+        if (userinfo) {
+            return JSON.parse(userinfo);
+        }
+
+        // 获取token
+        const token = await this.queryToken();
+        // 获取URL
+        const queryURL = wxConfig.enterprise.user.queryAPI.replace('ACCESS_TOKEN', token).replace('USERID', userid);
+        // 获取返回结果
+        const result = await axios.get(queryURL);
+        // 保存用户信息
+        store.set(`wxConfig.enterprise.user.userinfo@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+
+        // 设置返回信息
+        return result.data;
+
+    }
+
     /**
      * @function 查询部门信息
      * @param {*} departid
