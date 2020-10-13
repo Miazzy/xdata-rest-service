@@ -514,7 +514,7 @@ class WeworkController extends Controller {
 
                             if (result.data.userinfo.userid) {
                                 // 获取用户信息
-                                const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid);
+                                const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
                                 result.data.userinfo.systemuserinfo = user;
                                 result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
                                 result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
