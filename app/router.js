@@ -67,6 +67,9 @@ module.exports = app => {
     // 查询企业微信用户信息
     router.get('/api/v2/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
 
+    // 查询企业微信用户信息
+    router.get('/api/v2/wework_mobile/:mobile', controller.wework.queryWeWorkUserInfoByMobile);
+
     // 查询企业微信部门成员信息
     router.get('/api/v2/wework_user_page/:page/:size', controller.wework.queryWeWorkDepartUser);
 
