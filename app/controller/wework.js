@@ -227,8 +227,11 @@ class WeworkController extends Controller {
         // const userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${userid}`);
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
-            ctx.body = JSON.parse(userinfo);
+            try {
+                ctx.body = JSON.parse(userinfo);
+            } catch (error) {
+                ctx.body = userinfo;
+            }
         } else {
             // 获取token
             const token = await this.queryToken();
