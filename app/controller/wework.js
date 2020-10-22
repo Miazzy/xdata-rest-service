@@ -249,6 +249,27 @@ class WeworkController extends Controller {
 
     /**
      * @function 获取用户信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID
+     */
+    async queryWeWorkUserInfoByMobile() {
+
+        const { ctx } = this;
+
+        const mobile = ctx.query.mobile || ctx.params.mobile || '';
+
+        // 获取动态token
+        const userinfo = await ctx.service.bussiness.queryUserInfoByMobile(mobile);
+
+        try {
+            ctx.body = JSON.parse(userinfo);
+        } catch (error) {
+            ctx.body = userinfo;
+        }
+
+    }
+
+    /**
+     * @function 获取用户信息 queryWechatWorkUserInfo
      * @description https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
      */
     async queryWeWorkDepartUser() {
@@ -280,6 +301,7 @@ class WeworkController extends Controller {
 
             // 遍历数据，每个用户ID，存一个用户信息
             result.data.userlist.map(item => {
+                store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
                 return store.set(`wxConfig.enterprise.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
             });
 

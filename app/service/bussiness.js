@@ -165,6 +165,41 @@ class BussinessService extends Service {
 
     }
 
+    async queryUserInfoByMobile(mobile) {
+
+        const { app } = this;
+
+        // 设置返回结果
+        let response = null;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.user.userinfo#mobile#@${mobile}`);
+
+        // 如果获取到用户信息，则直接返回数据
+        if (userinfo) {
+            return JSON.parse(userinfo);
+        }
+
+        // 获取token
+        const token = await this.queryToken();
+        // 获取URL
+        const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', 2).replace('FETCH_CHILD', 1);
+        // 获取返回结果
+        const result = await axios.get(queryURL);
+
+
+        // 遍历数据，每个用户ID，存一个用户信息
+        result.data.userlist.each(item => {
+            response = item.mobile === mobile ? item : {};
+            store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
+        });
+
+        return response;
+    }
+
     /**
      * @function 查询部门信息
      * @param {*} departid
