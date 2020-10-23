@@ -136,6 +136,40 @@ class BussinessService extends Service {
 
     }
 
+    /**
+     * @function 查询所有员工数据，并保持至数据库中
+     * @param {*} mobile
+     */
+    async queryEmployeeByMobile(mobile) {
+
+        await this.init();
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  ( mobile = '${mobile}' )order by id asc offset 0 row fetch next 10000 row  only  `;
+
+        console.log('queryEmployeeByID sql : ' + sql);
+
+        const result = await this.pool.query(sql);
+
+        console.log('queryEmployeeByID result : ' + JSON.stringify(result));
+
+        // 遍历数据，每个用户ID，存一个用户信息
+        result.recordset.map(item => {
+            store.set(`wxConfig.enterprise.user.sysuserinfo#id@${item.id}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo#wid@${item.wid}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo#mobile@${mobile}`, JSON.stringify(item), 3600 * 24 * 31);
+            store.set(`wxConfig.enterprise.user.sysuserinfo@${item.username}`, JSON.stringify(item), 3600 * 24 * 31);
+            return true;
+        });
+
+        return result.recordset[0];
+
+    }
+
     async queryUserInfoByID(userid) {
 
         const { app } = this;
@@ -200,6 +234,15 @@ class BussinessService extends Service {
             response = item.mobile === mobile ? item : {};
             store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
         });
+
+        // 如果获取到返回信息
+        if (response) {
+            // 获取用户信息
+            const user = await this.queryEmployeeByMobile(mobile);
+            response.systemuserinfo = user;
+            response.username = user.username;
+            response.grouplimits = await this.queryGroupLimitsByID(user.username); // 用户管理组权限
+        }
 
         return response;
     }
