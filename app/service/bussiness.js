@@ -186,13 +186,17 @@ class BussinessService extends Service {
         // 获取token
         const token = await this.queryToken();
         // 获取URL
-        const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', 2).replace('FETCH_CHILD', 1);
+        const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', 1019).replace('FETCH_CHILD', 1);
+
+        console.log(queryURL);
+
         // 获取返回结果
         const result = await axios.get(queryURL);
 
+        console.log(`result : ${JSON.stringify(result.data.userlist.length)}`);
 
         // 遍历数据，每个用户ID，存一个用户信息
-        result.data.userlist.each(item => {
+        result.data.userlist.map(item => {
             response = item.mobile === mobile ? item : {};
             store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
         });
