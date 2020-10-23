@@ -491,10 +491,12 @@ class WeworkController extends Controller {
         // 获取动态token
         const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
 
-        if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
-            ctx.body = JSON.parse(userinfo);
-        } else {
+        // if (userinfo) {
+        //     // console.log(` userinfo : ${userinfo}`);
+        //     ctx.body = JSON.parse(userinfo);
+        // } else
+
+        {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
@@ -540,6 +542,14 @@ class WeworkController extends Controller {
                             if (result.data.userinfo.userid) {
                                 // 获取用户信息
                                 const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
+                                result.data.userinfo.systemuserinfo = user;
+                                result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
+                                result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                            }
+
+                            if (!result.data.userinfo.systemuserinfo && result.data.userinfo.mobile) {
+                                // 获取用户信息
+                                const user = await ctx.service.bussiness.queryEmployeeByMobile(result.data.userinfo.mobile);
                                 result.data.userinfo.systemuserinfo = user;
                                 result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
                                 result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
