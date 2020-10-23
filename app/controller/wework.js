@@ -491,8 +491,8 @@ class WeworkController extends Controller {
         // 获取动态token
         const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
 
+        // 如果查询到缓存信息，则直接使用缓存信息，如果未查询到缓存信息，则查询用户信息
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
             let response = null;
 
             try {
