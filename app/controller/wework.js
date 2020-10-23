@@ -491,12 +491,60 @@ class WeworkController extends Controller {
         // 获取动态token
         const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
 
-        // if (userinfo) {
-        //     // console.log(` userinfo : ${userinfo}`);
-        //     ctx.body = JSON.parse(userinfo);
-        // } else
+        if (userinfo) {
+            // console.log(` userinfo : ${userinfo}`);
+            let response = null;
 
-        {
+            try {
+                response = JSON.parse(userinfo);
+            } catch (error) {
+                response = userinfo;
+            }
+
+            try {
+                if (!response.userinfo.systemuserinfo && response.userinfo.mobile) {
+                    // 获取用户信息
+                    const user = await ctx.service.bussiness.queryEmployeeByMobile(response.userinfo.mobile);
+                    response.userinfo.systemuserinfo = user;
+                    response.userinfo.username = response.userinfo.systemuserinfo.username;
+                    response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
+                    // 保存用户信息
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            try {
+                if (!response.userinfo.department && response.userinfo.main_department) {
+                    // 查询部门信息
+                    const department = await ctx.service.bussiness.queryDepartmentByID(response.userinfo.main_department);
+                    response.userinfo.department = department;
+                    console.log(JSON.stringify(department));
+                    // 查询公司信息
+                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                    response.userinfo.company = company;
+                    console.log(JSON.stringify(company));
+                    // 查询上级公司信息
+                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                    response.userinfo.parent_company = parent_company;
+                    console.log(JSON.stringify(parent_company));
+                    // 查询顶级公司信息
+                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                    response.userinfo.top_company = top_company;
+                    console.log(JSON.stringify(top_company));
+                    // 保存用户信息
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+            console.log(JSON.stringify(response));
+
+            ctx.body = response;
+        } else {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
@@ -534,44 +582,61 @@ class WeworkController extends Controller {
                     try {
                         if (result.data.userinfo) {
                             // result.data.userinfo = JSON.parse(result.data.userinfo);
-                            result.data.userinfo.orgin_userid = result.data.UserId;
-                            result.data.userinfo.realname = result.data.userinfo.name;
-                            result.data.userinfo.phone = result.data.userinfo.mobile;
-                            result.data.userinfo.openid = openinfo.openid;
 
-                            if (result.data.userinfo.userid) {
-                                // 获取用户信息
-                                const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
-                                result.data.userinfo.systemuserinfo = user;
-                                result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                                result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                            try {
+                                result.data.userinfo.orgin_userid = result.data.UserId;
+                                result.data.userinfo.realname = result.data.userinfo.name;
+                                result.data.userinfo.phone = result.data.userinfo.mobile;
+                                result.data.userinfo.openid = openinfo.openid;
+                            } catch (error) {
+                                console.log(error);
                             }
 
-                            if (!result.data.userinfo.systemuserinfo && result.data.userinfo.mobile) {
-                                // 获取用户信息
-                                const user = await ctx.service.bussiness.queryEmployeeByMobile(result.data.userinfo.mobile);
-                                result.data.userinfo.systemuserinfo = user;
-                                result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                                result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                            try {
+                                if (result.data.userinfo.userid) {
+                                    // 获取用户信息
+                                    const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
+                                    result.data.userinfo.systemuserinfo = user;
+                                    result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
+                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                }
+                            } catch (error) {
+                                console.log(error);
                             }
 
-                            if (result.data.userinfo.main_department) {
-                                // 查询部门信息
-                                const department = await ctx.service.bussiness.queryDepartmentByID(result.data.userinfo.main_department);
-                                result.data.userinfo.department = department;
-                                console.log(JSON.stringify(department));
-                                // 查询公司信息
-                                const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
-                                result.data.userinfo.company = company;
-                                console.log(JSON.stringify(company));
-                                // 查询上级公司信息
-                                const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
-                                result.data.userinfo.parent_company = parent_company;
-                                console.log(JSON.stringify(parent_company));
-                                // 查询顶级公司信息
-                                const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
-                                result.data.userinfo.top_company = top_company;
-                                console.log(JSON.stringify(top_company));
+                            try {
+                                if (!result.data.userinfo.systemuserinfo && result.data.userinfo.mobile) {
+                                    // 获取用户信息
+                                    const user = await ctx.service.bussiness.queryEmployeeByMobile(result.data.userinfo.mobile);
+                                    result.data.userinfo.systemuserinfo = user;
+                                    result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
+                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                }
+                            } catch (error) {
+                                console.log(error);
+                            }
+
+                            try {
+                                if (result.data.userinfo.main_department) {
+                                    // 查询部门信息
+                                    const department = await ctx.service.bussiness.queryDepartmentByID(result.data.userinfo.main_department);
+                                    result.data.userinfo.department = department;
+                                    console.log(JSON.stringify(department));
+                                    // 查询公司信息
+                                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                                    result.data.userinfo.company = company;
+                                    console.log(JSON.stringify(company));
+                                    // 查询上级公司信息
+                                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                                    result.data.userinfo.parent_company = parent_company;
+                                    console.log(JSON.stringify(parent_company));
+                                    // 查询顶级公司信息
+                                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                                    result.data.userinfo.top_company = top_company;
+                                    console.log(JSON.stringify(top_company));
+                                }
+                            } catch (error) {
+                                console.log(error);
                             }
                         }
                     } catch (error) {
