@@ -40,9 +40,6 @@ module.exports = app => {
     // 查询员工数据
     router.get('/api/v2/employee', controller.database.employee);
 
-    // 查询员工OpenID
-    router.get('/api/v2/wework/openid/:userid', controller.wework.queryOpenIDByUserID);
-
     // 查询员工数据
     router.get('/api/v2/queryemployee/:id', controller.database.queryEmployeeByID);
 
@@ -55,14 +52,17 @@ module.exports = app => {
     // 查询文件信息，并进行下载(根据FileID)
     router.get('/api/v1/file/query/:file', controller.filebase.queryByFileID);
 
+    // 推送EMAIL机器消息
+    router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
+
+    // 查询员工OpenID
+    router.get('/api/v2/wework/openid/:userid', controller.wework.queryOpenIDByUserID);
+
     // 推送企业微信机器消息
     router.get('/api/v1/wework/:title/:description', controller.wework.send);
 
     // 推送企业微信应用消息
     router.get('/api/v1/weappms/:userid/:message', controller.wework.appmessage);
-
-    // 推送EMAIL机器消息
-    router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
 
     // 查询企业微信用户信息
     router.get('/api/v2/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
@@ -88,10 +88,10 @@ module.exports = app => {
     // 查询企业微信部门列表信息
     router.get('/api/v2/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo);
 
-    // 查询企业微信用户信息(网页授权)
+    // 查询企业微信用户信息 行政智能模块获取消息 (网页授权)
     router.get('/api/v2/wework_user_code/:code', controller.wework.queryWeWorkUserByCode);
 
-    // 查询企业微信用户信息(网页授权)
+    // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
     router.get('/api/v3/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeRewardSystem);
 
     // 查询企业微信用户信息(网页授权)
