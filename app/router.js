@@ -92,6 +92,9 @@ module.exports = app => {
     router.get('/api/v2/wework_user_code/:code', controller.wework.queryWeWorkUserByCode);
 
     // 查询企业微信用户信息(网页授权)
+    router.get('/api/v3/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeRewardSystem);
+
+    // 查询企业微信用户信息(网页授权)
     router.get('/api/v2/wework_ip_list', controller.wework.queryIpList);
 
     // 数据库表serialid自动排序

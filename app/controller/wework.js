@@ -213,6 +213,38 @@ class WeworkController extends Controller {
     }
 
     /**
+     * @function 获取企业微信token
+     */
+    async queryTokenByRewardSystem() {
+
+        const { app } = this;
+
+        await this.init();
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        const agentid = wxConfig.enterprise.reward.agentid;
+
+        // 获取TokenURL
+        const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.reward.secret}`;
+        // 获取动态token
+        let token = await store.get(`wxConfig.enterprise.access_token@${agentid}`);
+
+        // 检查token是否存在，如果不存在，则刷新token
+        if (!token) {
+            const result = await axios.get(tokenAPI);
+            token = result.data.access_token;
+            store.set(`wxConfig.enterprise.access_token@${agentid}`, token, 3600);
+            console.log('get token from wechat rest api :' + token);
+        } else {
+            // 打印token值
+            console.log('get token from redis :' + token);
+        }
+
+        return token;
+    }
+
+    /**
      * @function 获取用户信息 queryWechatWorkUserInfo
      * @description https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID
      */
@@ -551,6 +583,191 @@ class WeworkController extends Controller {
         } else {
             // 获取token
             const token = await this.queryToken();
+            // 获取URL
+            const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
+            // 获取返回结果
+            const result = await axios.get(queryURL);
+            // 打印查询结果信息
+            console.log('result : ' + JSON.stringify(result.data));
+            // 如果存在用户UserID信息，则进一步查询用户信息
+            try {
+                if (result.data.UserId) {
+
+                    // 查询OpenID
+                    const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
+
+                    // 查询基础数据
+                    try {
+                        await this.queryWeWorkDepartInfo();
+                        await this.queryWeWorkDepartlist();
+                        await this.queryWeWorkSimpleDepartUser();
+                        await this.queryWeWorkDepartUser();
+                    } catch (error) {
+                        console.log(error);
+                    }
+
+                    // 获取动态token
+                    try {
+                        result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
+                        // result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
+                    } catch (error) {
+                        console.log(error);
+                    }
+
+                    // 解析字符串为json对象
+                    try {
+                        if (result.data.userinfo) {
+                            // result.data.userinfo = JSON.parse(result.data.userinfo);
+
+                            try {
+                                result.data.userinfo.orgin_userid = result.data.UserId;
+                                result.data.userinfo.realname = result.data.userinfo.name;
+                                result.data.userinfo.phone = result.data.userinfo.mobile;
+                                result.data.userinfo.openid = openinfo.openid;
+                            } catch (error) {
+                                console.log(error);
+                            }
+
+                            try {
+                                if (result.data.userinfo.userid) {
+                                    // 获取用户信息
+                                    const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
+                                    result.data.userinfo.systemuserinfo = user;
+                                    result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
+                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                }
+                            } catch (error) {
+                                console.log(error);
+                            }
+
+                            try {
+                                if (!result.data.userinfo.systemuserinfo && result.data.userinfo.mobile) {
+                                    // 获取用户信息
+                                    const user = await ctx.service.bussiness.queryEmployeeByMobile(result.data.userinfo.mobile);
+                                    result.data.userinfo.systemuserinfo = user;
+                                    result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
+                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                }
+                            } catch (error) {
+                                console.log(error);
+                            }
+
+                            try {
+                                if (result.data.userinfo.main_department) {
+                                    // 查询部门信息
+                                    const department = await ctx.service.bussiness.queryDepartmentByID(result.data.userinfo.main_department);
+                                    result.data.userinfo.department = department;
+                                    console.log(JSON.stringify(department));
+                                    // 查询公司信息
+                                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                                    result.data.userinfo.company = company;
+                                    console.log(JSON.stringify(company));
+                                    // 查询上级公司信息
+                                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                                    result.data.userinfo.parent_company = parent_company;
+                                    console.log(JSON.stringify(parent_company));
+                                    // 查询顶级公司信息
+                                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                                    result.data.userinfo.top_company = top_company;
+                                    console.log(JSON.stringify(top_company));
+                                }
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+
+                    // 保存用户信息
+                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            // 保存用户信息
+            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+
+            // 设置返回信息
+            ctx.body = result.data;
+        }
+
+    }
+
+    /**
+     * @function 获取部门信息 queryWechatWorkUserInfo
+     * @description https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN
+     */
+    async queryWeWorkUserByCodeRewardSystem() {
+
+        const { ctx, app } = this;
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+        // 获取部门编号
+        const code = ctx.query.code || ctx.params.code || '';
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
+
+        // 如果查询到缓存信息，则直接使用缓存信息，如果未查询到缓存信息，则查询用户信息
+        if (userinfo) {
+            let response = null;
+
+            try {
+                response = JSON.parse(userinfo);
+            } catch (error) {
+                response = userinfo;
+            }
+
+            try {
+                if (!response.userinfo.systemuserinfo && response.userinfo.mobile) {
+                    // 获取用户信息
+                    const user = await ctx.service.bussiness.queryEmployeeByMobile(response.userinfo.mobile);
+                    response.userinfo.systemuserinfo = user;
+                    response.userinfo.username = response.userinfo.systemuserinfo.username;
+                    response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
+                    // 保存用户信息
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            try {
+                if (!response.userinfo.department && response.userinfo.main_department) {
+                    // 查询部门信息
+                    const department = await ctx.service.bussiness.queryDepartmentByID(response.userinfo.main_department);
+                    response.userinfo.department = department;
+                    console.log(JSON.stringify(department));
+                    // 查询公司信息
+                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                    response.userinfo.company = company;
+                    console.log(JSON.stringify(company));
+                    // 查询上级公司信息
+                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                    response.userinfo.parent_company = parent_company;
+                    console.log(JSON.stringify(parent_company));
+                    // 查询顶级公司信息
+                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                    response.userinfo.top_company = top_company;
+                    console.log(JSON.stringify(top_company));
+                    // 保存用户信息
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+            console.log(JSON.stringify(response));
+
+            ctx.body = response;
+        } else {
+            // 获取token
+            const token = await this.queryTokenByRewardSystem();
             // 获取URL
             const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
             // 获取返回结果

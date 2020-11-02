@@ -19,6 +19,10 @@ const config = {
         agent: {
             1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
         },
+        reward: {
+            agentid: 1000079,
+            secret: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
+        },
         message: {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
             api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
