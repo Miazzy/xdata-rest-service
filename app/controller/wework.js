@@ -80,6 +80,9 @@ class WeworkController extends Controller {
                 redirectUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3b01d8bf4c588933&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect'.replace('REDIRECT_URL', encodeURIComponent(redirectUrl));
             }
         } catch (error) {
+            if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
+                redirectUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3b01d8bf4c588933&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect'.replace('REDIRECT_URL', redirectUrl);
+            }
             console.log(error);
         }
         return redirectUrl;
