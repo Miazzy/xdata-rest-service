@@ -71,6 +71,21 @@ class WeworkController extends Controller {
     }
 
     /**
+     * @function 获取添加微信跳转的URL
+     * @param {*} redirectUrl
+     */
+    queryRedirectURL(redirectUrl) {
+        try {
+            if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
+                redirectUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3b01d8bf4c588933&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect'.replace('REDIRECT_URL', encodeURIComponent(redirectUrl));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        return redirectUrl;
+    }
+
+    /**
      * @function 发送message消息
      */
     async appmessage() {
@@ -86,7 +101,7 @@ class WeworkController extends Controller {
         const message = query.message || ctx.params.message;
         const userid = query.userid || ctx.params.userid;
         const agentid = query.agentid || ctx.params.agentid || wxConfig.enterprise.agentid;
-        const redirectUrl = query.rurl || ctx.params.rurl;
+        const redirectUrl = this.queryRedirectURL(query.rurl || ctx.params.rurl);
 
         // 获取TokenURL
         const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
@@ -951,7 +966,6 @@ class WeworkController extends Controller {
 
         return ctx.body;
     }
-
 
 
 }
