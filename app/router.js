@@ -106,6 +106,9 @@ module.exports = app => {
     // 数据库表serialid自动排序
     router.get('/api/v2/mysql/serial/update_seal_info', controller.mysql.updateSealInfo);
 
+    // 数据库表Row权限更新
+    router.get('/api/v3/mysql/:tablename/:username/:ids/:groupfieldname/:fieldname', controller.mysql.updateRowLimits);
+
     // 查询用印管理用户管理组信息
     router.get('/api/v2/bussiness/grouplimits/:username', controller.bussiness.queryGroupLimits);
 
