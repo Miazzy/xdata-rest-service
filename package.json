@@ -24,7 +24,9 @@
     "egg-proxy": "^1.2.0",
     "egg-redis": "^2.4.0",
     "egg-scripts": "^2.11.0",
-    "mssql": "^6.2.1"
+    "excel": "^1.0.1",
+    "mssql": "^6.2.1",
+    "read-excel-file": "^4.0.7"
   },
   "devDependencies": {
     "autod": "^3.0.1",
