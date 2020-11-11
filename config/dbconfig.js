@@ -21,6 +21,22 @@ const config = {
     },
 };
 
+const configcd = {
+    user: 'sa',
+    password: 'Leading888',
+    server: '172.18.1.60',
+    database: 'ecology',
+    port: 1433,
+    options: {
+        encrypt: false,
+    },
+    pool: {
+        min: 0,
+        max: 10,
+        idleTimeoutMillis: 3000,
+    },
+};
+
 /**
  * @function 初始化数据库连接池
  */
@@ -33,5 +49,7 @@ const init = async() => {
 
 module.exports = {
     ...config,
+    config: {...config },
+    configcd: {...configcd },
     init,
 };

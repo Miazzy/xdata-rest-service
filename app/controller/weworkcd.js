@@ -13,12 +13,12 @@ const dbconfig = require('../../config/dbconfig');
 const tools = require('../utils/tools');
 
 // 设置数据库连接地址
-const config = dbconfig.config;
+const config = dbconfig.configcd;
 
 /**
- * @abstract 定义数据库相关处理类
+ * @abstract 定义数据库相关处理类 创达公司企业微信
  */
-class WeworkController extends Controller {
+class WeworkCDController extends Controller {
 
     /**
      * @function 初始化数据库连接池
@@ -77,11 +77,11 @@ class WeworkController extends Controller {
     queryRedirectURL(redirectUrl) {
         try {
             if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
-                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterprise.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', encodeURIComponent(redirectUrl));
+                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterpriseCD.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', encodeURIComponent(redirectUrl));
             }
         } catch (error) {
             if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
-                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterprise.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', redirectUrl);
+                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterpriseCD.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', redirectUrl);
             }
             console.log(error);
         }
@@ -103,13 +103,13 @@ class WeworkController extends Controller {
         const query = ctx.query;
         const message = query.message || ctx.params.message;
         const userid = query.userid || ctx.params.userid;
-        const agentid = query.agentid || ctx.params.agentid || wxConfig.enterprise.agentid;
+        const agentid = query.agentid || ctx.params.agentid || wxConfig.enterpriseCD.agentid;
         const redirectUrl = this.queryRedirectURL(query.rurl || ctx.params.rurl);
 
         // 获取TokenURL
-        const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
+        const tokenAPI = `${wxConfig.wework.message.gettoken}?corpid=${wxConfig.enterpriseCD.id}&corpsecret=${wxConfig.enterpriseCD.agent[agentid]}`;
         // 获取动态token
-        let token = await store.get(`wxConfig.enterprise.access_token@${agentid}`);
+        let token = await store.get(`wxConfig.wework.access_token@${agentid}`);
         // 消息中的链接消息
         let messageurl = '';
 
@@ -119,7 +119,7 @@ class WeworkController extends Controller {
         if (!token) {
             const result = await axios.get(tokenAPI);
             token = result.data.access_token;
-            store.set(`wxConfig.enterprise.access_token@${agentid}`, token, 3600);
+            store.set(`wxConfig.wework.access_token@${agentid}`, token, 3600);
             console.log('get token from wechat rest api :' + token);
         } else {
             // 打印token值
@@ -170,7 +170,7 @@ class WeworkController extends Controller {
         console.log(`userid : ${userID}`);
 
         // 发送信息URL
-        const queryAPI = wxConfig.enterprise.message.api + token;
+        const queryAPI = wxConfig.wework.message.api + token;
 
         const node = {
             touser: `${userID}`,
@@ -209,18 +209,18 @@ class WeworkController extends Controller {
         const store = app.cache.store('redis');
 
         const query = ctx.query;
-        const agentid = query.agentid || ctx.params.agentid || wxConfig.enterprise.agentid;
+        const agentid = query.agentid || ctx.params.agentid || wxConfig.enterpriseCD.agentid;
 
         // 获取TokenURL
-        const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.agent[agentid]}`;
+        const tokenAPI = `${wxConfig.wework.message.gettoken}?corpid=${wxConfig.enterpriseCD.id}&corpsecret=${wxConfig.enterpriseCD.agent[agentid]}`;
         // 获取动态token
-        let token = await store.get(`wxConfig.enterprise.access_token@${agentid}`);
+        let token = await store.get(`wxConfig.wework.access_token@${agentid}`);
 
         // 检查token是否存在，如果不存在，则刷新token
         if (!token) {
             const result = await axios.get(tokenAPI);
             token = result.data.access_token;
-            store.set(`wxConfig.enterprise.access_token@${agentid}`, token, 3600);
+            store.set(`wxConfig.wework.access_token@${agentid}`, token, 3600);
             console.log('get token from wechat rest api :' + token);
         } else {
             // 打印token值
@@ -241,18 +241,18 @@ class WeworkController extends Controller {
 
         // 缓存控制器
         const store = app.cache.store('redis');
-        const agentid = wxConfig.enterprise.reward.agentid;
+        const agentid = wxConfig.enterpriseCD.reward.agentid;
 
         // 获取TokenURL
-        const tokenAPI = `${wxConfig.enterprise.message.gettoken}?corpid=${wxConfig.enterprise.id}&corpsecret=${wxConfig.enterprise.reward.secret}`;
+        const tokenAPI = `${wxConfig.wework.message.gettoken}?corpid=${wxConfig.enterpriseCD.id}&corpsecret=${wxConfig.enterpriseCD.reward.secret}`;
         // 获取动态token
-        let token = await store.get(`wxConfig.enterprise.access_token@${agentid}`);
+        let token = await store.get(`wxConfig.wework.access_token@${agentid}`);
 
         // 检查token是否存在，如果不存在，则刷新token
         if (!token) {
             const result = await axios.get(tokenAPI);
             token = result.data.access_token;
-            store.set(`wxConfig.enterprise.access_token@${agentid}`, token, 3600);
+            store.set(`wxConfig.wework.access_token@${agentid}`, token, 3600);
             console.log('get token from wechat rest api :' + token);
         } else {
             // 打印token值
@@ -274,11 +274,8 @@ class WeworkController extends Controller {
         const store = app.cache.store('redis');
         const userid = ctx.query.userid || ctx.params.userid || '';
 
-        console.log(` userid : ${userid} `);
-
         // 获取动态token
         const userinfo = await ctx.service.bussiness.queryUserInfoByID(userid);
-        // const userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${userid}`);
 
         if (userinfo) {
             try {
@@ -290,11 +287,11 @@ class WeworkController extends Controller {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.user.queryAPI.replace('ACCESS_TOKEN', token).replace('USERID', userid);
+            const queryURL = wxConfig.wework.user.queryAPI.replace('ACCESS_TOKEN', token).replace('USERID', userid);
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.userinfo@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.user.userinfo@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
             // 设置返回信息
             ctx.body = result.data;
         }
@@ -335,28 +332,25 @@ class WeworkController extends Controller {
         const departid = ctx.query.departid || ctx.params.departid || '2';
         const fetch = ctx.query.fetch || ctx.params.fetch || '1';
 
-        console.log(` departid : ${departid} fetch : ${fetch}`);
-
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`);
+        const userlist = await store.get(`wxConfig.wework.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`);
 
         if (userlist) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userlist);
         } else {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
+            const queryURL = wxConfig.wework.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
 
             // 遍历数据，每个用户ID，存一个用户信息
             result.data.userlist.map(item => {
-                store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
-                return store.set(`wxConfig.enterprise.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
+                store.set(`wxConfig.wework.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
+                return store.set(`wxConfig.wework.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
             });
 
             // 设置返回信息
@@ -378,10 +372,8 @@ class WeworkController extends Controller {
         const departid = ctx.query.departid || ctx.params.departid || '2';
         const fetch = ctx.query.fetch || ctx.params.fetch || '1';
 
-        console.log(` departid : ${departid} fetch : ${fetch}`);
-
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`);
+        const userlist = await store.get(`wxConfig.wework.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`);
 
         if (userlist) {
             ctx.body = JSON.parse(userlist);
@@ -389,7 +381,7 @@ class WeworkController extends Controller {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
+            const queryURL = wxConfig.wework.user.queryDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
             // 获取返回结果
             const result = await axios.get(queryURL);
 
@@ -404,7 +396,7 @@ class WeworkController extends Controller {
             });
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), 3600 * 24 * 3);
 
             // 设置返回信息
             ctx.body = list;
@@ -425,26 +417,24 @@ class WeworkController extends Controller {
         const departid = ctx.query.departid || ctx.params.departid || '2';
         const fetch = ctx.query.fetch || ctx.params.fetch || '1';
 
-        console.log(` departid : ${departid} fetch : ${fetch}`);
-
         // 获取动态token
-        const userlist = await store.get(`wxConfig.enterprise.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`);
+        const userlist = await store.get(`wxConfig.wework.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`);
 
         if (userlist) {
-            // console.log(` userinfo : ${userinfo}`);
+
             ctx.body = JSON.parse(userlist);
         } else {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.user.querySimpleDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
+            const queryURL = wxConfig.wework.user.querySimpleDepartUserAPI.replace('ACCESS_TOKEN', token).replace('DEPARTMENT_ID', departid).replace('FETCH_CHILD', fetch);
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
             // 遍历数据，每个用户ID，存一个用户信息
             result.data.userlist.map(item => {
-                return store.set(`wxConfig.enterprise.user.userinfo.simple@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
+                return store.set(`wxConfig.wework.user.userinfo.simple@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
             });
             // 设置返回信息
             ctx.body = result.data;
@@ -469,7 +459,7 @@ class WeworkController extends Controller {
         departid = departid === '-1' ? '' : departid;
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.department.queryALL@${departid}`);
+        const userinfo = await store.get(`wxConfig.wework.department.queryALL@${departid}`);
 
         if (departid) {
             params = `&id=${departid}`;
@@ -478,21 +468,20 @@ class WeworkController extends Controller {
         console.log(` departid : ${departid} params : ${params}`);
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userinfo);
         } else {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.department.queryALL.replace('ACCESS_TOKEN', token) + params;
+            const queryURL = wxConfig.wework.department.queryALL.replace('ACCESS_TOKEN', token) + params;
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.enterprise.department.queryALL@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.department.queryALL@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
 
             // 遍历数据，每个用户ID，存一个用户信息
             result.data.department.map(item => {
-                return store.set(`wxConfig.enterprise.department.single@${item.id}`, JSON.stringify(item), 3600 * 24 * 3);
+                return store.set(`wxConfig.wework.department.single@${item.id}`, JSON.stringify(item), 3600 * 24 * 3);
             });
 
             // 打印字符串
@@ -517,10 +506,9 @@ class WeworkController extends Controller {
         const departid = ctx.query.departid || ctx.params.departid || '1';
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.department.single@${departid}`);
+        const userinfo = await store.get(`wxConfig.wework.department.single@${departid}`);
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userinfo);
         } else {
             // 设置返回信息
@@ -543,7 +531,7 @@ class WeworkController extends Controller {
         const code = ctx.query.code || ctx.params.code || '';
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
+        const userinfo = await store.get(`wxConfig.wework.user.code@${code}`);
 
         // 如果查询到缓存信息，则直接使用缓存信息，如果未查询到缓存信息，则查询用户信息
         if (userinfo) {
@@ -563,7 +551,7 @@ class WeworkController extends Controller {
                     response.userinfo.username = response.userinfo.systemuserinfo.username;
                     response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
                 }
 
             } catch (error) {
@@ -589,7 +577,7 @@ class WeworkController extends Controller {
                     response.userinfo.top_company = top_company;
                     console.log(JSON.stringify(top_company));
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
                 }
             } catch (error) {
                 console.log(error);
@@ -602,7 +590,7 @@ class WeworkController extends Controller {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
+            const queryURL = wxConfig.wework.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 打印查询结果信息
@@ -627,7 +615,6 @@ class WeworkController extends Controller {
                     // 获取动态token
                     try {
                         result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
-                        // result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
                     } catch (error) {
                         console.log(error);
                     }
@@ -698,7 +685,7 @@ class WeworkController extends Controller {
                     }
 
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+                    store.set(`wxConfig.wework.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
                 }
 
             } catch (error) {
@@ -706,7 +693,7 @@ class WeworkController extends Controller {
             }
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
 
             // 设置返回信息
             ctx.body = result.data;
@@ -728,7 +715,7 @@ class WeworkController extends Controller {
         const code = ctx.query.code || ctx.params.code || '';
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.user.code@${code}`);
+        const userinfo = await store.get(`wxConfig.wework.user.code@${code}`);
 
         // 如果查询到缓存信息，则直接使用缓存信息，如果未查询到缓存信息，则查询用户信息
         if (userinfo) {
@@ -748,7 +735,7 @@ class WeworkController extends Controller {
                     response.userinfo.username = response.userinfo.systemuserinfo.username;
                     response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
                 }
 
             } catch (error) {
@@ -774,7 +761,7 @@ class WeworkController extends Controller {
                     response.userinfo.top_company = top_company;
                     console.log(JSON.stringify(top_company));
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
                 }
             } catch (error) {
                 console.log(error);
@@ -787,7 +774,7 @@ class WeworkController extends Controller {
             // 获取token
             const token = await this.queryTokenByRewardSystem();
             // 获取URL
-            const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
+            const queryURL = wxConfig.wework.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 打印查询结果信息
@@ -812,7 +799,6 @@ class WeworkController extends Controller {
                     // 获取动态token
                     try {
                         result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
-                        // result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
                     } catch (error) {
                         console.log(error);
                     }
@@ -820,7 +806,6 @@ class WeworkController extends Controller {
                     // 解析字符串为json对象
                     try {
                         if (result.data.userinfo) {
-                            // result.data.userinfo = JSON.parse(result.data.userinfo);
 
                             try {
                                 result.data.userinfo.orgin_userid = result.data.UserId;
@@ -883,7 +868,7 @@ class WeworkController extends Controller {
                     }
 
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+                    store.set(`wxConfig.wework.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
                 }
 
             } catch (error) {
@@ -891,7 +876,7 @@ class WeworkController extends Controller {
             }
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
 
             // 设置返回信息
             ctx.body = result.data;
@@ -911,20 +896,19 @@ class WeworkController extends Controller {
         const store = app.cache.store('redis');
 
         // 获取动态token
-        const userinfo = await store.get('wxConfig.enterprise.ip.queryIpListAPI');
+        const userinfo = await store.get('wxConfig.wework.ip.queryIpListAPI');
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userinfo);
         } else {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.ip.queryIpListAPI.replace('ACCESS_TOKEN', token);
+            const queryURL = wxConfig.wework.ip.queryIpListAPI.replace('ACCESS_TOKEN', token);
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set('wxConfig.enterprise.ip.queryIpListAPI', JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set('wxConfig.wework.ip.queryIpListAPI', JSON.stringify(result.data), 3600 * 24 * 3);
             // 设置返回信息
             ctx.body = result.data;
         }
@@ -947,22 +931,21 @@ class WeworkController extends Controller {
         const userid = ctx.query.userid || ctx.params.userid || id || '';
 
         // 获取动态token
-        const userinfo = await store.get(`wxConfig.enterprise.openid#userid#@${userid}`);
+        const userinfo = await store.get(`wxConfig.wework.openid#userid#@${userid}`);
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userinfo);
         } else {
             // 获取token
             const token = await this.queryToken();
             // 获取URL
-            const queryURL = wxConfig.enterprise.openid.queryOpenIDByUserIdAPI.replace('ACCESS_TOKEN', token);
+            const queryURL = wxConfig.wework.openid.queryOpenIDByUserIdAPI.replace('ACCESS_TOKEN', token);
             // 获取返回结果
             const result = await axios.post(queryURL, { userid });
 
             console.log(`queryURL: ${queryURL} \n\r result: ` + JSON.stringify(result.data));
             // 保存用户信息
-            store.set(`wxConfig.enterprise.openid#userid#@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.openid#userid#@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
             // 设置返回信息
             ctx.body = result.data;
         }
@@ -973,4 +956,4 @@ class WeworkController extends Controller {
 
 }
 
-module.exports = WeworkController;
+module.exports = WeworkCDController;

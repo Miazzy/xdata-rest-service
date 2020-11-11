@@ -18,11 +18,56 @@ const config = {
         },
         agent: {
             1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
+            1000079: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
         },
         reward: {
             agentid: 1000079,
             secret: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
         },
+        message: {
+            gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
+            api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
+        },
+        ip: {
+            queryIpListAPI: 'https://qyapi.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=ACCESS_TOKEN ',
+        },
+        user: {
+            queryAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID',
+            queryCodeAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=ACCESS_TOKEN&code=CODE',
+            queryDepartUserAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD',
+            querySimpleDepartUserAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD',
+        },
+        openid: {
+            queryOpenIDByUserIdAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid?access_token=ACCESS_TOKEN',
+        },
+        department: {
+            queryALL: 'https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN',
+            queryAPI: 'https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN&id=ID',
+        },
+        access_token: null,
+    },
+    enterpriseCD: {
+        id: 'ww3806b33a15a7d3fc',
+        agentid: 1000013,
+        secret: {
+            contact: {
+                code: 'XAXnndDttZ5Lm859TSAarV9U86Heyr-M0wfXCyOSsgc',
+            },
+            workflowTodoItem: {
+                agentid: 1000013,
+                code: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
+            },
+        },
+        agent: {
+            1000013: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
+            1000015: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
+        },
+        reward: {
+            agentid: 1000015,
+            secret: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
+        },
+    },
+    wework: {
         message: {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
             api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
@@ -54,38 +99,18 @@ const config = {
         users: {
             //印章管理人员列表
             management: [{
-                id: 'chenll',
-                name: '陈乐丽',
-                phone: '18180826191',
-            }, {
                 id: 'yanggc',
                 name: '杨高春',
                 phone: '13880556967',
-            }, {
-                id: 'zhouxianlei',
-                name: '周贤磊',
-                phone: '15184419692',
             }],
             //前台接待人员列表
             reception: [{
-                id: 'zhouxianlei',
-                name: '周贤磊',
-                phone: '15184419692',
-            }, {
-                id: 'longjing',
-                name: '龙菁',
-                phone: '13730665046',
-            }, {
                 id: 'zhouxueli',
                 name: '周雪丽',
                 phone: '18084917627',
             }],
             //归档人员列表
             archive: [{
-                id: 'zhouxianlei',
-                name: '周贤磊',
-                phone: '15184419692',
-            }, {
                 id: 'chenyl0929',
                 name: '陈雅兰',
                 phone: '18628105773',
