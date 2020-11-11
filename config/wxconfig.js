@@ -66,6 +66,27 @@ const config = {
             agentid: 1000015,
             secret: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
         },
+        message: {
+            gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
+            api: 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=',
+        },
+        ip: {
+            queryIpListAPI: 'https://qyapi.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=ACCESS_TOKEN ',
+        },
+        user: {
+            queryAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID',
+            queryCodeAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=ACCESS_TOKEN&code=CODE',
+            queryDepartUserAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD',
+            querySimpleDepartUserAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD',
+        },
+        openid: {
+            queryOpenIDByUserIdAPI: 'https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid?access_token=ACCESS_TOKEN',
+        },
+        department: {
+            queryALL: 'https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN',
+            queryAPI: 'https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN&id=ID',
+        },
+        access_token: null,
     },
     wework: {
         message: {

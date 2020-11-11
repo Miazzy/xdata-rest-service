@@ -275,7 +275,7 @@ class WeworkCDController extends Controller {
         const userid = ctx.query.userid || ctx.params.userid || '';
 
         // 获取动态token
-        const userinfo = await ctx.service.bussiness.queryUserInfoByID(userid);
+        const userinfo = await ctx.service.bussinesscd.queryUserInfoByID(userid);
 
         if (userinfo) {
             try {
@@ -309,7 +309,7 @@ class WeworkCDController extends Controller {
         const mobile = ctx.query.mobile || ctx.params.mobile || '';
 
         // 获取动态token
-        const userinfo = await ctx.service.bussiness.queryUserInfoByMobile(mobile);
+        const userinfo = await ctx.service.bussinesscd.queryUserInfoByMobile(mobile);
 
         try {
             ctx.body = JSON.parse(userinfo);
@@ -535,6 +535,7 @@ class WeworkCDController extends Controller {
 
         // 如果查询到缓存信息，则直接使用缓存信息，如果未查询到缓存信息，则查询用户信息
         if (userinfo) {
+
             let response = null;
 
             try {
@@ -543,49 +544,54 @@ class WeworkCDController extends Controller {
                 response = userinfo;
             }
 
-            try {
-                if (!response.userinfo.systemuserinfo && response.userinfo.mobile) {
-                    // 获取用户信息
-                    const user = await ctx.service.bussiness.queryEmployeeByMobile(response.userinfo.mobile);
-                    response.userinfo.systemuserinfo = user;
-                    response.userinfo.username = response.userinfo.systemuserinfo.username;
-                    response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
-                    // 保存用户信息
-                    store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+            if (response.errcode === 0) {
+
+                try {
+                    if (!response.userinfo.systemuserinfo && response.userinfo.mobile) {
+                        // 获取用户信息
+                        const user = await ctx.service.bussinesscd.queryEmployeeByMobile(response.userinfo.mobile);
+                        response.userinfo.systemuserinfo = user;
+                        response.userinfo.username = response.userinfo.systemuserinfo.username;
+                        response.userinfo.grouplimits = await ctx.service.bussinesscd.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
+                        // 保存用户信息
+                        store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    }
+
+                } catch (error) {
+                    console.log(error);
                 }
 
-            } catch (error) {
-                console.log(error);
-            }
-
-            try {
-                if (!response.userinfo.department && response.userinfo.main_department) {
-                    // 查询部门信息
-                    const department = await ctx.service.bussiness.queryDepartmentByID(response.userinfo.main_department);
-                    response.userinfo.department = department;
-                    console.log(JSON.stringify(department));
-                    // 查询公司信息
-                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
-                    response.userinfo.company = company;
-                    console.log(JSON.stringify(company));
-                    // 查询上级公司信息
-                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
-                    response.userinfo.parent_company = parent_company;
-                    console.log(JSON.stringify(parent_company));
-                    // 查询顶级公司信息
-                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
-                    response.userinfo.top_company = top_company;
-                    console.log(JSON.stringify(top_company));
-                    // 保存用户信息
-                    store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                try {
+                    if (!response.userinfo.department && response.userinfo.main_department) {
+                        // 查询部门信息
+                        const department = await ctx.service.bussinesscd.queryDepartmentByID(response.userinfo.main_department);
+                        response.userinfo.department = department;
+                        console.log(JSON.stringify(department));
+                        // 查询公司信息
+                        const company = await ctx.service.bussinesscd.queryDepartmentByID(department.parentid);
+                        response.userinfo.company = company;
+                        console.log(JSON.stringify(company));
+                        // 查询上级公司信息
+                        const parent_company = await ctx.service.bussinesscd.queryDepartmentByID(company.parentid);
+                        response.userinfo.parent_company = parent_company;
+                        console.log(JSON.stringify(parent_company));
+                        // 查询顶级公司信息
+                        const top_company = await ctx.service.bussinesscd.queryDepartmentByID(parent_company.parentid);
+                        response.userinfo.top_company = top_company;
+                        console.log(JSON.stringify(top_company));
+                        // 保存用户信息
+                        store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    }
+                } catch (error) {
+                    console.log(error);
                 }
-            } catch (error) {
-                console.log(error);
-            }
 
-            console.log(JSON.stringify(response));
+                console.log(JSON.stringify(response));
+
+            }
 
             ctx.body = response;
+
         } else {
             // 获取token
             const token = await this.queryToken();
@@ -614,7 +620,7 @@ class WeworkCDController extends Controller {
 
                     // 获取动态token
                     try {
-                        result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
+                        result.data.userinfo = await ctx.service.bussinesscd.queryUserInfoByID(result.data.UserId);
                     } catch (error) {
                         console.log(error);
                     }
@@ -636,10 +642,10 @@ class WeworkCDController extends Controller {
                             try {
                                 if (result.data.userinfo.userid) {
                                     // 获取用户信息
-                                    const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
+                                    const user = await ctx.service.bussinesscd.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
                                     result.data.userinfo.systemuserinfo = user;
                                     result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                    result.data.userinfo.grouplimits = await ctx.service.bussinesscd.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
                                 }
                             } catch (error) {
                                 console.log(error);
@@ -648,10 +654,10 @@ class WeworkCDController extends Controller {
                             try {
                                 if (!result.data.userinfo.systemuserinfo && result.data.userinfo.mobile) {
                                     // 获取用户信息
-                                    const user = await ctx.service.bussiness.queryEmployeeByMobile(result.data.userinfo.mobile);
+                                    const user = await ctx.service.bussinesscd.queryEmployeeByMobile(result.data.userinfo.mobile);
                                     result.data.userinfo.systemuserinfo = user;
                                     result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                    result.data.userinfo.grouplimits = await ctx.service.bussinesscd.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
                                 }
                             } catch (error) {
                                 console.log(error);
@@ -660,19 +666,19 @@ class WeworkCDController extends Controller {
                             try {
                                 if (result.data.userinfo.main_department) {
                                     // 查询部门信息
-                                    const department = await ctx.service.bussiness.queryDepartmentByID(result.data.userinfo.main_department);
+                                    const department = await ctx.service.bussinesscd.queryDepartmentByID(result.data.userinfo.main_department);
                                     result.data.userinfo.department = department;
                                     console.log(JSON.stringify(department));
                                     // 查询公司信息
-                                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                                    const company = await ctx.service.bussinesscd.queryDepartmentByID(department.parentid);
                                     result.data.userinfo.company = company;
                                     console.log(JSON.stringify(company));
                                     // 查询上级公司信息
-                                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                                    const parent_company = await ctx.service.bussinesscd.queryDepartmentByID(company.parentid);
                                     result.data.userinfo.parent_company = parent_company;
                                     console.log(JSON.stringify(parent_company));
                                     // 查询顶级公司信息
-                                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                                    const top_company = await ctx.service.bussinesscd.queryDepartmentByID(parent_company.parentid);
                                     result.data.userinfo.top_company = top_company;
                                     console.log(JSON.stringify(top_company));
                                 }
@@ -730,10 +736,10 @@ class WeworkCDController extends Controller {
             try {
                 if (!response.userinfo.systemuserinfo && response.userinfo.mobile) {
                     // 获取用户信息
-                    const user = await ctx.service.bussiness.queryEmployeeByMobile(response.userinfo.mobile);
+                    const user = await ctx.service.bussinesscd.queryEmployeeByMobile(response.userinfo.mobile);
                     response.userinfo.systemuserinfo = user;
                     response.userinfo.username = response.userinfo.systemuserinfo.username;
-                    response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
+                    response.userinfo.grouplimits = await ctx.service.bussinesscd.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
                     // 保存用户信息
                     store.set(`wxConfig.wework.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
                 }
@@ -745,19 +751,19 @@ class WeworkCDController extends Controller {
             try {
                 if (!response.userinfo.department && response.userinfo.main_department) {
                     // 查询部门信息
-                    const department = await ctx.service.bussiness.queryDepartmentByID(response.userinfo.main_department);
+                    const department = await ctx.service.bussinesscd.queryDepartmentByID(response.userinfo.main_department);
                     response.userinfo.department = department;
                     console.log(JSON.stringify(department));
                     // 查询公司信息
-                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                    const company = await ctx.service.bussinesscd.queryDepartmentByID(department.parentid);
                     response.userinfo.company = company;
                     console.log(JSON.stringify(company));
                     // 查询上级公司信息
-                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                    const parent_company = await ctx.service.bussinesscd.queryDepartmentByID(company.parentid);
                     response.userinfo.parent_company = parent_company;
                     console.log(JSON.stringify(parent_company));
                     // 查询顶级公司信息
-                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                    const top_company = await ctx.service.bussinesscd.queryDepartmentByID(parent_company.parentid);
                     response.userinfo.top_company = top_company;
                     console.log(JSON.stringify(top_company));
                     // 保存用户信息
@@ -786,6 +792,8 @@ class WeworkCDController extends Controller {
                     // 查询OpenID
                     const openinfo = await this.queryOpenIDByUserID(result.data.UserId);
 
+                    console.log('openinfo : ' + JSON.stringify(openinfo));
+
                     // 查询基础数据
                     try {
                         await this.queryWeWorkDepartInfo();
@@ -798,7 +806,7 @@ class WeworkCDController extends Controller {
 
                     // 获取动态token
                     try {
-                        result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
+                        result.data.userinfo = await ctx.service.bussinesscd.queryUserInfoByID(result.data.UserId);
                     } catch (error) {
                         console.log(error);
                     }
@@ -819,10 +827,10 @@ class WeworkCDController extends Controller {
                             try {
                                 if (result.data.userinfo.userid) {
                                     // 获取用户信息
-                                    const user = await ctx.service.bussiness.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
+                                    const user = await ctx.service.bussinesscd.queryEmployeeByID(result.data.userinfo.userid, result.data.userinfo.name, result.data.userinfo.mobile);
                                     result.data.userinfo.systemuserinfo = user;
                                     result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                    result.data.userinfo.grouplimits = await ctx.service.bussinesscd.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
                                 }
                             } catch (error) {
                                 console.log(error);
@@ -831,10 +839,10 @@ class WeworkCDController extends Controller {
                             try {
                                 if (!result.data.userinfo.systemuserinfo && result.data.userinfo.mobile) {
                                     // 获取用户信息
-                                    const user = await ctx.service.bussiness.queryEmployeeByMobile(result.data.userinfo.mobile);
+                                    const user = await ctx.service.bussinesscd.queryEmployeeByMobile(result.data.userinfo.mobile);
                                     result.data.userinfo.systemuserinfo = user;
                                     result.data.userinfo.username = result.data.userinfo.systemuserinfo.username;
-                                    result.data.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
+                                    result.data.userinfo.grouplimits = await ctx.service.bussinesscd.queryGroupLimitsByID(result.data.userinfo.systemuserinfo.username); // 用户管理组权限
                                 }
                             } catch (error) {
                                 console.log(error);
@@ -843,19 +851,19 @@ class WeworkCDController extends Controller {
                             try {
                                 if (result.data.userinfo.main_department) {
                                     // 查询部门信息
-                                    const department = await ctx.service.bussiness.queryDepartmentByID(result.data.userinfo.main_department);
+                                    const department = await ctx.service.bussinesscd.queryDepartmentByID(result.data.userinfo.main_department);
                                     result.data.userinfo.department = department;
                                     console.log(JSON.stringify(department));
                                     // 查询公司信息
-                                    const company = await ctx.service.bussiness.queryDepartmentByID(department.parentid);
+                                    const company = await ctx.service.bussinesscd.queryDepartmentByID(department.parentid);
                                     result.data.userinfo.company = company;
                                     console.log(JSON.stringify(company));
                                     // 查询上级公司信息
-                                    const parent_company = await ctx.service.bussiness.queryDepartmentByID(company.parentid);
+                                    const parent_company = await ctx.service.bussinesscd.queryDepartmentByID(company.parentid);
                                     result.data.userinfo.parent_company = parent_company;
                                     console.log(JSON.stringify(parent_company));
                                     // 查询顶级公司信息
-                                    const top_company = await ctx.service.bussiness.queryDepartmentByID(parent_company.parentid);
+                                    const top_company = await ctx.service.bussinesscd.queryDepartmentByID(parent_company.parentid);
                                     result.data.userinfo.top_company = top_company;
                                     console.log(JSON.stringify(top_company));
                                 }

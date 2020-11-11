@@ -137,7 +137,7 @@ module.exports = app => {
     router.get('/api/v1_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCode);
 
     // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
-    router.get('/api/v1_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCodeRewardSystem);
+    router.get('/api/v3_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCodeRewardSystem);
 
     // 查询企业微信用户信息(网页授权)
     router.get('/api/v1_cd/wework_ip_list', controller.weworkcd.queryIpList);
