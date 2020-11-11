@@ -556,6 +556,7 @@ class WeworkController extends Controller {
             }
 
             try {
+
                 if (!response.userinfo.systemuserinfo && response.userinfo.mobile) {
                     // 获取用户信息
                     const user = await ctx.service.bussiness.queryEmployeeByMobile(response.userinfo.mobile);
@@ -594,9 +595,7 @@ class WeworkController extends Controller {
             } catch (error) {
                 console.log(error);
             }
-
             console.log(JSON.stringify(response));
-
             ctx.body = response;
         } else {
             // 获取token
@@ -607,6 +606,7 @@ class WeworkController extends Controller {
             const result = await axios.get(queryURL);
             // 打印查询结果信息
             console.log('result : ' + JSON.stringify(result.data));
+
             // 如果存在用户UserID信息，则进一步查询用户信息
             try {
                 if (result.data.UserId) {
@@ -627,7 +627,6 @@ class WeworkController extends Controller {
                     // 获取动态token
                     try {
                         result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
-                        // result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
                     } catch (error) {
                         console.log(error);
                     }
@@ -635,7 +634,6 @@ class WeworkController extends Controller {
                     // 解析字符串为json对象
                     try {
                         if (result.data.userinfo) {
-                            // result.data.userinfo = JSON.parse(result.data.userinfo);
 
                             try {
                                 result.data.userinfo.orgin_userid = result.data.UserId;
