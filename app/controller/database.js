@@ -447,7 +447,6 @@ class DatabaseController extends Controller {
         const userlist = await store.get(`wxConfig.enterprise.user.systemuserlist#sort#@${sql}`);
 
         if (userlist) {
-            // ctx.body = JSON.parse(userlist);
             return JSON.parse(userlist);
         }
 
