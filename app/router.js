@@ -296,4 +296,7 @@ module.exports = app => {
     // 上传文档附件
     router.post('/api/v1/upload', controller.upload.upload);
 
+    // 同步人事数据
+    router.get('/api/v1/datasync', controller.datasync.syncHRM);
+
 };
