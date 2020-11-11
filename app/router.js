@@ -25,6 +25,10 @@ module.exports = app => {
     // 执行初始化
     init();
 
+    /** ******************** 领地Wework(数据库操作) ******************** */
+
+    /** **************** v1 版 **************** */
+
     // 查询MSSQL数据库信息
     router.get('/api/v1/:table/:order', controller.database.where);
 
@@ -38,6 +42,29 @@ module.exports = app => {
     router.delete('/api/v1/:table/:node', controller.database.delete);
 
     // 查询员工数据
+    router.get('/api/v1/employee', controller.database.employee);
+
+    // 查询员工数据
+    router.get('/api/v1/queryemployee/:id', controller.database.queryEmployeeByID);
+
+    // 查询员工数据
+    router.get('/api/v1/employeewid/:id', controller.database.queryEmployeeByWID);
+
+    /** **************** v2 版 **************** */
+
+    // 查询MSSQL数据库信息
+    router.get('/api/v2/:table/:order', controller.database.where);
+
+    // 新增MSSQL数据库记录
+    router.post('/api/v2/:table/:node', controller.database.insert);
+
+    // 更新MSSQL数据库记录
+    router.patch('/api/v2/:table/:node', controller.database.update);
+
+    // 删除MSSQL数据库记录
+    router.delete('/api/v2/:table/:node', controller.database.delete);
+
+    // 查询员工数据
     router.get('/api/v2/employee', controller.database.employee);
 
     // 查询员工数据
@@ -45,6 +72,31 @@ module.exports = app => {
 
     // 查询员工数据
     router.get('/api/v2/employeewid/:id', controller.database.queryEmployeeByWID);
+
+    /** **************** v1_cd 创达版 **************** */
+
+    // 查询MSSQL数据库信息
+    router.get('/api/v1_cd/:table/:order', controller.databasecd.where);
+
+    // 新增MSSQL数据库记录
+    router.post('/api/v1_cd/:table/:node', controller.databasecd.insert);
+
+    // 更新MSSQL数据库记录
+    router.patch('/api/v1_cd/:table/:node', controller.databasecd.update);
+
+    // 删除MSSQL数据库记录
+    router.delete('/api/v1_cd/:table/:node', controller.databasecd.delete);
+
+    // 查询员工数据
+    router.get('/api/v1_cd/employee', controller.databasecd.employee);
+
+    // 查询员工数据
+    router.get('/api/v1_cd/queryemployee/:id', controller.databasecd.queryEmployeeByID);
+
+    // 查询员工数据
+    router.get('/api/v1_cd/employeewid/:id', controller.databasecd.queryEmployeeByWID);
+
+    /** ******************** 领地Wework(数据库操作) ******************** */
 
     // 查询文件信息，并进行下载
     router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
