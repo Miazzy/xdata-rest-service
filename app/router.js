@@ -53,48 +53,48 @@ module.exports = app => {
     /** **************** v2 版 **************** */
 
     // 查询MSSQL数据库信息
-    router.get('/api/v2/:table/:order', controller.database.where);
+    // router.get('/api/v2/:table/:order', controller.database.where);
 
     // 新增MSSQL数据库记录
-    router.post('/api/v2/:table/:node', controller.database.insert);
+    // router.post('/api/v2/:table/:node', controller.database.insert);
 
     // 更新MSSQL数据库记录
-    router.patch('/api/v2/:table/:node', controller.database.update);
+    // router.patch('/api/v2/:table/:node', controller.database.update);
 
     // 删除MSSQL数据库记录
-    router.delete('/api/v2/:table/:node', controller.database.delete);
+    // router.delete('/api/v2/:table/:node', controller.database.delete);
 
     // 查询员工数据
-    router.get('/api/v2/employee', controller.database.employee);
+    // router.get('/api/v2/employee', controller.database.employee);
 
     // 查询员工数据
-    router.get('/api/v2/queryemployee/:id', controller.database.queryEmployeeByID);
+    // router.get('/api/v2/queryemployee/:id', controller.database.queryEmployeeByID);
 
     // 查询员工数据
-    router.get('/api/v2/employeewid/:id', controller.database.queryEmployeeByWID);
+    // router.get('/api/v2/employeewid/:id', controller.database.queryEmployeeByWID);
 
     /** **************** v1_cd 创达版 **************** */
 
     // 查询MSSQL数据库信息
-    router.get('/api/v1_cd/:table/:order', controller.databasecd.where);
+    // router.get('/api/v1_cd/:table/:order', controller.databasecd.where);
 
     // 新增MSSQL数据库记录
-    router.post('/api/v1_cd/:table/:node', controller.databasecd.insert);
+    // router.post('/api/v1_cd/:table/:node', controller.databasecd.insert);
 
     // 更新MSSQL数据库记录
-    router.patch('/api/v1_cd/:table/:node', controller.databasecd.update);
+    // router.patch('/api/v1_cd/:table/:node', controller.databasecd.update);
 
     // 删除MSSQL数据库记录
-    router.delete('/api/v1_cd/:table/:node', controller.databasecd.delete);
+    // router.delete('/api/v1_cd/:table/:node', controller.databasecd.delete);
 
     // 查询员工数据
-    router.get('/api/v1_cd/employee', controller.databasecd.employee);
+    // router.get('/api/v1_cd/employee', controller.databasecd.employee);
 
     // 查询员工数据
-    router.get('/api/v1_cd/queryemployee/:id', controller.databasecd.queryEmployeeByID);
+    // router.get('/api/v1_cd/queryemployee/:id', controller.databasecd.queryEmployeeByID);
 
     // 查询员工数据
-    router.get('/api/v1_cd/employeewid/:id', controller.databasecd.queryEmployeeByWID);
+    // router.get('/api/v1_cd/employeewid/:id', controller.databasecd.queryEmployeeByWID);
 
     /** ******************** 领地Wework(数据库操作) ******************** */
 
