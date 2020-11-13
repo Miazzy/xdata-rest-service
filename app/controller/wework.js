@@ -357,7 +357,7 @@ class WeworkController extends Controller {
             await store.set(`wxConfig.enterprise.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 1);
 
             // 遍历数据，每个用户ID，存一个用户信息
-            for (const item of JSON.parse(userlist).userlist) {
+            for (const item of result.data.userlist) {
 
                 // 将数据存入缓存中
                 await store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
@@ -369,12 +369,13 @@ class WeworkController extends Controller {
                 // 检查待存入的数据是否存在于数据库中，如果存在，则不存入(执行更新)，如果不存在，则插入数据
                 const response = await app.mysql.query(` select count(0) id from bs_wework_user where userid = '${item.userid}' and company = '${item.company}' `, []);
 
-                console.log(JSON.stringify(response));
+                console.log('数据是否存在查询结果: ' + JSON.stringify(response));
                 if (response[0].id === 0) {
                     item.department = item.department ? JSON.stringify(item.department) : '';
                     item.extattr = item.extattr ? JSON.stringify(item.extattr) : '';
                     item.is_leader_in_dept = item.is_leader_in_dept ? JSON.stringify(item.is_leader_in_dept) : '';
                     item.orders = item.order ? JSON.stringify(item.order) : '';
+                    item.external_position = item.external_position ? JSON.stringify(item.external_position) : '';
                     delete item.order;
                     await this.postTableData('bs_wework_user', item);
                 } else { // 执行更新操作，如果是晚上某点，则执行更新
