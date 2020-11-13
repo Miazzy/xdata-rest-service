@@ -4,6 +4,16 @@
 'use strict';
 
 const config = {
+    company: {
+        rl /**融量*/: {
+            1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
+            1000079: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
+        },
+        cd /**创达*/: {
+            1000013: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
+            1000015: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
+        },
+    },
     enterprise: {
         id: 'wx3b01d8bf4c588933',
         agentid: 1000077,
