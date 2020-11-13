@@ -6,6 +6,9 @@ const Controller = require('egg').Controller;
 const axios = require('axios');
 const sql = require('mssql');
 
+const dayjs = require('dayjs');
+const superagent = require('superagent');
+
 const fileConfig = require('../../config/fileconfig');
 const wxConfig = require('../../config/wxconfig');
 const dbconfig = require('../../config/dbconfig');
@@ -345,13 +348,34 @@ class WeworkCDController extends Controller {
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.wework.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.wework.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 1);
 
             // 遍历数据，每个用户ID，存一个用户信息
-            result.data.userlist.map(item => {
-                store.set(`wxConfig.wework.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
-                return store.set(`wxConfig.wework.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
-            });
+            for (const item of JSON.parse(userlist).userlist) {
+
+                // 将数据存入缓存中
+                await store.set(`wxConfig.wework.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
+                await store.set(`wxConfig.wework.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
+
+                item.id = tools.queryUniqueID();
+                item.company = '创达';
+
+                // 检查待存入的数据是否存在于数据库中，如果存在，则不存入(执行更新)，如果不存在，则插入数据
+                const response = await app.mysql.query(` select count(0) id from bs_wework_user where userid = '${item.userid}' and company = '${item.company}' `, []);
+
+                console.log(JSON.stringify(response));
+                if (response[0].id === 0) {
+                    item.department = item.department ? JSON.stringify(item.department) : '';
+                    item.extattr = item.extattr ? JSON.stringify(item.extattr) : '';
+                    item.is_leader_in_dept = item.is_leader_in_dept ? JSON.stringify(item.is_leader_in_dept) : '';
+                    item.orders = item.order ? JSON.stringify(item.order) : '';
+                    delete item.order;
+                    await this.postTableData('bs_wework_user', item);
+                } else { // 执行更新操作，如果是晚上某点，则执行更新
+                    console.log(`id : ${item.userid} , company: ${item.company} is already exist !`);
+                }
+
+            }
 
             // 设置返回信息
             ctx.body = result.data;
@@ -959,6 +983,35 @@ class WeworkCDController extends Controller {
         }
 
         return ctx.body;
+    }
+
+    /**
+     * @function 提交并持久化数据到服务器
+     * @param {*} tableName
+     * @param {*} node
+     */
+    async postTableData(tableName, node) {
+
+        // 大写转小写
+        tableName = tableName.toLowerCase();
+        // Post数据的URL地址
+        const insertURL = `${wxConfig.wework.api_url}/${tableName}`;
+        // 设置node为value
+        const value = node;
+
+        // 设置时间格式
+        Object.keys(value).map(key => {
+            value[key] = (key.includes('time') || key.includes('created') || key.includes('modified')) && value[key] ? dayjs(value[key]).format('YYYY-MM-DD HH:mm:ss') : value[key];
+        });
+
+        try {
+            const res = await superagent.post(insertURL).send(node).set('accept', 'json');
+            console.log(JSON.stringify(res.boyd));
+            return res.body;
+        } catch (err) {
+            console.log(err);
+        }
+
     }
 
 
