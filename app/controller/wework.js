@@ -54,8 +54,6 @@ class WeworkController extends Controller {
             ...fileConfig,
         };
 
-        console.log(url);
-
         const node = {
             msgtype: 'news',
             news: {
@@ -116,8 +114,6 @@ class WeworkController extends Controller {
         // 消息中的链接消息
         let messageurl = '';
 
-        console.log(token);
-
         // 检查token是否存在，如果不存在，则刷新token
         if (!token) {
             const result = await axios.get(tokenAPI);
@@ -128,8 +124,6 @@ class WeworkController extends Controller {
             // 打印token值
             console.log('get token from redis :' + token);
         }
-
-        console.log('redirect');
 
         // 如果存在回调URL，则编辑消息中的链接信息
         if (redirectUrl) {
@@ -297,7 +291,7 @@ class WeworkController extends Controller {
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.userinfo@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.user.userinfo@${userid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
             // 设置返回信息
             ctx.body = result.data;
         }
@@ -354,14 +348,14 @@ class WeworkController extends Controller {
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            await store.set(`wxConfig.enterprise.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 1);
+            await store.set(`wxConfig.enterprise.user.queryDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
 
             // 遍历数据，每个用户ID，存一个用户信息
             for (const item of result.data.userlist) {
 
                 // 将数据存入缓存中
-                await store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), 3600 * 24 * 3);
-                await store.set(`wxConfig.enterprise.user.userinfo@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
+                await store.set(`wxConfig.enterprise.user.userinfo#mobile#@${item.mobile}`, JSON.stringify(item), wxConfig.timestamp.ONE_DAY);
+                await store.set(`wxConfig.enterprise.user.userinfo@${item.userid}`, JSON.stringify(item), wxConfig.timestamp.ONE_DAY);
 
                 item.id = tools.queryUniqueID();
                 item.company = '融量';
@@ -374,9 +368,8 @@ class WeworkController extends Controller {
                     item.department = item.department ? JSON.stringify(item.department) : '';
                     item.extattr = item.extattr ? JSON.stringify(item.extattr) : '';
                     item.is_leader_in_dept = item.is_leader_in_dept ? JSON.stringify(item.is_leader_in_dept) : '';
-                    item.orders = item.order ? JSON.stringify(item.order) : '';
+                    item.order = item.order ? JSON.stringify(item.order) : '';
                     item.external_position = item.external_position ? JSON.stringify(item.external_position) : '';
-                    delete item.order;
                     await this.postTableData('bs_wework_user', item);
                 } else { // 执行更新操作，如果是晚上某点，则执行更新
                     console.log(`id : ${item.userid} , company: ${item.company} is already exist !`);
@@ -429,7 +422,7 @@ class WeworkController extends Controller {
             });
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.user#queryWeWorkDepartUserSim#_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(list), wxConfig.timestamp.ONE_DAY);
 
             // 设置返回信息
             ctx.body = list;
@@ -456,7 +449,6 @@ class WeworkController extends Controller {
         const userlist = await store.get(`wxConfig.enterprise.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`);
 
         if (userlist) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userlist);
         } else {
             // 获取token
@@ -466,10 +458,10 @@ class WeworkController extends Controller {
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.user.querySimpleDepartUserAPI_FETCH_CHILD#${fetch}@${departid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
             // 遍历数据，每个用户ID，存一个用户信息
             result.data.userlist.map(item => {
-                return store.set(`wxConfig.enterprise.user.userinfo.simple@${item.userid}`, JSON.stringify(item), 3600 * 24 * 3);
+                return store.set(`wxConfig.enterprise.user.userinfo.simple@${item.userid}`, JSON.stringify(item), wxConfig.timestamp.ONE_DAY);
             });
             // 设置返回信息
             ctx.body = result.data;
@@ -503,7 +495,6 @@ class WeworkController extends Controller {
         console.log(` departid : ${departid} params : ${params}`);
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userinfo);
         } else {
             // 获取token
@@ -513,12 +504,24 @@ class WeworkController extends Controller {
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set(`wxConfig.enterprise.department.queryALL@${departid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.department.queryALL@${departid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
 
             // 遍历数据，每个用户ID，存一个用户信息
-            result.data.department.map(item => {
-                return store.set(`wxConfig.enterprise.department.single@${item.id}`, JSON.stringify(item), 3600 * 24 * 3);
-            });
+            for (const item of result.data.department) {
+
+                await store.set(`wxConfig.enterprise.department.single@${item.id}`, JSON.stringify(item), wxConfig.timestamp.ONE_DAY);
+
+                item.company = '融量';
+                // 检查待存入的数据是否存在于数据库中，如果存在，则不存入(执行更新)，如果不存在，则插入数据
+                const response = await app.mysql.query(` select count(0) id from bs_wework_depart where id = '${item.id}' and company = '${item.company}' `, []);
+
+                console.log('数据是否存在查询结果: ' + JSON.stringify(response));
+                if (response[0].id === 0) {
+                    await this.postTableData('bs_wework_depart', item);
+                } else { // 执行更新操作，如果是晚上某点，则执行更新
+                    console.log(`id : ${item.id} , company: ${item.company} is already exist !`);
+                }
+            }
 
             // 打印字符串
             console.log('queryURL : ' + queryURL);
@@ -545,7 +548,6 @@ class WeworkController extends Controller {
         const userinfo = await store.get(`wxConfig.enterprise.department.single@${departid}`);
 
         if (userinfo) {
-            // console.log(` userinfo : ${userinfo}`);
             ctx.body = JSON.parse(userinfo);
         } else {
             // 设置返回信息
@@ -589,7 +591,7 @@ class WeworkController extends Controller {
                     response.userinfo.username = response.userinfo.systemuserinfo.username;
                     response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), wxConfig.timestamp.ONE_DAY);
                 }
 
             } catch (error) {
@@ -615,7 +617,7 @@ class WeworkController extends Controller {
                     response.userinfo.top_company = top_company;
                     console.log(JSON.stringify(top_company));
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), wxConfig.timestamp.ONE_DAY);
                 }
             } catch (error) {
                 console.log(error);
@@ -721,7 +723,7 @@ class WeworkController extends Controller {
                     }
 
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
                 }
 
             } catch (error) {
@@ -729,7 +731,7 @@ class WeworkController extends Controller {
             }
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
 
             // 设置返回信息
             ctx.body = result.data;
@@ -771,7 +773,7 @@ class WeworkController extends Controller {
                     response.userinfo.username = response.userinfo.systemuserinfo.username;
                     response.userinfo.grouplimits = await ctx.service.bussiness.queryGroupLimitsByID(response.userinfo.systemuserinfo.username); // 用户管理组权限
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), wxConfig.timestamp.ONE_DAY);
                 }
 
             } catch (error) {
@@ -797,7 +799,7 @@ class WeworkController extends Controller {
                     response.userinfo.top_company = top_company;
                     console.log(JSON.stringify(top_company));
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), 3600 * 24 * 3);
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(response), wxConfig.timestamp.ONE_DAY);
                 }
             } catch (error) {
                 console.log(error);
@@ -906,7 +908,7 @@ class WeworkController extends Controller {
                     }
 
                     // 保存用户信息
-                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+                    store.set(`wxConfig.enterprise.user.code#openid#@${openinfo.openid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
                 }
 
             } catch (error) {
@@ -914,7 +916,7 @@ class WeworkController extends Controller {
             }
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
 
             // 设置返回信息
             ctx.body = result.data;
@@ -947,7 +949,7 @@ class WeworkController extends Controller {
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 保存用户信息
-            store.set('wxConfig.enterprise.ip.queryIpListAPI', JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set('wxConfig.enterprise.ip.queryIpListAPI', JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
             // 设置返回信息
             ctx.body = result.data;
         }
@@ -985,7 +987,7 @@ class WeworkController extends Controller {
 
             console.log(`queryURL: ${queryURL} \n\r result: ` + JSON.stringify(result.data));
             // 保存用户信息
-            store.set(`wxConfig.enterprise.openid#userid#@${userid}`, JSON.stringify(result.data), 3600 * 24 * 3);
+            store.set(`wxConfig.enterprise.openid#userid#@${userid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_DAY);
             // 设置返回信息
             ctx.body = result.data;
         }

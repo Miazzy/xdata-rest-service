@@ -139,6 +139,15 @@ const config = {
             }],
         },
     },
+    timestamp: {
+        ONE_SECOND: 1,
+        ONE_MINITE: 60,
+        ONE_HOUR: 3600,
+        ONE_DAY: 3600 * 24 * 1,
+        ONE_WEEK: 3600 * 24 * 7,
+        ONE_MONTH: 3600 * 24 * 31,
+        ONE_YEAR: 3600 * 24 * 365,
+    },
 };
 
 module.exports = {
