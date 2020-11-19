@@ -14,6 +14,7 @@ import ExportRedis = require('../../../app/controller/redis');
 import ExportUpload = require('../../../app/controller/upload');
 import ExportWework = require('../../../app/controller/wework');
 import ExportWeworkcd = require('../../../app/controller/weworkcd');
+import ExportWeworkmessage = require('../../../app/controller/weworkmessage');
 
 declare module 'egg' {
   interface IController {
@@ -29,5 +30,6 @@ declare module 'egg' {
     upload: ExportUpload;
     wework: ExportWework;
     weworkcd: ExportWeworkcd;
+    weworkmessage: ExportWeworkmessage;
   }
 }
