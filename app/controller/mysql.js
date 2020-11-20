@@ -113,7 +113,7 @@ class MySQLController extends Controller {
         // 数据库Dump配置
         const mysqldumpConfig = {
             connection: connectionConfig,
-            dumpToFile: `./mysqldump/${dayjs().format('YYYYMMDD.HHmm')}dump.sql.gz`,
+            dumpToFile: `./mysqldump/${dayjs().format('YYYYMMDDHHmm')}dump.sql.gz`,
             compressFile: true,
         };
 
