@@ -7,6 +7,7 @@
     "declarations": true
   },
   "dependencies": {
+    "@types/node": "^14.14.6",
     "axios": "^0.20.0",
     "buffer": "^5.6.0",
     "cache-manager-ioredis": "^2.1.0",
@@ -27,6 +28,7 @@
     "egg-scripts": "^2.11.0",
     "excel": "^1.0.1",
     "mssql": "^6.2.1",
+    "mysqldump": "^3.2.0",
     "read-excel-file": "^4.0.7",
     "superagent": "^6.1.0"
   },

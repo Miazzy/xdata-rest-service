@@ -3,6 +3,9 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const mysqldump = require('mysqldump');
+const mysqlconfig = require('../../config/dbconfig');
+const dayjs = require('dayjs');
 
 class MySQLController extends Controller {
 
@@ -57,8 +60,6 @@ class MySQLController extends Controller {
 
         const { ctx, app } = this;
 
-        // `update bs_seal_regist set seal_group_ids = 'guoqian0623,wangjx,lili03,yel0809'  where seal like 'lili03' and  seal_group_ids != 'guoqian0623,wangjx,lili03,yel0809';`
-
         // 执行更新SQL
         const response = await app.mysql.query('update bs_seal_regist set front = seal where (front = \'\' or front is null) and seal is not null ; ', []);
         await app.mysql.query('update bs_seal_regist set finance = seal where (finance = \'\' or finance is null) and seal is not null ;', []);
@@ -95,6 +96,34 @@ class MySQLController extends Controller {
 
         ctx.body = response;
     }
+
+    async backupDatabase() {
+
+        const { ctx } = this;
+
+        // 获取数据库连接信息
+        const connectionConfig = {
+            host: mysqlconfig.mysql.client.host,
+            user: mysqlconfig.mysql.client.user,
+            password: mysqlconfig.mysql.client.password,
+            database: mysqlconfig.mysql.client.database,
+            port: mysqlconfig.mysql.client.port,
+        };
+
+        // 数据库Dump配置
+        const mysqldumpConfig = {
+            connection: connectionConfig,
+            dumpToFile: `./mysqldump/${dayjs().format('YYYYMMDD.HHmm')}dump.sql.gz`,
+            compressFile: true,
+        };
+
+        // dump the result straight to a compressed file
+        mysqldump(mysqldumpConfig);
+
+        ctx.body = { errcode: 'ok', error: false, success: true };
+
+    }
+
 }
 
 

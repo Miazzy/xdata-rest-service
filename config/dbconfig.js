@@ -37,6 +37,27 @@ const configcd = {
     },
 };
 
+// mysql数据库连接配置
+const mysql = {
+    // database configuration
+    client: {
+        // host
+        host: '172.18.254.95',
+        // port
+        port: '3309',
+        // username
+        user: 'zhaoziyun',
+        // password
+        password: 'ziyequma',
+        // database
+        database: 'jeecg-boot',
+    },
+    // load into app, default is open
+    app: true,
+    // load into agent, default is close
+    agent: false,
+};
+
 /**
  * @function 初始化数据库连接池
  */
@@ -51,5 +72,6 @@ module.exports = {
     ...config,
     config: {...config },
     configcd: {...configcd },
+    mysql,
     init,
 };
