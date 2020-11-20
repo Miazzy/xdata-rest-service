@@ -5,6 +5,7 @@
 
 const sql = require('mssql');
 
+// 泛微OA数据库链接配置(领地公司)
 const config = {
     user: 'meeting',
     password: 'meeting',
@@ -21,6 +22,7 @@ const config = {
     },
 };
 
+// 泛微OA数据库链接配置(创达公司)
 const configcd = {
     user: 'sa',
     password: 'Leading888',
@@ -37,7 +39,7 @@ const configcd = {
     },
 };
 
-// mysql数据库连接配置
+// MySQL数据库连接配置(Jeecg-Boot)
 const mysql = {
     // database configuration
     client: {
@@ -70,8 +72,8 @@ const init = async() => {
 
 module.exports = {
     ...config,
-    config: {...config },
-    configcd: {...configcd },
+    config,
+    configcd,
     mysql,
     init,
 };
