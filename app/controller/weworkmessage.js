@@ -19,6 +19,8 @@ class WeworkMessageController extends Controller {
         const mobile = ctx.query.mobile || ctx.params.mobile || '';
         // 获取推送消息
         const message = ctx.query.message || ctx.params.message || '';
+        // 获取推送消息
+        const type = ctx.query.type || ctx.params.type || 'agentid';
         // 获取详情链接
         const url = this.queryRedirectURL(ctx.query.url || ctx.params.url || ctx.query.rurl || ctx.params.rurl || '');
         // 设置是否结束标识
@@ -29,14 +31,14 @@ class WeworkMessageController extends Controller {
 
         // 遍历元素，推送企业微信消息
         for (const elem of mlist) {
-            flag = await this.sendMessageByMobile(elem, message, url, flag); // 检查如果是电话号码
-            flag = await this.sendMessageByUserID(elem, message, url, flag); // 检查如果是用户编号
+            flag = await this.sendMessageByMobile(elem, message, url, flag, type); // 检查如果是电话号码
+            flag = await this.sendMessageByUserID(elem, message, url, flag, type); // 检查如果是用户编号
         }
 
         ctx.body = { errcode: 0, message: '' };
     }
 
-    async sendMessageByMobile(mobile, message, url, flag) {
+    async sendMessageByMobile(mobile, message, url, flag, type = 'agentid') {
         const { app } = this;
 
         // 如果不是电话号码，则退出
@@ -49,14 +51,14 @@ class WeworkMessageController extends Controller {
 
         // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
         for (const item of response) {
-            await this.sendMessage(item.cname, wxConfig.company[item.cname].agentid, item.userid, message, url);
+            await this.sendMessage(item.cname, wxConfig.company[item.cname][type], item.userid, message, url);
             console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
         }
 
         return true;
     }
 
-    async sendMessageByUserID(userID, message, url, flag) {
+    async sendMessageByUserID(userID, message, url, flag, type = 'agentid') {
         const { app } = this;
 
         // 如果不符合账户编码规则，则退出
@@ -69,7 +71,7 @@ class WeworkMessageController extends Controller {
 
         // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
         for (const item of response) {
-            await this.sendMessage(item.cname, wxConfig.company[item.cname].agentid, item.userid, message, url);
+            await this.sendMessage(item.cname, wxConfig.company[item.cname][type], item.userid, message, url);
             console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
         }
 
