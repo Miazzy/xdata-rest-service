@@ -117,9 +117,6 @@ module.exports = app => {
     // 推送企业微信机器消息
     router.get('/api/v1/wework/:title/:description', controller.wework.send);
 
-    // 推送企业微信应用消息
-    router.get('/api/v1/weappms/:userid/:message', controller.wework.appmessage);
-
     // 查询企业微信用户信息
     router.get('/api/v1/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
 
@@ -275,6 +272,9 @@ module.exports = app => {
     /** ******************** 推送企业微信消息 ******************** */
 
     router.post('/api/v5/wework_message/:mobile', controller.weworkmessage.message);
+
+    // 推送企业微信应用消息
+    router.get('/api/v1/weappms/:mobile/:message', controller.weworkmessage.message);
 
     /** ******************** 推送企业微信消息 ******************** */
 

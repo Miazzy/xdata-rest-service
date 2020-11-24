@@ -20,7 +20,7 @@ class WeworkMessageController extends Controller {
         // 获取推送消息
         const message = ctx.query.message || ctx.params.message || '';
         // 获取详情链接
-        const url = this.queryRedirectURL(ctx.query.url || ctx.params.url || '');
+        const url = this.queryRedirectURL(ctx.query.url || ctx.params.url || ctx.query.rurl || ctx.params.rurl || '');
         // 设置是否结束标识
         let flag = false;
 
