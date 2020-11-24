@@ -152,9 +152,6 @@ module.exports = app => {
     // 推送企业微信机器消息
     router.get('/api/v2/wework/:title/:description', controller.wework.send);
 
-    // 推送企业微信应用消息
-    router.get('/api/v2/weappms/:userid/:message', controller.wework.appmessage);
-
     // 查询企业微信用户信息
     router.get('/api/v2/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
 
@@ -189,9 +186,6 @@ module.exports = app => {
 
     // 推送企业微信机器消息
     router.get('/api/v3/wework/:title/:description', controller.wework.send);
-
-    // 推送企业微信应用消息
-    router.get('/api/v3/weappms/:userid/:message', controller.wework.appmessage);
 
     // 查询企业微信用户信息
     router.get('/api/v3/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
@@ -230,9 +224,6 @@ module.exports = app => {
 
     // 推送企业微信机器消息
     router.get('/api/v1_cd/wework/:title/:description', controller.weworkcd.send);
-
-    // 推送企业微信应用消息
-    router.get('/api/v1_cd/weappms/:userid/:message', controller.weworkcd.appmessage);
 
     // 查询企业微信用户信息
     router.get('/api/v1_cd/wework_user/:userid', controller.weworkcd.queryWeWorkUserInfo);
@@ -275,6 +266,15 @@ module.exports = app => {
 
     // 推送企业微信应用消息
     router.get('/api/v1/weappms/:mobile/:message', controller.weworkmessage.message);
+
+    // 推送企业微信应用消息
+    router.get('/api/v2/weappms/:mobile/:message', controller.weworkmessage.message);
+
+    // 推送企业微信应用消息
+    router.get('/api/v3/weappms/:mobile/:message', controller.weworkmessage.message);
+
+    // 推送企业微信应用消息
+    router.get('/api/v1_cd/weappms/:mobile/:message', controller.weworkmessage.message);
 
     /** ******************** 推送企业微信消息 ******************** */
 
