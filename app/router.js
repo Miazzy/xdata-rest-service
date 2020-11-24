@@ -272,6 +272,12 @@ module.exports = app => {
 
     /** ******************** 创达Wework ******************** */
 
+    /** ******************** 推送企业微信消息 ******************** */
+
+    router.post('/api/v5/wework_message/:mobile', controller.weworkmessage.message);
+
+    /** ******************** 推送企业微信消息 ******************** */
+
     // 数据库表serialid自动排序
     router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
 

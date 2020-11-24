@@ -20,7 +20,7 @@ class WeworkMessageController extends Controller {
         // 获取推送消息
         const message = ctx.query.message || ctx.params.message || '';
         // 获取详情链接
-        const url = ctx.query.url || ctx.params.url || '';
+        const url = this.queryRedirectURL(ctx.query.url || ctx.params.url || '');
 
         // 查询电话号码对应的一条至多条企业微信账号数据，获取到userid,company，不同的compay对应不同的企业agentid,secret
         const response = await app.mysql.query(`select * from v_hrmresource where mobile = '${mobile}';`, []);
@@ -51,6 +51,7 @@ class WeworkMessageController extends Controller {
 
         // 根据item的userid, company获取agentid,secret,token
         agentid = agentid ? agentid : wxConfig.company[cname].agentid;
+        messageurl = messageurl ? `，链接: <a href="${messageurl}">详情</a>` : '';
 
         // 获取TokenURL
         const tokenAPI = `${wxConfig.wework.message.gettoken}?corpid=${wxConfig.company[cname].id}&corpsecret=${wxConfig.company[cname][agentid]}`;
@@ -90,6 +91,24 @@ class WeworkMessageController extends Controller {
         const result = await axios.post(queryAPI, node);
 
         return result;
+    }
+
+    /**
+     * @function 获取添加微信跳转的URL
+     * @param {*} redirectUrl
+     */
+    queryRedirectURL(redirectUrl) {
+        try {
+            if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
+                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterpriseCD.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', encodeURIComponent(redirectUrl));
+            }
+        } catch (error) {
+            if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
+                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterpriseCD.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', redirectUrl);
+            }
+            console.log(error);
+        }
+        return redirectUrl;
     }
 
 }
