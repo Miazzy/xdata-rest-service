@@ -13,7 +13,7 @@ class WeworkMessageController extends Controller {
      */
     async message() {
 
-        const { ctx, app } = this;
+        const { ctx } = this;
 
         // 获取电话号码
         const mobile = ctx.query.mobile || ctx.params.mobile || '';
@@ -21,6 +21,26 @@ class WeworkMessageController extends Controller {
         const message = ctx.query.message || ctx.params.message || '';
         // 获取详情链接
         const url = this.queryRedirectURL(ctx.query.url || ctx.params.url || '');
+
+        // 检查是否含有逗号,如果含有逗号表示为数组
+        const mlist = mobile.split(',');
+
+        // 遍历元素，推送企业微信消息
+        for (const elem of mlist) {
+            await this.sendMessageByMobile(elem, message, url); // 检查如果是电话号码
+            await this.sendMessageByUserID(elem, message, url); // 检查如果是用户编号
+        }
+
+        ctx.body = { errcode: 0, message: '' };
+    }
+
+    async sendMessageByMobile(mobile, message, url) {
+        const { app } = this;
+
+        // 如果不是电话号码，则退出
+        if (!/^1[3|4|5|6|7|8|9]\d{9}$/.test(mobile)) {
+            return false;
+        }
 
         // 查询电话号码对应的一条至多条企业微信账号数据，获取到userid,company，不同的compay对应不同的企业agentid,secret
         const response = await app.mysql.query(`select * from v_hrmresource where mobile = '${mobile}';`, []);
@@ -30,8 +50,24 @@ class WeworkMessageController extends Controller {
             await this.sendMessage(item.cname, wxConfig.company[item.cname].agentid, item.userid, message, url);
             console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
         }
+    }
 
-        ctx.body = { errcode: 0, message: '' };
+    async sendMessageByUserID(userID, message, url) {
+        const { app } = this;
+
+        // 如果不符合账户编码规则，则退出
+        if (!/^[a-zA-z0-9]\w{3,20}$/.test(userID)) {
+            return false;
+        }
+
+        // 查询电话号码对应的一条至多条企业微信账号数据，获取到userid,company，不同的compay对应不同的企业agentid,secret
+        const response = await app.mysql.query(`select * from v_hrmresource where userid = '${userID}';`, []);
+
+        // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
+        for (const item of response) {
+            await this.sendMessage(item.cname, wxConfig.company[item.cname].agentid, item.userid, message, url);
+            console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
+        }
     }
 
     /**
