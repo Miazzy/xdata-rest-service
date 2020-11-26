@@ -64,5 +64,10 @@ module.exports = {
         package: 'egg-redis',
     },
 
+    sequelize: {
+        enable: true,
+        package: 'egg-sequelize',
+    },
+
 
 };
