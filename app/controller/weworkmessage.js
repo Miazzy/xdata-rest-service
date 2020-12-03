@@ -22,7 +22,7 @@ class WeworkMessageController extends Controller {
         // 获取推送消息
         const type = ctx.query.type || ctx.params.type || 'agentid';
         // 获取详情链接
-        const url = this.queryRedirectURL(ctx.query.url || ctx.params.url || ctx.query.rurl || ctx.params.rurl || '');
+        const url = ctx.query.url || ctx.params.url || ctx.query.rurl || ctx.params.rurl || '';
         // 设置是否结束标识
         let flag = false;
 
@@ -93,6 +93,8 @@ class WeworkMessageController extends Controller {
         // 缓存控制器
         const store = app.cache.store('redis');
 
+        messageurl = this.queryRedirectURL(messageurl, cname);
+
         // 根据item的userid, company获取agentid,secret,token
         agentid = agentid ? agentid : wxConfig.company[cname].agentid;
         messageurl = messageurl ? `，链接: <a href="${messageurl}">详情</a>` : '';
@@ -140,15 +142,16 @@ class WeworkMessageController extends Controller {
     /**
      * @function 获取添加微信跳转的URL
      * @param {*} redirectUrl
+     * @param {*} cname
      */
-    queryRedirectURL(redirectUrl) {
+    queryRedirectURL(redirectUrl, cname) {
         try {
             if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
-                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterpriseCD.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', encodeURIComponent(redirectUrl));
+                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.company[cname].id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', encodeURIComponent(redirectUrl));
             }
         } catch (error) {
             if (redirectUrl && !redirectUrl.includes('open.weixin.qq.com')) {
-                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.enterpriseCD.id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', redirectUrl);
+                redirectUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.company[cname].id}&response_type=code&scope=snsapi_base&state=STATE&redirect_uri=REDIRECT_URL#wechat_redirect`.replace('REDIRECT_URL', redirectUrl);
             }
             console.log(error);
         }
