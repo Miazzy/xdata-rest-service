@@ -69,6 +69,7 @@ class MySQLController extends Controller {
         await app.mysql.query('update bs_seal_regist set record_name = seal_man where (record_name = \'\' or record_name is null) and seal is not null ;', []);
         await app.mysql.query('update bs_seal_regist set finance_name = seal_man where (finance_name = \'\' or finance_name is null) and seal is not null ;', []);
         await app.mysql.query('update bs_seal_regist set archive_name = seal_man where (archive_name = \'\' or archive_name is null) and seal is not null ;', []);
+        await app.mysql.query('update bs_seal_regist set serial_id = serialid where serial_id is null;', []);
 
         ctx.body = response;
     }
