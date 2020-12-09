@@ -293,6 +293,9 @@ module.exports = app => {
     // 数据库表Row权限更新
     router.get('/api/v3/mysql/backup', controller.mysql.backupDatabase);
 
+    // 数据库表迁移数据
+    router.get('/api/v3/mysql/mtdata', controller.mysql.moveTableData);
+
     // 查询用印管理用户管理组信息
     router.get('/api/v2/bussiness/grouplimits/:username', controller.bussiness.queryGroupLimits);
 

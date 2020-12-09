@@ -75,6 +75,29 @@ class MySQLController extends Controller {
     }
 
     /**
+     * @function 迁移数据
+     */
+    async moveTableData() {
+
+        const { ctx, app } = this;
+
+        // 获取部门编号
+        const tablename = ctx.query.tablename || ctx.params.tablename || '';
+        // 获取部门编号
+        const historyname = ctx.query.historyname || ctx.params.historyname || '';
+        // 获取部门编号
+        const field = ctx.query.field || ctx.params.field || 'pid';
+        // 获取部门编号
+        const value = ctx.query.value || ctx.params.value || 'id';
+
+        // 执行更新SQL
+        const response = await app.mysql.query(`insert into ${historyname} select * from ${tablename} where ${field} = '${value}';`, []);
+        await app.mysql.query(`delete from ${tablename} where ${field} = '${value}'`, []);
+
+        ctx.body = response;
+    }
+
+    /**
      * @function 数据Row权限更新
      */
     async updateRowLimits() {
@@ -114,7 +137,7 @@ class MySQLController extends Controller {
         // 数据库Dump配置
         const mysqldumpConfig = {
             connection: connectionConfig,
-            dumpToFile: `./mysqldump/${dayjs().format('YYYYMMDDHHmm')}dump.sql.gz`,
+            dumpToFile: `./mysqldump/${dayjs().format('YYYYMMDD')}dump.sql.gz`,
             compressFile: true,
         };
 
