@@ -82,13 +82,13 @@ class MySQLController extends Controller {
         const { ctx, app } = this;
 
         // 获取部门编号
-        const tablename = ctx.query.tablename || ctx.params.tablename || '';
+        const tablename = ctx.query.tablename || ctx.params.tablename || ctx.query.tname || ctx.params.tname || '';
         // 获取部门编号
-        const historyname = ctx.query.historyname || ctx.params.historyname || '';
+        const historyname = ctx.query.historyname || ctx.params.historyname || ctx.query.hname || ctx.params.hname || '';
         // 获取部门编号
         const field = ctx.query.field || ctx.params.field || 'pid';
         // 获取部门编号
-        const value = ctx.query.value || ctx.params.value || 'id';
+        const value = ctx.query.value || ctx.params.value || '';
 
         // 执行更新SQL
         const response = await app.mysql.query(`insert into ${historyname} select * from ${tablename} where ${field} = '${value}';`, []);
