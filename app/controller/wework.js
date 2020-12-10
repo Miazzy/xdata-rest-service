@@ -917,17 +917,12 @@ class WeworkController extends Controller {
 
             // 保存用户信息
             try {
-                store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
-            } catch (error) {
-                console.log(error);
-            }
-            try {
-                store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.userid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
-            } catch (error) {
-                console.log(error);
-            }
-            try {
-                store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.mobile}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+                if (result.data && result.data.UserId && result.data.errcode === 0 && result.data.errmsg === 'ok' && result.data.userinfo) {
+                    store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+                    store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.userid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+                    store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.mobile}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+                    store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.username}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+                }
             } catch (error) {
                 console.log(error);
             }
