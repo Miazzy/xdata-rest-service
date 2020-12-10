@@ -916,8 +916,21 @@ class WeworkController extends Controller {
             }
 
             // 保存用户信息
-            store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
-            store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.userid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+            try {
+                store.set(`wxConfig.enterprise.user.code@${code}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+            } catch (error) {
+                console.log(error);
+            }
+            try {
+                store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.userid}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+            } catch (error) {
+                console.log(error);
+            }
+            try {
+                store.set(`wxConfig.enterprise.user.code@${result.data.userinfo.mobile}`, JSON.stringify(result.data), wxConfig.timestamp.ONE_YEAR);
+            } catch (error) {
+                console.log(error);
+            }
 
             // 设置返回信息
             ctx.body = result.data;
