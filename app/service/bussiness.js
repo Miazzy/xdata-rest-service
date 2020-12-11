@@ -100,6 +100,78 @@ class BussinessService extends Service {
     }
 
     /**
+     * @function 查询企业微信员工数据通过联系号码
+     * @param {*} mobile
+     */
+    async queryWeWorkUserByMobile(mobile) {
+
+        const { ctx, app } = this;
+
+        console.log(`queryWeWorkUserByMobile:${mobile}`);
+
+        // 获取部门编号
+        const company = ctx.query.company || ctx.params.company || '融量';
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.wework.user.mobile.queryuserinfo@${mobile}`);
+
+        // 如果获取到缓存数据，设置返回结果
+        if (userinfo) {
+            return userinfo;
+        }
+
+        const sql = ` select * from bs_wework_user where mobile = '${mobile}' and company = '${company}'  ; `;
+        const result = await app.mysql.query(sql, []);
+        console.log(`mobile:${mobile},userinfo:${JSON.stringify(result)},sql:${sql}`);
+
+        // 设置缓存
+        await store.set(`wxConfig.wework.user.mobile.queryuserinfo@${mobile}`, result, wxConfig.timestamp.ONE_DAY);
+
+        // 设置返回结果
+        return result;
+
+    }
+
+    /**
+     * @function 查询企业微信员工数据通过联系号码
+     * @param {*} username
+     */
+    async queryWeWorkUserByUserName(username) {
+
+        const { ctx, app } = this;
+
+        console.log(`queryWeWorkUserByUserName:${username}`);
+
+        // 获取部门编号
+        const company = ctx.query.company || ctx.params.company || '融量';
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.wework.user.username.queryuserinfo@${username}`);
+
+        // 如果获取到缓存数据，设置返回结果
+        if (userinfo) {
+            return userinfo;
+        }
+
+        const sql = ` select * from v_hrmresource where (loginid = '${username}' or userid = '${username}' ) and cname = '${company}'  ; `;
+        const result = await app.mysql.query(sql, []);
+        console.log(`username:${username},userinfo:${JSON.stringify(result)},sql:${sql}`);
+
+        // 设置缓存
+        await store.set(`wxConfig.wework.user.username.queryuserinfo@${username}`, result, wxConfig.timestamp.ONE_DAY);
+
+        // 设置返回结果
+        return result;
+
+    }
+
+    /**
      * @function 查询所有员工数据，并保持至数据库中
      * @param {*} id
      * @param {*} name
@@ -116,7 +188,7 @@ class BussinessService extends Service {
 
         console.log('queryEmployeeByID userid : ' + id);
 
-        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  (id = ${id} or lastname = '${name}' or mobile = '${mobile}' )order by id asc offset 0 row fetch next 10000 row  only  `;
+        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  (id = '${id}' or lastname = '${name}' or mobile = '${mobile}' ) order by id asc offset 0 row fetch next 10000 row  only  `;
 
         console.log('queryEmployeeByID sql : ' + sql);
 

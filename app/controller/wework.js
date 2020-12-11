@@ -819,6 +819,21 @@ class WeworkController extends Controller {
             console.log('result : ' + JSON.stringify(result.data));
             // 如果存在用户UserID信息，则进一步查询用户信息
             try {
+
+                if (!result.data.UserId) { // 如果未查询到用户数据，则判断是否为mobile,如果不是手机号，则为用户账号，根据手机号或者用户账号获取数据
+
+                    if (/^[1][3,4,5,7,8][0-9]{9}$/.test(code)) { // 参数为手机号
+                        // 如果为手机号，则查询bs_wework_user表
+                        result.data.uresult = await ctx.service.bussiness.queryWeWorkUserByMobile(code);
+                    } else { // 参数为用户名
+                        // 如果为用户名，则查询v_hrmresource表
+                        result.data.uresult = await ctx.service.bussiness.queryWeWorkUserByUserName(code);
+                    }
+
+                    result.data.UserId = result.data.uresult && result.data.uresult.length > 0 ? result.data.uresult[0].userid : result.data.UserId;
+
+                }
+
                 if (result.data.UserId) {
 
                     // 查询OpenID
@@ -837,7 +852,6 @@ class WeworkController extends Controller {
                     // 获取动态token
                     try {
                         result.data.userinfo = await ctx.service.bussiness.queryUserInfoByID(result.data.UserId);
-                        // result.data.userinfo = await store.get(`wxConfig.enterprise.user.userinfo@${result.data.UserId}`);
                     } catch (error) {
                         console.log(error);
                     }
@@ -845,7 +859,6 @@ class WeworkController extends Controller {
                     // 解析字符串为json对象
                     try {
                         if (result.data.userinfo) {
-                            // result.data.userinfo = JSON.parse(result.data.userinfo);
 
                             try {
                                 result.data.userinfo.orgin_userid = result.data.UserId;
