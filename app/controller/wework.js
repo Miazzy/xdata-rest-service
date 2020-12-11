@@ -831,7 +831,7 @@ class WeworkController extends Controller {
                     }
 
                     result.data.UserId = result.data.uresult && result.data.uresult.length > 0 ? result.data.uresult[0].userid : result.data.UserId;
-
+                    result.data.errmsg = result.data.uresult && result.data.uresult.length > 0 ? '' : result.data.errmsg;
                 }
 
                 if (result.data.UserId) {
