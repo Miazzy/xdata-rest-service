@@ -172,6 +172,44 @@ class BussinessService extends Service {
     }
 
     /**
+     * @function 查询企业微信员工数据通过联系号码
+     * @param {*} username
+     * @param {*} mobile
+     * @param {*} certno
+     */
+    async queryUserInfoByUserMobileCertNO(username, mobile, certno) {
+
+        const { ctx, app } = this;
+
+        console.log(`queryWeWorkUserByUserName:${username},${mobile},${certno}`);
+
+        // 获取部门编号
+        const company = ctx.query.company || ctx.params.company || '融量';
+
+        // 缓存控制器
+        const store = app.cache.store('redis');
+
+        // 获取动态token
+        const userinfo = await store.get(`wxConfig.wework.user.username.mobile.certno.queryUserInfoByUserMobileCertNO@${username}@${mobile}@${certno}`);
+
+        // 如果获取到缓存数据，设置返回结果
+        if (userinfo) {
+            return userinfo;
+        }
+
+        const sql = ` select * from v_hrmresource where (loginid = '${username}' or userid = '${username}' ) and mobile = '${mobile}' and cert like '%${certno}' and cname = '${company}'  ; `;
+        const result = await app.mysql.query(sql, []);
+        console.log(`username,mobile,certno:${username},${mobile},${certno},userinfo:${JSON.stringify(result)},sql:${sql}`);
+
+        // 设置缓存
+        await store.set(`wxConfig.wework.user.username.mobile.certno.queryUserInfoByUserMobileCertNO@${username}@${mobile}@${certno}`, result, wxConfig.timestamp.ONE_DAY);
+
+        // 设置返回结果
+        return result;
+
+    }
+
+    /**
      * @function 查询所有员工数据，并保持至数据库中
      * @param {*} id
      * @param {*} name
