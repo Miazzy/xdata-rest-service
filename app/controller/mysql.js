@@ -25,7 +25,7 @@ class MySQLController extends Controller {
 
         // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
         const response = await app.mysql.query(`call serial_id_seal('${tablename}','${fieldID}','${id}');`, []);
-
+        response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
         ctx.body = response;
     }
 
