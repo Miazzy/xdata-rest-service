@@ -23,10 +23,8 @@ class MySQLController extends Controller {
         // 获取部门编号
         const id = ctx.query.id || ctx.params.id || 'id';
 
-        // 设置排序号
-        await app.mysql.query('set @rank= 0;', []);
-        // 执行排序过程
-        const response = await app.mysql.query(`update ${tablename} t set t.${fieldID} = @rank:=@rank + 1 order by t.${id} asc;`, []);
+        // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
+        const response = await app.mysql.query(`call serial_id_seal('${tablename}','${fieldID}','${id}');`, []);
 
         ctx.body = response;
     }
