@@ -225,7 +225,7 @@ class BussinessService extends Service {
         const store = app.cache.store('redis');
         console.log('queryEmployeeByID userid : ' + id);
 
-        const conditionSQL = `id = '${id}' ` + (name ? `or lastname = '${name}'` : '') + (mobile ? `or mobile = '${mobile}'` : '');
+        const conditionSQL = `( id = '${id}' ` + (name ? `and lastname = '${name}' ) ` : ' ) ') + (mobile ? ` or mobile = '${mobile}' ` : ' ');
         console.log('conditionsql : ' + conditionSQL);
         const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  ( ${conditionSQL} ) order by id asc offset 0 row fetch next 10000 row  only  `;
         console.log('queryEmployeeByID sql : ' + sql);
