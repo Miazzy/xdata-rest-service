@@ -223,13 +223,12 @@ class BussinessService extends Service {
 
         // 缓存控制器
         const store = app.cache.store('redis');
-
         console.log('queryEmployeeByID userid : ' + id);
 
-        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  (id = '${id}' or lastname = '${name}' or mobile = '${mobile}' ) order by id asc offset 0 row fetch next 10000 row  only  `;
-
+        const conditionSQL = `id = '${id}' ` + (name ? `or lastname = '${name}'` : '') + (mobile ? `or mobile = '${mobile}'` : '');
+        console.log('conditionsql : ' + conditionSQL);
+        const sql = `select id , dsporder wid , loginid username , lastname realname , sex , mobile , joblevel level, textfield1 , certificatenum cert, status from newecology.dbo.hrmresource  where (status != 5) and  ( ${conditionSQL} ) order by id asc offset 0 row fetch next 10000 row  only  `;
         console.log('queryEmployeeByID sql : ' + sql);
-
         const result = await this.pool.query(sql);
 
         console.log('queryEmployeeByID result : ' + JSON.stringify(result));

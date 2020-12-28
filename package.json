@@ -28,6 +28,7 @@
     "egg-redis": "^2.4.0",
     "egg-scripts": "^2.11.0",
     "excel": "^1.0.1",
+    "karma-firefox-launcher": "^2.1.0",
     "mocha": "^5.2.0",
     "mssql": "^6.2.1",
     "mysql2": "^2.2.5",
@@ -42,11 +43,16 @@
   "devDependencies": {
     "autod": "^3.0.1",
     "autod-egg": "^1.1.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-latest": "^6.24.1",
     "egg-bin": "^4.11.0",
     "egg-ci": "^1.11.0",
     "egg-mock": "^3.21.0",
     "eslint": "^5.13.0",
-    "eslint-config-egg": "^7.1.0"
+    "eslint-config-egg": "^7.1.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "engines": {
     "node": ">=10.0.0"
