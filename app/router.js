@@ -314,4 +314,7 @@ module.exports = app => {
     // 同步人事数据
     router.get('/api/v1/datasync', controller.datasync.syncHRM);
 
+    // 同步签到数据
+    router.get('/api/v1/datasync_schedule_sign', controller.datasync.syncHRMScheduleSign);
+
 };
