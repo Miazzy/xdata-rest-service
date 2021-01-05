@@ -122,6 +122,35 @@ class DataSyncController extends Controller {
     }
 
     /**
+     * @function 同步泛微OA表HRMScheduleSign到MySQL数据库bs_HRMScheduleSign中
+     */
+    async syncHRMScheduleSignDate() {
+
+        await this.init();
+
+        const { ctx, app } = this;
+
+        const date = ctx.query.date || ctx.params.date || ''; // 获取电话号码
+
+        let response = null;
+        let sql = null;
+        let list = [];
+
+        sql = `select * from ${config.config.database}.dbo.hrmresource  where signDate like '%${date}%' order by id asc offset 0 row fetch next 1000000 row only `;
+        response = await pool.ld.query(sql);
+        list = response.recordset;
+
+        // 合并查询到的员工签到数据，将数据insert到MySQL的bs_hrmschedulesign中
+        for (const node of list) {
+            await this.postTableData('bs_hrmschedulesign', node);
+        }
+
+        // 返回查询数据
+        ctx.body = { list };
+
+    }
+
+    /**
      * @function 提交并持久化数据到服务器
      * @param {*} tableName
      * @param {*} node

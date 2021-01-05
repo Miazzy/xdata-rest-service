@@ -317,4 +317,7 @@ module.exports = app => {
     // 同步签到数据
     router.get('/api/v1/datasync_schedule_sign', controller.datasync.syncHRMScheduleSign);
 
+    // 同步签到数据（按日期）
+    router.get('/api/v1/datasync_schedule_sign_date', controller.datasync.syncHRMScheduleSignDate);
+
 };
