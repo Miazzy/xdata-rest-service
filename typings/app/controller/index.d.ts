@@ -12,6 +12,7 @@ import ExportMail = require('../../../app/controller/mail');
 import ExportMysql = require('../../../app/controller/mysql');
 import ExportRedis = require('../../../app/controller/redis');
 import ExportUpload = require('../../../app/controller/upload');
+import ExportUser = require('../../../app/controller/user');
 import ExportWework = require('../../../app/controller/wework');
 import ExportWeworkcd = require('../../../app/controller/weworkcd');
 import ExportWeworkmessage = require('../../../app/controller/weworkmessage');
@@ -28,6 +29,7 @@ declare module 'egg' {
     mysql: ExportMysql;
     redis: ExportRedis;
     upload: ExportUpload;
+    user: ExportUser;
     wework: ExportWework;
     weworkcd: ExportWeworkcd;
     weworkmessage: ExportWeworkmessage;

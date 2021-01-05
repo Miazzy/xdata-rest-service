@@ -104,10 +104,10 @@ class DataSyncController extends Controller {
         let maxID = 0;
         let list = [];
 
-        response = await app.mysql.query(' select max(id) id from bs_hrmresource ', []);
+        response = await app.mysql.query(' select max(id) id from bs_HrmScheduleSign ', []);
         maxID = response[0].id;
 
-        sql = `select * from ${config.config.database}.dbo.hrmresource  where id > ${maxID} order by id asc offset 0 row fetch next 10000 row only `;
+        sql = `select * from ${config.config.database}.dbo.HrmScheduleSign  where id > ${maxID} order by id asc offset 0 row fetch next 10000 row only `;
         response = await pool.ld.query(sql);
         list = response.recordset;
 
@@ -136,7 +136,7 @@ class DataSyncController extends Controller {
         let sql = null;
         let list = [];
 
-        sql = `select * from ${config.config.database}.dbo.hrmresource  where signDate like '%${date}%' order by id asc offset 0 row fetch next 1000000 row only `;
+        sql = `select * from ${config.config.database}.dbo.HrmScheduleSign where signDate like '%${date}%' order by id asc offset 0 row fetch next 1000000 row only `;
         response = await pool.ld.query(sql);
         list = response.recordset;
 
