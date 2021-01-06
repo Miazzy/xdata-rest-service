@@ -30,6 +30,24 @@ class MySQLController extends Controller {
     }
 
     /**
+     * @function 将超过N天未领取办公用品的申请状态修改为已完成
+     */
+    async goodsComplete() {
+
+        const { ctx, app } = this;
+
+        const tablename = ctx.query.tablename || ctx.params.tablename || 'bs_goods_receive'; // 获取表名称
+        const field = ctx.query.field || ctx.params.field || 'status'; // 获取表字段
+        const oldValue = ctx.query.old || ctx.params.old || '已准备'; // 获取原状态
+        const newValue = ctx.query.new || ctx.params.new || '已完成'; // 获取新状态
+        const day = ctx.query.day || ctx.params.day || 10; //获取默认天数
+
+        const response = await app.mysql.query(`call goods_complete('${tablename}' , '${field}' , '${oldValue}' , '${newValue}' , ${day} );`, []);
+        response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+        ctx.body = response;
+    }
+
+    /**
      * @function 数据库serialID按时间进行排序
      */
     async patchSerialID() {
