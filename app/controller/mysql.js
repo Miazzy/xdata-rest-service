@@ -81,7 +81,7 @@ class MySQLController extends Controller {
 
         // 更新表单区域名称
         for (const item of list) {
-            await app.mysql.query(`update bs_seal_regist set zone_name = '${item.value}' where seal_group_ids like '%${item.id}%';`, []);
+            await app.mysql.query(`update bs_seal_regist set zone_name = '${item.value}' where zone_name is null and seal_group_ids like '%${item.id}%';`, []);
         }
 
         ctx.body = { success: true };
