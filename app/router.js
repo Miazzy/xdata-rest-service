@@ -303,7 +303,7 @@ module.exports = app => {
     router.get('/api/v3/mysql/mtdata', controller.mysql.moveTableData);
 
     // 数据库表更新zonename
-    router.get('/api/v3/mysql/updata_zonename', controller.mysql.updateSealZoneName);
+    router.get('/api/v2/mysql/updata_zonename', controller.mysql.updateSealZoneName);
 
     // 查询用印管理用户管理组信息
     router.get('/api/v2/bussiness/grouplimits/:username', controller.bussiness.queryGroupLimits);
