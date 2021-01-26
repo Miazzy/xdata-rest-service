@@ -79,9 +79,12 @@ class MySQLController extends Controller {
         // 设置排序号
         const list = await app.mysql.query(`select userlist_reception id , zonename value from bs_admin_group t where t.groupname like '%SEAL_ADMIN%';`, []);
 
-        console.log(JSON.stringify(list));
+        // 更新表单区域名称
+        for (const item of list) {
+            await app.mysql.query(`update bs_seal_regist set zone_name = '${item.value}' where seal_group_ids like '%${item.id}%';`, []);
+        }
 
-        ctx.body = response;
+        ctx.body = { success: true };
     }
 
     /**
