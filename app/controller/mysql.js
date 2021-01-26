@@ -77,7 +77,7 @@ class MySQLController extends Controller {
         const { ctx, app } = this;
 
         // 设置排序号
-        const list = await app.mysql.query(`select userlist_reception id , zonename value from bs_admin_group t where t.groupname like '%SEAL_ADMIN%';`, []);
+        const list = await app.mysql.query(`select create_time , userlist_reception id , zonename value from bs_admin_group t where t.groupname like '%SEAL_ADMIN%' order by create_time desc;`, []);
 
         // 更新表单区域名称
         for (const item of list) {
