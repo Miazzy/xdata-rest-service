@@ -70,6 +70,21 @@ class MySQLController extends Controller {
     }
 
     /**
+     * @function 数据库更新用印数据ZoneName
+     */
+    async updateSealZoneName() {
+
+        const { ctx, app } = this;
+
+        // 设置排序号
+        const list = await app.mysql.query(`select userlist_reception id , zonename value from bs_admin_group t where t.groupname like '%SEAL_ADMIN%';`, []);
+
+        console.log(JSON.stringify(list));
+
+        ctx.body = response;
+    }
+
+    /**
      * @function 用印数据定时更新
      */
     async updateSealInfo() {
