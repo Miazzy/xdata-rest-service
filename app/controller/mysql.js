@@ -73,17 +73,13 @@ class MySQLController extends Controller {
      * @function 数据库更新用印数据ZoneName
      */
     async updateSealZoneName() {
-
         const { ctx, app } = this;
-
         // 设置排序号
         const list = await app.mysql.query(`select create_time , userlist_reception id , zonename value from bs_admin_group t where t.groupname like '%SEAL_ADMIN%' order by create_time desc;`, []);
-
         // 更新表单区域名称
         for (const item of list) {
-            await app.mysql.query(`update bs_seal_regist set zone_name = '${item.value}' where zone_name is null and seal_group_ids like '%${item.id}%';`, []);
+            app.mysql.query(`update bs_seal_regist set zone_name = '${item.value}' where zone_name is null and seal_group_ids like '%${item.id}%';`, []);
         }
-
         ctx.body = { success: true };
     }
 
