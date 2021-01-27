@@ -91,19 +91,19 @@ class MySQLController extends Controller {
         const { ctx, app } = this;
 
         // 执行更新SQL
-        await app.mysql.query('update bs_seal_regist set front = seal where (front = \'\' or front is null) and seal is not null ; ', []);
-        await app.mysql.query('update bs_seal_regist set finance = seal where (finance = \'\' or finance is null) and seal is not null ;', []);
-        await app.mysql.query('update bs_seal_regist set record = seal where (record = \'\' or record is null) and seal is not null ;', []);
-        await app.mysql.query('update bs_seal_regist set archive = seal where (archive = \'\' or archive is null) and seal is not null ;', []);
-        await app.mysql.query('update bs_seal_regist set front_name = seal_man where (front_name = \'\' or front_name is null) and seal is not null ;', []);
-        await app.mysql.query('update bs_seal_regist set record_name = seal_man where (record_name = \'\' or record_name is null) and seal is not null ;', []);
-        await app.mysql.query('update bs_seal_regist set finance_name = seal_man where (finance_name = \'\' or finance_name is null) and seal is not null ;', []);
-        await app.mysql.query('update bs_seal_regist set archive_name = seal_man where (archive_name = \'\' or archive_name is null) and seal is not null ;', []);
-        await app.mysql.query('update bs_seal_regist set serial_id = serialid where serial_id is null;', []);
+        app.mysql.query('update bs_seal_regist set front = seal where (front = \'\' or front is null) and seal is not null ; ', []);
+        app.mysql.query('update bs_seal_regist set finance = seal where (finance = \'\' or finance is null) and seal is not null ;', []);
+        app.mysql.query('update bs_seal_regist set record = seal where (record = \'\' or record is null) and seal is not null ;', []);
+        app.mysql.query('update bs_seal_regist set archive = seal where (archive = \'\' or archive is null) and seal is not null ;', []);
+        app.mysql.query('update bs_seal_regist set front_name = seal_man where (front_name = \'\' or front_name is null) and seal is not null ;', []);
+        app.mysql.query('update bs_seal_regist set record_name = seal_man where (record_name = \'\' or record_name is null) and seal is not null ;', []);
+        app.mysql.query('update bs_seal_regist set finance_name = seal_man where (finance_name = \'\' or finance_name is null) and seal is not null ;', []);
+        app.mysql.query('update bs_seal_regist set archive_name = seal_man where (archive_name = \'\' or archive_name is null) and seal is not null ;', []);
+        app.mysql.query('update bs_seal_regist set serial_id = serialid where serial_id is null;', []);
 
-        await app.mysql.query(`update bs_seal_regist set seal_group_ids = 'yanggc,chenll,zhaozy1028' where seal_group_ids like '%yanggc%';`);
-        await app.mysql.query(`update bs_seal_regist set zone_name = '领地集团总部' where zone_name is null and seal_group_ids like '%yanggc%';`);
-        await app.mysql.query(`update bs_seal_regist set zone_name = '领悦物业总部' where zone_name is null and seal_group_ids like '%longcl%';`);
+        app.mysql.query(`update bs_seal_regist set seal_group_ids = 'yanggc,chenll,zhaozy1028' where seal_group_ids like '%yanggc%';`);
+        app.mysql.query(`update bs_seal_regist set zone_name = '领地集团总部' where zone_name is null and seal_group_ids like '%yanggc%';`);
+        app.mysql.query(`update bs_seal_regist set zone_name = '领悦物业总部' where zone_name is null and seal_group_ids like '%longcl%';`);
 
         ctx.body = { success: true };
     }
