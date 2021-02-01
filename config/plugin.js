@@ -4,7 +4,7 @@
 
 /** @type Egg.EggPlugin */
 module.exports = {
-    // had enabled by egg
+
     // static: {
     //   enable: true,
     // }
@@ -50,7 +50,7 @@ module.exports = {
     },
 
     httpProxy: {
-        enable: false,
+        enable: true,
         package: 'egg-http-proxy',
     },
 

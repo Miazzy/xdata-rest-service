@@ -169,9 +169,9 @@ module.exports = appInfo => {
 
     // 网关代理配置
     config.httpProxy = {
-        '/api': {
-            target: 'http://www.example.org',
-            pathRewrite: { '^/api': '/api' },
+        '/apis': {
+            target: 'http://172.18.254.95:3000',
+            pathRewrite: { '^/apis': '/api' },
         },
     };
 

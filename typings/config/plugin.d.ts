@@ -19,6 +19,7 @@ import 'egg-mailer';
 import 'egg-cache';
 import 'egg-mysql';
 import 'egg-mssql';
+import 'egg-http-proxy';
 import 'egg-redis';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
