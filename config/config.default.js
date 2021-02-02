@@ -108,13 +108,13 @@ module.exports = appInfo => {
 
     config.ratelimiter = {
         router: [{
-                path: '/apis',
+                path: '/apis/**',
                 max: 1,
                 time: '5s', //时间单位 s m h d y ...
                 message: 'Custom request overrun error message path:/apis ' //自定义请求超限错误信息
             },
             {
-                path: '/api',
+                path: '/api/**',
                 max: 1,
                 time: '5s', //时间单位 s m h d y ...
                 message: 'Custom request overrun error message path:/api ' //自定义请求超限错误信息
