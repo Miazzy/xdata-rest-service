@@ -204,6 +204,43 @@ module.exports = appInfo => {
         },
     };
 
+    config.nacos = {
+        logger: console,
+        serverList: '172.18.1.50:8848', // replace to real nacos serverList
+        namespace: 'public',
+        serviceName: 'xdata-rest-service',
+    };
+
+    // 示例代码，具体配置项参考ts声明文件
+    // config.nacos = {
+    //     serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'],
+    //     namespace: 'public',
+    //     // subscribers: { // 需要监听的服务，不配置不监听
+    //     //     messageService: {
+    //     //         serviceName: 'xdata-rest-service',
+    //     //     },
+    //     // },
+    //     // configCenter: { // 配置中心相关配置
+    //     //     clientOptions: {},
+    //     //     configList: {
+    //     //         baseConfig: {
+    //     //             dataId: 'xdata-rest-config.yml',
+    //     //             groupName: 'DEFAULT_GROUP',
+    //     //         },
+    //     //     },
+    //     // },
+    //     providers: {
+    //         accountService: {
+    //             serviceName: 'xdata-rest-service',
+    //             instance: {
+    //                 ip: '127.0.0.1',
+    //                 port: 7001,
+    //             },
+    //             groupName: 'DEFAULT_GROUP',
+    //         },
+    //     },
+    // };
+
     // config.sequelize = {
     //     dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
     //     database: 'jeecg-boot',

@@ -64,8 +64,18 @@ module.exports = {
         package: 'egg-redis',
     },
 
+    // nacos: {
+    //     enable: false,
+    //     package: 'egg-nacos-ts',
+    // },
+
+    nacos: {
+        enable: true,
+        package: 'egg-nacos',
+    },
+
     // sequelize: {
-    //     enable: true,
+    //     enable: false,
     //     package: 'egg-sequelize',
     // },
 
