@@ -1,5 +1,5 @@
 node_modules
-!node_modules/egg-ratelimiter
+!node_modules/egg-ratelimiter/
 coverage
 *.log
 npm-debug.log
