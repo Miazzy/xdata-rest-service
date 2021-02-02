@@ -19,7 +19,7 @@ import 'egg-mailer';
 import 'egg-cache';
 import 'egg-mysql';
 import 'egg-mssql';
-import 'egg-http-proxy';
+import 'egg-gateway-proxy';
 import 'egg-redis';
 import 'egg-nacos';
 import 'egg-rate-limiters';
@@ -47,7 +47,6 @@ declare module 'egg' {
     mssql?: EggPluginItem;
     proxy?: EggPluginItem;
     httpProxy?: EggPluginItem;
-    httpproxy?: EggPluginItem;
     redis?: EggPluginItem;
     nacos?: EggPluginItem;
     ratelimiter?: EggPluginItem;
