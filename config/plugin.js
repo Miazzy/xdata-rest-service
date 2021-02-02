@@ -51,23 +51,13 @@ module.exports = {
 
     httpProxy: {
         enable: true,
-        package: 'egg-http-proxy',
-    },
-
-    httpproxy: {
-        enable: false,
-        package: 'egg-http-proxy2',
+        package: 'egg-gateway-proxy',
     },
 
     redis: {
         enable: true,
         package: 'egg-redis',
     },
-
-    // nacos: {
-    //     enable: false,
-    //     package: 'egg-nacos-ts',
-    // },
 
     nacos: {
         enable: true,
@@ -78,11 +68,6 @@ module.exports = {
         enable: true,
         package: 'egg-rate-limiters',
     },
-
-    // sequelize: {
-    //     enable: false,
-    //     package: 'egg-sequelize',
-    // },
 
 
 };
