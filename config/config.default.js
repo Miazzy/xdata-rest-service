@@ -175,15 +175,6 @@ module.exports = appInfo => {
         },
     };
 
-    // 反向代理配置
-    // config.proxy = [{
-    //     host: 'host1',
-    //     match: /\/assets1/,
-    // }, {
-    //     host: 'host2',
-    //     match: /\/assets2/,
-    // }];
-
     // 网关代理配置
     config.httpProxy = {
         '/apis': {
