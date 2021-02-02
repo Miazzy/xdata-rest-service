@@ -206,7 +206,7 @@ module.exports = appInfo => {
 
     config.nacos = {
         logger: console,
-        serverList: '172.18.1.50:8848', // replace to real nacos serverList
+        serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
         namespace: 'public',
         serviceName: 'xdata-rest-service',
     };

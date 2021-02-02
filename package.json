@@ -72,6 +72,7 @@
         "start_7008": "egg-scripts start --daemon --title=egg-server-egg-rest-service --port=7008",
         "start_7009": "egg-scripts start --daemon --title=egg-server-egg-rest-service --port=7009",
         "start_7010": "egg-scripts start --daemon --title=egg-server-egg-rest-service --port=7010",
+        "start_all": "npm run start_7001 ; npm run start_7002 ; npm run start_7003 ; npm run start_7004 ; npm run start_7005 ; npm run start_7006 ; npm run start_7007 ; npm run start_7008 ; npm run start_7009 ; npm run start_7010 ; ",
         "stop": "egg-scripts stop --title=egg-server-egg-rest-service",
         "dev": "egg-bin dev",
         "debug": "egg-bin debug",
