@@ -74,6 +74,11 @@ module.exports = {
         package: 'egg-nacos',
     },
 
+    ratelimiter: {
+        enable: true,
+        package: 'egg-ratelimiter',
+    },
+
     // sequelize: {
     //     enable: false,
     //     package: 'egg-sequelize',
