@@ -76,7 +76,7 @@ module.exports = {
 
     ratelimiter: {
         enable: true,
-        package: 'egg-ratelimiter',
+        package: 'egg-rate-limiters',
     },
 
     // sequelize: {

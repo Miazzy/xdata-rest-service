@@ -22,7 +22,7 @@ import 'egg-mssql';
 import 'egg-http-proxy';
 import 'egg-redis';
 import 'egg-nacos';
-import 'egg-ratelimiter';
+import 'egg-rate-limiters';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
