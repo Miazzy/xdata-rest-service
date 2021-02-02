@@ -110,13 +110,13 @@ module.exports = appInfo => {
     config.ratelimiter = {
         router: [{
                 path: '/apis/**', //请注意匹配优先级，放在前面优先级越高，越先匹配
-                max: 1,
+                max: 100000,
                 time: '5s', //时间单位 s m h d y ...
                 message: 'Custom request overrun error message path:/apis ' //自定义请求超限错误信息
             },
             {
                 path: '/api/**',
-                max: 1,
+                max: 100000,
                 time: '5s', //时间单位 s m h d y ...
                 message: 'Custom request overrun error message path:/api ' //自定义请求超限错误信息
             }
@@ -177,8 +177,14 @@ module.exports = appInfo => {
 
     // 网关代理配置
     config.httpProxy = {
+        '@nacos': {
+            logger: console,
+            serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
+            namespace: 'public',
+        },
         '/apis': {
-            target: 'http://172.18.254.95:3000',
+            target: ['http://172.18.254.95:3000', 'http://172.18.254.96:3000'],
+            serviceName: 'xdata-xmysql-service',
             pathRewrite: { '^/apis': '/api' },
         },
     };
