@@ -1,6 +1,6 @@
 {
-    "name": "egg-rest-service",
-    "version": "1.0.0",
+    "name": "xdata-rest-service",
+    "version": "1.0.1",
     "description": "rest service",
     "private": true,
     "egg": {
