@@ -6,6 +6,7 @@ import ExportBussiness = require('../../../app/controller/bussiness');
 import ExportDatabase = require('../../../app/controller/database');
 import ExportDatabasecd = require('../../../app/controller/databasecd');
 import ExportDatasync = require('../../../app/controller/datasync');
+import ExportElasticsearch = require('../../../app/controller/elasticsearch');
 import ExportExcel = require('../../../app/controller/excel');
 import ExportFilebase = require('../../../app/controller/filebase');
 import ExportMail = require('../../../app/controller/mail');
@@ -23,6 +24,7 @@ declare module 'egg' {
     database: ExportDatabase;
     databasecd: ExportDatabasecd;
     datasync: ExportDatasync;
+    elasticsearch: ExportElasticsearch;
     excel: ExportExcel;
     filebase: ExportFilebase;
     mail: ExportMail;

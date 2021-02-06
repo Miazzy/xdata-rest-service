@@ -23,6 +23,7 @@ import 'egg-gateway-proxy';
 import 'egg-redis';
 import 'egg-nacos';
 import 'egg-rate-limiters';
+import 'egg-es';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -50,5 +51,7 @@ declare module 'egg' {
     redis?: EggPluginItem;
     nacos?: EggPluginItem;
     ratelimiter?: EggPluginItem;
+    elasticsearch?: EggPluginItem;
+    elasticsearch2?: EggPluginItem;
   }
 }

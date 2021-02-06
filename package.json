@@ -18,6 +18,7 @@
         "egg": "^2.15.1",
         "egg-cache": "0.0.7",
         "egg-cors": "^2.2.3",
+        "egg-elasticsearch2": "^2.0.1",
         "egg-es": "^1.2.2",
         "egg-gateway-proxy": "^1.0.3",
         "egg-http-proxy": "^1.0.1",

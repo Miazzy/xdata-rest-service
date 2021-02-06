@@ -227,8 +227,12 @@ module.exports = appInfo => {
 
     config.elasticsearch = {
         host: '172.18.1.50:9200',
-        apiVersion: '7.10'
+        apiVersion: '7.x'
     };
+
+    // config.elasticsearch = {
+    //     host: '172.18.1.50:9200',
+    // };
 
     // 示例代码，具体配置项参考ts声明文件
     // config.nacos = {

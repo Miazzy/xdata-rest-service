@@ -320,8 +320,20 @@ module.exports = app => {
     // 同步人事数据
     router.get('/api/v1/datasync', controller.datasync.syncHRM);
 
+    // elasticsearch 新增
+    router.get('/api/es/elasticsearch/index', controller.elasticsearch.index);
+
+    // elasticsearch 新增
+    router.post('/api/es/elasticsearch/index', controller.elasticsearch.index);
+
     // elasticsearch 查询
-    router.get('/api/v1/elasticsearch/index', controller.elasticsearch.index);
+    router.get('/api/es/elasticsearch/search', controller.elasticsearch.search);
+
+    // elasticsearch 查询
+    router.post('/api/es/elasticsearch/search', controller.elasticsearch.search);
+
+    // elasticsearch 删除
+    router.delete('/api/es/elasticsearch/delete', controller.elasticsearch.delete);
 
     // 同步签到数据
     router.get('/api/v1/datasync_schedule_sign', controller.datasync.syncHRMScheduleSign);
