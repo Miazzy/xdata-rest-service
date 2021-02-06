@@ -7,6 +7,7 @@
         "declarations": true
     },
     "dependencies": {
+        "@elastic/elasticsearch": "^7.10.0",
         "@types/node": "^14.14.6",
         "acorn": "^7.4.1",
         "axios": "^0.20.0",
@@ -17,6 +18,7 @@
         "egg": "^2.15.1",
         "egg-cache": "0.0.7",
         "egg-cors": "^2.2.3",
+        "egg-es": "^1.2.2",
         "egg-gateway-proxy": "^1.0.3",
         "egg-http-proxy": "^1.0.1",
         "egg-http-proxy2": "^1.0.4",

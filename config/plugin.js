@@ -69,5 +69,10 @@ module.exports = {
         package: 'egg-rate-limiters',
     },
 
+    elasticsearch = {
+        enable: true,
+        package: 'egg-es',
+    },
+
 
 };

@@ -225,6 +225,11 @@ module.exports = appInfo => {
         serviceName: 'xdata-rest-service',
     };
 
+    config.elasticsearch = {
+        host: '172.18.1.50:9200',
+        apiVersion: '7.10'
+    };
+
     // 示例代码，具体配置项参考ts声明文件
     // config.nacos = {
     //     serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'],
