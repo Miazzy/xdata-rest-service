@@ -230,6 +230,18 @@ module.exports = appInfo => {
         apiVersion: '7.x'
     };
 
+    config.eggEtcd = {
+        hosts: [
+            '172.18.1.50:32777',
+            '172.18.1.50:32776',
+            '172.18.1.50:32779',
+        ],
+        auth: { //curl -L http://localhost:32777/v3/auth/user/add  -X POST -d '{"name": "root", "password": "ziyequma"}'
+            username: 'root',
+            password: 'ziyequma',
+        },
+    };
+
     // config.elasticsearch = {
     //     host: '172.18.1.50:9200',
     // };
@@ -282,3 +294,5 @@ module.exports = appInfo => {
         ...userConfig,
     };
 };
+
+curl - L http: //localhost:32777/v3/kv/put   -X POST -d '{"key": "Zm9v", "value": "YmFy"}'

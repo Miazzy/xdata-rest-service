@@ -79,5 +79,9 @@ module.exports = {
         package: 'egg-elasticsearch2',
     },
 
+    eggEtcd = {
+        enable: true,
+        package: 'egg-etcd',
+    },
 
 };
