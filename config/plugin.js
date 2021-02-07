@@ -44,11 +44,6 @@ module.exports = {
         package: 'egg-mssql',
     },
 
-    proxy: {
-        enable: false,
-        package: 'egg-proxy',
-    },
-
     httpProxy: {
         enable: true,
         package: 'egg-gateway-proxy',

@@ -189,19 +189,6 @@ module.exports = appInfo => {
         },
     };
 
-    // 网关代理配置
-    config.httpproxy = {
-        proxyTable: [{
-                path: '/risws/',
-                proxy: { target: 'http://t.vy01.com/MedTechWebService/', changeOrigin: true },
-            },
-            {
-                path: '/zsapi/',
-                proxy: { target: 'http://a.vy01.com/api/', changeOrigin: true },
-            },
-        ],
-    };
-
     config.multipart = {
         // 设置支持的上传文件类型
         whitelist: ['.apk', '.pptx', '.docx', '.xlsx', '.csv', '.doc', '.ppt', '.xls', '.pdf', '.pages', '.wav', '.mov', '.txt', '.png', '.jpeg', '.jpg', '.gif', '.tar.gz', '.tar', '.zip', '.mp3', '.mp4', '.avi'],
