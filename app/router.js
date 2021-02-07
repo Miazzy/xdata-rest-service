@@ -282,7 +282,7 @@ module.exports = app => {
     /** ******************** 推送企业微信消息 ******************** */
 
     // 数据库表serialid自动排序
-    router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.autoSerialID);
+    router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
 
     // 数据库表serialid自动排序
     router.get('/api/v2/mysql/serial_update/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
