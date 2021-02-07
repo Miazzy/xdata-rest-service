@@ -294,5 +294,3 @@ module.exports = appInfo => {
         ...userConfig,
     };
 };
-
-curl - L http: //localhost:32777/v3/kv/put   -X POST -d '{"key": "Zm9v", "value": "YmFy"}'
