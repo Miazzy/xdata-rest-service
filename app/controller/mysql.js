@@ -12,6 +12,26 @@ class MySQLController extends Controller {
     /**
      * @function 数据库serialID按时间进行排序
      */
+    async autoSerialID() {
+
+        const { ctx, app } = this;
+
+        // 获取部门编号
+        const tablename = ctx.query.tablename || ctx.params.tablename || '';
+        // 获取部门编号
+        const fieldID = ctx.query.fieldid || ctx.params.fieldid || 'serialid';
+        // 获取部门编号
+        const id = ctx.query.id || ctx.params.id || 'id';
+
+        // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
+        const response = await app.mysql.query(`call serial_id_seal('${tablename}','${fieldID}','${id}');`, []);
+        response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+        ctx.body = response;
+    }
+
+    /**
+     * @function 数据库serialID按时间进行排序
+     */
     async updateSerialID() {
 
         const { ctx, app } = this;

@@ -282,7 +282,10 @@ module.exports = app => {
     /** ******************** 推送企业微信消息 ******************** */
 
     // 数据库表serialid自动排序
-    router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
+    router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.autoSerialID);
+
+    // 数据库表serialid自动排序
+    router.get('/api/v2/mysql/serial_update/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
 
     // 将超过N天未领取办公用品的申请状态修改为已完成
     router.get('/api/v2/mysql/goods_complete', controller.mysql.goodsComplete);
