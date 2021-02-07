@@ -31,6 +31,7 @@ class WeworkMessageController extends Controller {
 
         // 遍历元素，推送企业微信消息
         for (const elem of mlist) {
+            console.log(elem);
             flag = await this.sendMessageByMobile(elem, message, url, flag, type); // 检查如果是电话号码
             flag = await this.sendMessageByUserID(elem, message, url, flag, type); // 检查如果是用户编号
         }
@@ -46,6 +47,8 @@ class WeworkMessageController extends Controller {
             return false;
         }
 
+        console.log('sendMessageByMobile mobile:' + mobile);
+
         // 查询电话号码对应的一条至多条企业微信账号数据，获取到userid,company，不同的compay对应不同的企业agentid,secret
         const response = await app.mysql.query(`select * from v_hrmresource where mobile = '${mobile}';`, []);
 
@@ -53,6 +56,16 @@ class WeworkMessageController extends Controller {
         for (const item of response) {
             await this.sendMessage(item.cname, wxConfig.company[item.cname][type], item.userid, message, url);
             console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
+        }
+
+        if (!response || response.length <= 1) {
+            let response = await app.mysql.query(`select * from bs_wework_user where mobile = '${mobile}'`, []);
+
+            // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
+            for (const item of response) {
+                console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
+                await this.sendMessage(item.company || '融量', wxConfig.company[item.company || '融量'][type], item.userid, message, url);
+            }
         }
 
         return true;
@@ -66,13 +79,25 @@ class WeworkMessageController extends Controller {
             return false;
         }
 
+        console.log('sendMessageByUserID userID:' + userID);
+
         // 查询电话号码对应的一条至多条企业微信账号数据，获取到userid,company，不同的compay对应不同的企业agentid,secret
-        const response = await app.mysql.query(`select * from v_hrmresource where userid = '${userID}' or loginid = '${userID}';`, []);
+        let response = await app.mysql.query(`select * from v_hrmresource where userid = '${userID}' or loginid = '${userID}';`, []);
 
         // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
         for (const item of response) {
-            await this.sendMessage(item.cname, wxConfig.company[item.cname][type], item.userid, message, url);
             console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
+            await this.sendMessage(item.cname, wxConfig.company[item.cname][type], item.userid, message, url);
+        }
+
+        if (!response || response.length <= 1) {
+            let response = await app.mysql.query(`select * from bs_wework_user where userid = '${userID}' or name = '${userID}';`, []);
+
+            // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
+            for (const item of response) {
+                console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
+                await this.sendMessage(item.company || '融量', wxConfig.company[item.company || '融量'][type], item.userid, message, url);
+            }
         }
 
         return true;
@@ -89,6 +114,8 @@ class WeworkMessageController extends Controller {
     async sendMessage(cname = '', agentid, userID, message, messageurl) {
 
         const { app } = this;
+
+        console.log('sendMessage: cname:' + cname + ' agentid:' + agentid + ' userID:' + userID + ' message:' + message);
 
         // 缓存控制器
         const store = app.cache.store('redis');
@@ -135,6 +162,8 @@ class WeworkMessageController extends Controller {
         console.log(JSON.stringify(node));
 
         const result = await axios.post(queryAPI, node);
+
+        console.log('result:' + result);
 
         return result;
     }
