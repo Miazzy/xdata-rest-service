@@ -1,5 +1,38 @@
 const nacos = require('nacos');
 const os = require('os');
+const FlowRuleManager = require('xdata-sentinel/lib/core/flow/rule_manager');
+const Sentinel = require('xdata-sentinel/lib');
+
+const logger = console;
+logger.write = console.log;
+const sentinelClient = new Sentinel({
+    appName: 'sentinel-test',
+    async: true,
+    logger: console,
+    blockLogger: console,
+});
+
+const Constants = Sentinel.Constants;
+
+function loadFlowRules() {
+    FlowRuleManager.loadRules([
+        { resource: 'flowrule', count: 2, maxQueueingTimeMs: 3000, controlBehavior: 0, durationInSec: 1, warmUpPeriodSec: 1, metricType: 1 }
+    ]);
+}
+
+function doLimitTask(taskName, fn = () => {}) {
+    let entry;
+    try {
+        entry = sentinelClient.entry(taskName);
+        fn();
+    } catch (e) {
+        console.log('exec code error ... ', e);
+    } finally {
+        if (entry) {
+            entry.exit();
+        }
+    }
+}
 
 //获取本机ip
 function getIpAddress() {
@@ -26,6 +59,18 @@ module.exports = app => {
             ip: getIpAddress(),
             port: app.options.port || 7001,
         });
+
+        loadFlowRules();
+
+        try {
+            app.sentinel = sentinelClient;
+            app.sentinel.doLimitTask = doLimitTask;
+        } catch (e) {
+            console.error(e);
+        } finally {
+            console.log(Constants.ROOT.toString());
+        }
+
     });
     // 准备好执行
     app.ready(async() => {

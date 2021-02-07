@@ -3,6 +3,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+
 class ElasticSearchController extends Controller {
 
     /**

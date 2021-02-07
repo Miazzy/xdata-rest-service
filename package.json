@@ -48,7 +48,8 @@
         "read-excel-file": "^4.0.7",
         "sequelize": "^6.3.5",
         "superagent": "^6.1.0",
-        "tedious": "^9.2.1"
+        "tedious": "^9.2.1",
+        "xdata-sentinel": "^1.0.0"
     },
     "devDependencies": {
         "autod": "^3.0.1",
