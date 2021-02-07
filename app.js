@@ -16,17 +16,22 @@ const Constants = Sentinel.Constants;
 
 function loadFlowRules() {
     FlowRuleManager.loadRules([
-        { resource: 'flowrule', count: 2, maxQueueingTimeMs: 3000, controlBehavior: 0, durationInSec: 1, warmUpPeriodSec: 1, metricType: 1 }
+        { resource: 'flowrule', count: 1, maxQueueingTimeMs: 3000, controlBehavior: 0, durationInSec: 1, warmUpPeriodSec: 1, metricType: 1 }
     ]);
 }
 
-function doLimitTask(taskName, fn = () => {}) {
+function doLimitTask(taskName, args, fn = () => {}) {
     let entry;
     try {
         entry = sentinelClient.entry(taskName);
-        fn();
+        return fn(args);
     } catch (e) {
-        console.log('exec code error ... ', e);
+        if (args.ctx) {
+            console.log('block flowrule ... ');
+            args.ctx.body = { err: 'block flowrule ...', code: -1 };
+        }
+        // console.log('exec code error ... ', e);
+        throw new Error();
     } finally {
         if (entry) {
             entry.exit();
@@ -52,16 +57,15 @@ function getIpAddress() {
 module.exports = app => {
     // 开始前执行
     app.beforeStart(async() => {
-        console.log('egg service start :' + JSON.stringify(app.config.nacos));
+        console.log('egg service start & init nacos client :' + JSON.stringify(app.config.nacos));
         const client = new nacos.NacosNamingClient(app.config.nacos);
         await client.ready();
         await client.registerInstance(app.config.nacos.serviceName, {
             ip: getIpAddress(),
             port: app.options.port || 7001,
         });
-
+        console.log('egg service start & load flow rules ... ');
         loadFlowRules();
-
         try {
             app.sentinel = sentinelClient;
             app.sentinel.doLimitTask = doLimitTask;
@@ -70,7 +74,6 @@ module.exports = app => {
         } finally {
             console.log(Constants.ROOT.toString());
         }
-
     });
     // 准备好执行
     app.ready(async() => {

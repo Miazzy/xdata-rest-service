@@ -45,7 +45,7 @@ module.exports = {
     },
 
     httpProxy: {
-        enable: true,
+        enable: false,
         package: 'egg-gateway-proxy',
     },
 

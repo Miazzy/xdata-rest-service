@@ -13,6 +13,11 @@ class ElasticSearchController extends Controller {
 
         const { ctx, app } = this;
 
+        //限流组件，限流规则flowrule
+        app.sentinel.doLimitTask('flowrule', { ctx, app }, ({ ctx, app }) => { console.log('flowrule'); });
+
+        console.log('pass flowrule!');
+
         // 获取部门编号
         const schema = ctx.query.schema || ctx.params.schema || 'workspace';
         // 获取部门编号
@@ -33,6 +38,7 @@ class ElasticSearchController extends Controller {
         } catch (error) {
             console.log(error);
         }
+
     }
 
     /**
