@@ -128,13 +128,13 @@ module.exports = appInfo => {
         // database configuration
         client: {
             // host
-            host: '172.18.254.95',
+            host: '172.18.254.96',
             // port
-            port: '3309',
+            port: '16033',
             // username
-            user: 'zhaoziyun',
+            user: 'root',
             // password
-            password: 'ziyequma',
+            password: 'root',
             // database
             database: 'jeecg-boot',
         },
@@ -261,19 +261,6 @@ module.exports = appInfo => {
     //             groupName: 'DEFAULT_GROUP',
     //         },
     //     },
-    // };
-
-    // config.sequelize = {
-    //     dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
-    //     database: 'jeecg-boot',
-    //     host: '172.18.254.95',
-    //     port: 3309,
-    //     username: 'zhaoziyun',
-    //     password: 'ziyequma',
-    //     // delegate: 'myModel', // load all models to `app[delegate]` and `ctx[delegate]`, default to `model`
-    //     // baseDir: 'my_model', // load all files in `app/${baseDir}` as models, default to `model`
-    //     // exclude: 'index.js', // ignore `app/${baseDir}/index.js` when load models, support glob and array
-    //     // more sequelize options
     // };
 
     return {
