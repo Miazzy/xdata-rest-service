@@ -44,9 +44,9 @@ const mysql = {
     // database configuration
     client: {
         // host
-        host: '172.18.254.95',
+        host: '172.18.254.96',
         // port
-        port: '3309',
+        port: '4000',
         // username
         user: 'zhaoziyun',
         // password
