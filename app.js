@@ -57,22 +57,26 @@ function getIpAddress() {
 module.exports = app => {
     // 开始前执行
     app.beforeStart(async() => {
-        console.log('egg service start & init nacos client :' + JSON.stringify(app.config.nacos));
-        const client = new nacos.NacosNamingClient(app.config.nacos);
-        await client.ready();
-        await client.registerInstance(app.config.nacos.serviceName, {
-            ip: getIpAddress(),
-            port: app.options.port || 7001,
-        });
-        console.log('egg service start & load flow rules ... ');
-        loadFlowRules();
-        try {
-            app.sentinel = sentinelClient;
-            app.sentinel.doLimitTask = doLimitTask;
-        } catch (e) {
-            console.error(e);
-        } finally {
-            console.log(Constants.ROOT.toString());
+        if (app.config.nacos.register) {
+            console.log('egg service start & init nacos client :' + JSON.stringify(app.config.nacos));
+            const client = new nacos.NacosNamingClient(app.config.nacos);
+            await client.ready();
+            await client.registerInstance(app.config.nacos.serviceName, {
+                ip: getIpAddress(),
+                port: app.options.port || 7001,
+            });
+        }
+        if (app.config.sentinelLimit.status) {
+            console.log('egg service start & load flow rules ... ');
+            loadFlowRules();
+            try {
+                app.sentinel = sentinelClient;
+                app.sentinel.doLimitTask = doLimitTask;
+            } catch (e) {
+                console.error(e);
+            } finally {
+                console.log(Constants.ROOT.toString());
+            }
         }
     });
     // 准备好执行

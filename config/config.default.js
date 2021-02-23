@@ -88,7 +88,7 @@ module.exports = appInfo => {
             redis: { // full config: https://github.com/dabroek/node-cache-manager-ioredis#single-store
                 driver: redisStore,
                 host: '172.18.254.95',
-                port: 6379,
+                port: 6381,
                 password: '',
                 db: 0,
                 ttl: 600,
@@ -132,12 +132,13 @@ module.exports = appInfo => {
             // port
             port: '3309',
             // username
-            user: 'root',
+            user: 'zhaoziyun',
             // password
-            password: 'root',
+            password: 'ziyequma',
             // database
             database: 'jeecg-boot',
         },
+        procedure: false,
         // load into app, default is open
         app: true,
         // load into agent, default is close
@@ -146,16 +147,6 @@ module.exports = appInfo => {
 
     // mssql数据库连接配置
     config.mssql = {
-
-        // Single Database
-        // client: {
-        //     server: '172.18.1.11',
-        //     port: '1433',
-        //     user: 'meeting',
-        //     password: 'meeting',
-        //     database: 'newecology',
-        // },
-
         // Multi Databases
         clients: {
             db1: {
@@ -206,6 +197,7 @@ module.exports = appInfo => {
     };
 
     config.nacos = {
+        register: true,
         logger: console,
         serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
         namespace: 'public',
@@ -229,39 +221,9 @@ module.exports = appInfo => {
         },
     };
 
-    // config.elasticsearch = {
-    //     host: '172.18.1.50:9200',
-    // };
-
-    // 示例代码，具体配置项参考ts声明文件
-    // config.nacos = {
-    //     serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'],
-    //     namespace: 'public',
-    //     // subscribers: { // 需要监听的服务，不配置不监听
-    //     //     messageService: {
-    //     //         serviceName: 'xdata-rest-service',
-    //     //     },
-    //     // },
-    //     // configCenter: { // 配置中心相关配置
-    //     //     clientOptions: {},
-    //     //     configList: {
-    //     //         baseConfig: {
-    //     //             dataId: 'xdata-rest-config.yml',
-    //     //             groupName: 'DEFAULT_GROUP',
-    //     //         },
-    //     //     },
-    //     // },
-    //     providers: {
-    //         accountService: {
-    //             serviceName: 'xdata-rest-service',
-    //             instance: {
-    //                 ip: '127.0.0.1',
-    //                 port: 7001,
-    //             },
-    //             groupName: 'DEFAULT_GROUP',
-    //         },
-    //     },
-    // };
+    config.sentinelLimit = {
+        status: true,
+    }
 
     return {
         ...config,

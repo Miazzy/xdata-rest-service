@@ -16,17 +16,38 @@ class MySQLController extends Controller {
 
         const { ctx, app } = this;
 
-        // 获取部门编号
+        // 获取表名称
         const tablename = ctx.query.tablename || ctx.params.tablename || '';
-        // 获取部门编号
+        // 设置排序值得字段
         const fieldID = ctx.query.fieldid || ctx.params.fieldid || 'serialid';
-        // 获取部门编号
+        // 进行排序的字段
         const id = ctx.query.id || ctx.params.id || 'id';
+        // 具体ID的值
+        const value = ctx.query.key || ctx.params.key || ctx.query.value || ctx.params.value || '';
+        // 设置返回结果集
+        let response = null;
 
-        // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
-        const response = await app.mysql.query(`call serial_id_seal('${tablename}','${fieldID}','${id}');`, []);
-        response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+        if (value == '' || value == null) { // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
+            if (app.config.mysql.procedure) { //启用了存储过程，使用存储过程执行操作
+                response = await app.mysql.query(`call serial_id_seal('${tablename}','${fieldID}','${id}');`, []);
+                response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+            } else {
+                const ilist = response = await app.mysql.query(`select id from ${tablename} where ${fieldID} is null or ${fieldID} = '' `);
+                for (let item of ilist) {
+                    const result = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${item.id}'`);
+                    console.log(`result:${JSON.stringify(result)}`);
+                    const vIndex = result && result.length ? result[0].v : -1;
+                    app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
+                }
+            }
+        } else {
+            response = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${value}'`);
+            const vIndex = response && response.length ? response[0].v : -1;
+            app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${value}' `);
+            response = response && response.length ? response[0] : { v: -1 };
+        }
         ctx.body = response;
+
     }
 
     /**
@@ -36,16 +57,37 @@ class MySQLController extends Controller {
 
         const { ctx, app } = this;
 
-        // 获取部门编号
+        // 获取表名称
         const tablename = ctx.query.tablename || ctx.params.tablename || '';
-        // 获取部门编号
+        // 设置排序值得字段
         const fieldID = ctx.query.fieldid || ctx.params.fieldid || 'serialid';
-        // 获取部门编号
+        // 进行排序的字段
         const id = ctx.query.id || ctx.params.id || 'id';
+        // 具体ID的值
+        const value = ctx.query.key || ctx.params.key || ctx.query.value || ctx.params.value || '';
+        // 设置返回结果集
+        let response = null;
 
-        // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
-        const response = await app.mysql.query(`call serial_id_seal_update('${tablename}','${fieldID}','${id}');`, []);
-        response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+        if (value == '' || value == null) { // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
+            if (app.config.mysql.procedure) { //启用了存储过程，使用存储过程执行操作
+                await app.mysql.query(`call serial_id_seal_update('${tablename}','${fieldID}','${id}');`, []);
+                response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+            } else {
+                const ilist = response = await app.mysql.query(`select id from ${tablename} where ${fieldID} is null or ${fieldID} = '' `);
+                console.log(JSON.stringify(ilist));
+                for (let item of ilist) {
+                    const result = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${item.id}'`);
+                    console.log(`result:${JSON.stringify(result)}`);
+                    const vIndex = result && result.length ? result[0].v : -1;
+                    app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
+                }
+            }
+        } else {
+            response = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${value}'`);
+            const vIndex = response && response.length ? response[0].v : -1;
+            app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${value}' `);
+            response = response && response.length ? response[0] : { v: -1 };
+        }
         ctx.body = response;
     }
 
@@ -65,6 +107,7 @@ class MySQLController extends Controller {
         const response = await app.mysql.query(`call goods_complete('${tablename}' , '${field}' , '${oldValue}' , '${newValue}' , ${day} );`, []);
         response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
         ctx.body = response;
+
     }
 
     /**
@@ -120,7 +163,6 @@ class MySQLController extends Controller {
         app.mysql.query('update bs_seal_regist set finance_name = seal_man where (finance_name = \'\' or finance_name is null) and seal is not null ;', []);
         app.mysql.query('update bs_seal_regist set archive_name = seal_man where (archive_name = \'\' or archive_name is null) and seal is not null ;', []);
         app.mysql.query('update bs_seal_regist set serial_id = serialid where serial_id is null;', []);
-
         app.mysql.query(`update bs_seal_regist set seal_group_ids = 'yanggc,chenll,zhaozy1028' where seal_group_ids like '%yanggc%';`);
         app.mysql.query(`update bs_seal_regist set zone_name = '领地集团总部' where zone_name is null and seal_group_ids like '%yanggc%';`);
         app.mysql.query(`update bs_seal_regist set zone_name = '领悦物业总部' where zone_name is null and seal_group_ids like '%longcl%';`);
