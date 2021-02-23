@@ -103,9 +103,13 @@ class MySQLController extends Controller {
         const oldValue = ctx.query.old || ctx.params.old || '已准备'; // 获取原状态
         const newValue = ctx.query.new || ctx.params.new || '已完成'; // 获取新状态
         const day = ctx.query.day || ctx.params.day || 10; //获取默认天数
-
-        const response = await app.mysql.query(`call goods_complete('${tablename}' , '${field}' , '${oldValue}' , '${newValue}' , ${day} );`, []);
-        response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+        let response = null;
+        if (app.config.mysql.procedure) { //启用了存储过程，使用存储过程执行操作
+            response = await app.mysql.query(`call goods_complete('${tablename}' , '${field}' , '${oldValue}' , '${newValue}' , ${day} );`, []);
+            response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
+        } else {
+            response = await app.mysql.query(`update ${tablename} set ${field} = '${newValue}' where status in ('${oldValue}')  and DATE_ADD(create_time , INTERVAL ${day} DAY) < NOW() `);
+        }
         ctx.body = response;
 
     }
