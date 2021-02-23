@@ -52,7 +52,7 @@ const mysql = {
         // password
         password: 'ziyequma',
         // database
-        database: 'jeecg-boot',
+        database: 'xdata',
     },
     // load into app, default is open
     app: true,

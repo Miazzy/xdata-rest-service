@@ -136,7 +136,7 @@ module.exports = appInfo => {
             // password
             password: 'ziyequma',
             // database
-            database: 'jeecg-boot',
+            database: 'xdata',
         },
         procedure: false,
         // load into app, default is open
