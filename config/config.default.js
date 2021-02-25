@@ -188,12 +188,28 @@ module.exports = appInfo => {
     };
 
     config.redis = {
-        client: {
+        client: { // single
             port: 6381, // Redis port
             host: '172.18.254.95', // Redis host
             password: '',
             db: 0,
         },
+        // client: { //cluster
+        //     cluster: true,
+        //     nodes: [{
+        //       host: '127.0.0.1',
+        //       port: '6379',
+        //       family: 'user',
+        //       password: 'password',
+        //       db: 'db',
+        //     }, {
+        //       host: '127.0.0.1',
+        //       port: '6380',
+        //       family: 'user',
+        //       password: 'password',
+        //       db: 'db',
+        //     }]
+        //   },
     };
 
     config.nacos = {
