@@ -57,8 +57,7 @@ function getIpAddress() {
     }
 }
 
-
-
+//链接ES服务上游数据库MySQL
 function createESMySQLClient(config, app) {
 
     config = app.config.elasticsearchsync.mysql;
@@ -127,8 +126,8 @@ module.exports = app => {
                 }
             };
 
-            app.search = new ElasticSearchClient(serverOptions);
-            app.addSingleton('esMySQL', createESMySQLClient);
+            app.esSearch = new ElasticSearchClient(serverOptions);
+            app.esMySQL = createESMySQLClient(app.config.elasticsearchsync.mysql, app);
         }
     });
 
