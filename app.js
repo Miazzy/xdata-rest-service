@@ -1,8 +1,10 @@
 const nacos = require('nacos');
+const assert = require('assert');
 const os = require('os');
 const FlowRuleManager = require('xdata-sentinel/lib/core/flow/rule_manager');
 const Sentinel = require('xdata-sentinel/lib');
 const ElasticSearchClient = require('elasticsearchclient');
+const rds = require('ali-rds');
 
 const logger = console;
 logger.write = console.log;
@@ -55,6 +57,28 @@ function getIpAddress() {
     }
 }
 
+
+
+function createESMySQLClient(config, app) {
+
+    config = app.config.elasticsearchsync.mysql;
+
+    assert(config.host && config.port && config.user && config.database,
+        `[elasticsearch-mysql] 'host: ${config.host}', 'port: ${config.port}', 'user: ${config.user}', 'database: ${config.database}' are required on config`);
+
+    app.coreLogger.info('[elasticsearch-mysql] connecting %s@%s:%s/%s',
+        config.user, config.host, config.port, config.database);
+
+    const client = rds(config);
+
+    app.beforeStart(function*() {
+        const rows = yield client.query('select now() as currentTime;');
+        app.coreLogger.info(`[elasticsearch-mysql] instance status OK, rds currentTime: ${rows[0].currentTime}`);
+    });
+
+    return client;
+}
+
 module.exports = app => {
     // 开始前执行
     app.beforeStart(async() => {
@@ -104,6 +128,7 @@ module.exports = app => {
             };
 
             app.search = new ElasticSearchClient(serverOptions);
+            app.addSingleton('esMySQL', createESMySQLClient);
         }
     });
 
