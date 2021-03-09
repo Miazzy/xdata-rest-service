@@ -248,7 +248,7 @@ module.exports = appInfo => {
             index: 'xdata',
             type: 'bs_seal_regist',
             params: 'serialid',
-            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 200',
             dbtable: 'bs_sync_rec', //持久化记录表 
             pindex: 0,
         },
@@ -257,7 +257,7 @@ module.exports = appInfo => {
             index: 'xdata',
             type: 'bs_admin_group',
             params: 'serialid',
-            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 200',
             dbtable: 'bs_sync_rec', //持久化记录表 
             pindex: 0,
         },
@@ -266,7 +266,7 @@ module.exports = appInfo => {
             index: 'xdata',
             type: 'bs_admin_address',
             params: 'id',
-            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 200',
             dbtable: 'bs_sync_rec', //持久化记录表 
             pindex: 0,
         },
@@ -275,7 +275,7 @@ module.exports = appInfo => {
             index: 'xdata',
             type: 'bs_company_flow_base',
             params: 'id',
-            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 200',
             dbtable: 'bs_sync_rec', //持久化记录表 
             pindex: 0,
         }
