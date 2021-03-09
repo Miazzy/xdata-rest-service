@@ -26,6 +26,16 @@ class EsSyncController extends Controller {
             const config = app.config.elasticsearchsync[taskName];
             //console.log(`elasticsearchsync config:`, JSON.stringify(config));
             const sql = config.sql.replace(/\${index}/g, config.index).replace(/\${type}/g, config.type).replace(/\${params}/g, config.params);
+
+            //查询数据库中的pindex
+            const queryIndexSQL = `select pindex from ${config.index}.bs_essync_rec t where t.index = :index and t.type = :type and t.params = :params `;
+            const responseIndex = await app.esMySQL.query(queryIndexSQL, { pindex: config.pindex, index: config.index, type: config.type, params: config.params });
+
+            if (responseIndex && responseIndex.length > 0) {
+                console.log('response index : ', JSON.stringify(responseIndex[0]));
+                config.pindex = responseIndex[0].pindex;
+            }
+
             console.log(`sql:`, JSON.stringify(sql), " pindex:", config.pindex);
             const response = await app.esMySQL.query(sql, { pindex: config.pindex });
 
@@ -33,17 +43,18 @@ class EsSyncController extends Controller {
                 console.log(`response:`, JSON.stringify(response[response.length - 1][config.params]));
                 //记录最后处理的pindex，下次同步查询从此pindex开始
                 app.config.elasticsearchsync[taskName].pindex = response[response.length - 1][config.params];
+
                 //console.log(`last pindex:`, app.config.elasticsearchsync[taskName].pindex);
                 for (const element of response) {
                     //console.log(`id:`, element.id, ` type:`, config.type, ` index`, config.index);
-                    await app.esSearch.index({
+                    app.esSearch.index({
                         index: config.index,
                         type: config.type,
                         id: element.id,
                         body: element,
                     });
                 }
-                const updateSQL = `update ${config.index}.${config.type} set ${config.params} = :pindex where index = :index and type = :type and params = :params `;
+                const updateSQL = `update ${config.index}.bs_essync_rec t set t.pindex = :pindex where t.index = :index and t.type = :type and t.params = :params `;
                 //打印日志
                 console.log(`updateSQL:`, updateSQL);
                 //讲pindex写入数据库
