@@ -232,7 +232,7 @@ module.exports = appInfo => {
         namespace: 'public',
         serviceName: 'xdata-essync-service',
         es: {
-            host: 'elasticsearch.yunwisdom.club',
+            host: 'elasticsearch.yunwisdom.club:30080',
             port: 30080,
             apiVersion: '7.x',
         },
@@ -247,9 +247,9 @@ module.exports = appInfo => {
             index: 'xdata',
             type: 'bs_seal_regist',
             params: 'serialid',
-            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 100',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 10000',
             dbtable: 'bs_sync_rec', //持久化记录表
-            pindex: 0,
+            pindex: 23499,
         }
     }
 

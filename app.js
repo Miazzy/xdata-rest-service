@@ -5,6 +5,7 @@ const FlowRuleManager = require('xdata-sentinel/lib/core/flow/rule_manager');
 const Sentinel = require('xdata-sentinel/lib');
 const ElasticSearchClient = require('elasticsearchclient');
 const rds = require('ali-rds');
+const elasticsearch = require('elasticsearch');
 
 const logger = console;
 logger.write = console.log;
@@ -125,9 +126,13 @@ module.exports = app => {
                     password: '',
                 }
             };
+
+            console.log(`config:`, app.config.elasticsearchsync.es);
+
             //注册es同步相关模块
-            app.esSearch = new ElasticSearchClient(serverOptions);
+            app.esSearch = new elasticsearch.Client(app.config.elasticsearchsync.es);
             app.esMySQL = createESMySQLClient(app.config.elasticsearchsync.mysql, app);
+
         }
     });
 
