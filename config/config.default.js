@@ -248,7 +248,15 @@ module.exports = appInfo => {
             type: 'bs_seal_regist',
             params: 'serialid',
             sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
-            dbtable: 'bs_sync_rec', //持久化记录表
+            dbtable: 'bs_sync_rec', //持久化记录表 
+            pindex: 0,
+        },
+        job2: {
+            index: 'xdata',
+            type: 'bs_admin_group',
+            params: 'serialid',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
+            dbtable: 'bs_sync_rec', //持久化记录表 
             pindex: 0,
         }
     }

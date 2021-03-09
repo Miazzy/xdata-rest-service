@@ -34,6 +34,9 @@ class EsSyncController extends Controller {
             if (responseIndex && responseIndex.length > 0) {
                 console.log('response index : ', JSON.stringify(responseIndex[0]));
                 config.pindex = responseIndex[0].pindex;
+            } else {
+                const insertSQL = `INSERT INTO ${config.index}.bs_essync_rec t (index, type, params, pindex) VALUES (:index, :type, :params, :pindex)`;
+                await app.esMySQL.query(insertSQL, { pindex: config.pindex, index: config.index, type: config.type, params: config.params });
             }
 
             console.log(`sql:`, JSON.stringify(sql), " pindex:", config.pindex);
