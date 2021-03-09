@@ -247,7 +247,7 @@ module.exports = appInfo => {
             index: 'xdata',
             type: 'bs_seal_regist',
             params: 'serialid',
-            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 10',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 100',
             dbtable: 'bs_sync_rec', //持久化记录表
             pindex: 0,
         }
