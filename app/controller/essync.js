@@ -50,9 +50,9 @@ class EsSyncController extends Controller {
 
                 //console.log(`last pindex:`, app.config.elasticsearchsync[taskName].pindex);
                 for (const element of response) {
-                    //console.log(`id:`, element.id, ` type:`, config.type, ` index`, config.index);
+                    console.log(`id:`, element.id, ` type:`, config.type, ` index:`, `${config.index}_${config.type}`, ' content: ', JSON.stringify(element));
                     app.esSearch.index({
-                        index: config.index,
+                        index: `${config.index}_${config.type}`,
                         type: config.type,
                         id: element.id,
                         body: element,
