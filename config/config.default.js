@@ -244,6 +244,7 @@ module.exports = appInfo => {
             database: 'xdata',
         },
         job1: {
+            database: 'xdata',
             index: 'xdata',
             type: 'bs_seal_regist',
             params: 'serialid',
@@ -252,10 +253,29 @@ module.exports = appInfo => {
             pindex: 0,
         },
         job2: {
-            index: 'xdata',
+            database: 'xdata',
+            index: 'bs_admin_group',
             type: 'bs_admin_group',
             params: 'serialid',
             sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
+            dbtable: 'bs_sync_rec', //持久化记录表 
+            pindex: 0,
+        },
+        job3: {
+            database: 'xdata',
+            index: 'bs_admin_address',
+            type: 'bs_admin_address',
+            params: 'id',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 250',
+            dbtable: 'bs_sync_rec', //持久化记录表 
+            pindex: 0,
+        },
+        job4: {
+            database: 'xdata',
+            index: 'bs_company_flow_base',
+            type: 'bs_company_flow_base',
+            params: 'id',
+            sql: 'select * from ${index}.${type} where ${params} > :pindex order by ${params} asc limit 10',
             dbtable: 'bs_sync_rec', //持久化记录表 
             pindex: 0,
         }

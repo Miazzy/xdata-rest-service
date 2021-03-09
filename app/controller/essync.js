@@ -25,19 +25,19 @@ class EsSyncController extends Controller {
 
             const config = app.config.elasticsearchsync[taskName];
             //console.log(`elasticsearchsync config:`, JSON.stringify(config));
-            const sql = config.sql.replace(/\${index}/g, config.index).replace(/\${type}/g, config.type).replace(/\${params}/g, config.params);
+            const sql = config.sql.replace(/\${index}/g, config.database).replace(/\${type}/g, config.type).replace(/\${params}/g, config.params);
 
             //查询数据库中的pindex
-            const queryIndexSQL = `select pindex from ${config.index}.bs_essync_rec t where t.index = :index and t.type = :type and t.params = :params `;
-            const responseIndex = await app.esMySQL.query(queryIndexSQL, { pindex: config.pindex, index: config.index, type: config.type, params: config.params });
+            const queryIndexSQL = `SELECT pindex FROM ${config.database}.bs_essync_rec t WHERE t.database = :database and t.index = :index and t.type = :type and t.params = :params `;
+            const responseIndex = await app.esMySQL.query(queryIndexSQL, { pindex: config.pindex, index: config.index, type: config.type, params: config.params, database: config.database });
 
             if (responseIndex && responseIndex.length > 0) {
                 console.log('response index : ', JSON.stringify(responseIndex[0]));
                 config.pindex = responseIndex[0].pindex;
             } else {
-                const insertSQL = `INSERT INTO ${config.index}.bs_essync_rec (\`index\`, type, params, pindex) VALUES (:index, :type, :params, :pindex)`;
+                const insertSQL = `INSERT INTO ${config.database}.bs_essync_rec (\`database\`, \`index\`, type, params, pindex) VALUES (:database, :index, :type, :params, :pindex)`;
                 console.log('insert sql:', insertSQL);
-                await app.esMySQL.query(insertSQL, { pindex: config.pindex, index: config.index, type: config.type, params: config.params });
+                await app.esMySQL.query(insertSQL, { pindex: config.pindex, index: config.index, type: config.type, params: config.params, database: config.database });
             }
 
             console.log(`sql:`, JSON.stringify(sql), " pindex:", config.pindex);
@@ -58,7 +58,7 @@ class EsSyncController extends Controller {
                         body: element,
                     });
                 }
-                const updateSQL = `update ${config.index}.bs_essync_rec t set t.pindex = :pindex where t.index = :index and t.type = :type and t.params = :params `;
+                const updateSQL = `UPDATE ${config.database}.bs_essync_rec t SET t.pindex = :pindex WHERE t.index = :index and t.type = :type and t.params = :params `;
                 //打印日志
                 console.log(`updateSQL:`, updateSQL);
                 //讲pindex写入数据库
