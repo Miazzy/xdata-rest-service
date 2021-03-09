@@ -125,7 +125,7 @@ module.exports = app => {
                     password: '',
                 }
             };
-
+            //注册es同步相关模块
             app.esSearch = new ElasticSearchClient(serverOptions);
             app.esMySQL = createESMySQLClient(app.config.elasticsearchsync.mysql, app);
         }
