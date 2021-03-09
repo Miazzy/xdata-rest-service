@@ -338,6 +338,9 @@ module.exports = app => {
     // elasticsearch 删除
     router.delete('/api/es/elasticsearch/delete', controller.elasticsearch.delete);
 
+    // elasticsearch 同步
+    router.get('/api/es/elasticsearch/sync', controller.essync.index);
+
     // 同步签到数据
     router.get('/api/v1/datasync_schedule_sign', controller.datasync.syncHRMScheduleSign);
 

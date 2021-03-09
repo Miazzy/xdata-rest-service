@@ -21,6 +21,7 @@ import 'egg-mysql';
 import 'egg-mssql';
 import 'egg-redis';
 import 'egg-rate-limiters';
+import 'egg-es';
 import 'egg-etcd';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
@@ -49,7 +50,6 @@ declare module 'egg' {
     nacos?: EggPluginItem;
     ratelimiter?: EggPluginItem;
     elasticsearch?: EggPluginItem;
-    elasticsearch2?: EggPluginItem;
     eggEtcd?: EggPluginItem;
   }
 }

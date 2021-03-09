@@ -65,13 +65,8 @@ module.exports = {
     },
 
     elasticsearch: {
-        enable: false,
+        enable: true,
         package: 'egg-es',
-    },
-
-    elasticsearch2: {
-        enable: false,
-        package: 'egg-elasticsearch2',
     },
 
     eggEtcd: {

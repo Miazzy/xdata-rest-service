@@ -221,7 +221,7 @@ module.exports = appInfo => {
     };
 
     config.elasticsearch = {
-        host: '172.18.1.50:9200',
+        host: 'elasticsearch.yunwisdom.club:30080',
         apiVersion: '7.x'
     };
 
