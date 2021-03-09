@@ -45,7 +45,7 @@ module.exports = {
     },
 
     httpProxy: {
-        enable: true,
+        enable: false,
         package: 'egg-gateway-proxy',
     },
 
@@ -55,7 +55,7 @@ module.exports = {
     },
 
     nacos: {
-        enable: true,
+        enable: false,
         package: 'egg-nacos',
     },
 

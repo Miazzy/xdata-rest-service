@@ -213,7 +213,7 @@ module.exports = appInfo => {
     };
 
     config.nacos = {
-        register: true,
+        register: false,
         logger: console,
         serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
         namespace: 'public',
@@ -224,6 +224,32 @@ module.exports = appInfo => {
         host: '172.18.1.50:9200',
         apiVersion: '7.x'
     };
+
+    config.elasticsearchsync = {
+        register: true,
+        logger: console,
+        serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
+        namespace: 'public',
+        serviceName: 'xdata-essync-service',
+        es: {
+            host: 'elasticsearch.yunwisdom.club',
+            port: 30080,
+            apiVersion: '7.x',
+        },
+        mysql: {
+            host: '172.18.254.96',
+            port: '4000',
+            user: 'zhaoziyun',
+            password: 'ziyequma',
+            database: 'xdata',
+        },
+        job1: {
+            index: 'xdata',
+            type: 'bs_seal_regist',
+            params: 'serialid',
+            sql: 'select * from ${index}.${type} where ${params} > ?',
+        }
+    }
 
     config.eggEtcd = {
         hosts: [

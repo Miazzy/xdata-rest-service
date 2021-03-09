@@ -2,6 +2,7 @@ const nacos = require('nacos');
 const os = require('os');
 const FlowRuleManager = require('xdata-sentinel/lib/core/flow/rule_manager');
 const Sentinel = require('xdata-sentinel/lib');
+const ElasticSearchClient = require('elasticsearchclient');
 
 const logger = console;
 logger.write = console.log;
@@ -57,6 +58,7 @@ function getIpAddress() {
 module.exports = app => {
     // 开始前执行
     app.beforeStart(async() => {
+        // 注册 xdata-rest-service 服务
         if (app.config.nacos.register) {
             console.log('egg service start & init nacos client :' + JSON.stringify(app.config.nacos));
             const client = new nacos.NacosNamingClient(app.config.nacos);
@@ -66,6 +68,7 @@ module.exports = app => {
                 port: app.options.port || 7001,
             });
         }
+        // 注册 sentinel limit 限流服务
         if (app.config.sentinelLimit.status) {
             console.log('egg service start & load flow rules ... ');
             loadFlowRules();
@@ -78,11 +81,37 @@ module.exports = app => {
                 console.log(Constants.ROOT.toString());
             }
         }
+        // 注册 elasticsearch sync 服务
+        if (app.config.elasticsearchsync.register) {
+            console.log('egg service start & register elasticsearch sync rules ... ');
+
+            const client = new nacos.NacosNamingClient(app.config.elasticsearchsync);
+            await client.ready();
+            await client.registerInstance(app.config.elasticsearchsync.serviceName, {
+                ip: getIpAddress(),
+                port: app.options.port || 7001,
+            });
+
+            var serverOptions = {
+                host: app.config.elasticsearchsync.es.host,
+                port: app.config.elasticsearchsync.es.port,
+                pathPrefix: 'optional pathPrefix',
+                secure: false,
+                auth: { //Optional basic HTTP Auth
+                    username: '',
+                    password: '',
+                }
+            };
+
+            app.search = new ElasticSearchClient(serverOptions);
+        }
     });
+
     // 准备好执行
     app.ready(async() => {
         console.log('egg service ready');
     });
+
     // 关闭前执行
     app.beforeClose(async() => {
         console.log('egg service close');
