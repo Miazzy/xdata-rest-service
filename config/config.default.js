@@ -194,26 +194,10 @@ module.exports = appInfo => {
             password: '',
             db: 0,
         },
-        // client: { //cluster
-        //     cluster: true,
-        //     nodes: [{
-        //       host: '127.0.0.1',
-        //       port: '6379',
-        //       family: 'user',
-        //       password: 'password',
-        //       db: 'db',
-        //     }, {
-        //       host: '127.0.0.1',
-        //       port: '6380',
-        //       family: 'user',
-        //       password: 'password',
-        //       db: 'db',
-        //     }]
-        //   },
     };
 
     config.nacos = {
-        register: false,
+        register: true,
         logger: console,
         serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
         namespace: 'public',
