@@ -248,6 +248,7 @@ module.exports = appInfo => {
             type: 'bs_seal_regist',
             params: 'serialid',
             sql: 'select * from ${index}.${type} where ${params} > ?',
+            pindex: 0,
         }
     }
 
