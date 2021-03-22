@@ -88,7 +88,7 @@ module.exports = appInfo => {
             redis: { // full config: https://github.com/dabroek/node-cache-manager-ioredis#single-store
                 driver: redisStore,
                 host: '172.18.254.95',
-                port: 6381,
+                port: 36379,
                 password: '',
                 db: 0,
                 ttl: 600,
@@ -128,9 +128,9 @@ module.exports = appInfo => {
         // database configuration
         client: {
             // host
-            host: '172.18.254.96',
+            host: '172.18.254.95',
             // port
-            port: '4000',
+            port: '39090',
             // username
             user: 'zhaoziyun',
             // password
@@ -189,7 +189,7 @@ module.exports = appInfo => {
 
     config.redis = {
         client: { // single
-            port: 6381, // Redis port
+            port: 36379, // Redis port
             host: '172.18.254.95', // Redis host
             password: '',
             db: 0,
@@ -221,8 +221,8 @@ module.exports = appInfo => {
             apiVersion: '7.x',
         },
         mysql: {
-            host: '172.18.254.96',
-            port: '4000',
+            host: '172.18.254.95',
+            port: '39090',
             user: 'zhaoziyun',
             password: 'ziyequma',
             database: 'xdata',
