@@ -211,6 +211,9 @@ module.exports = app => {
     // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
     router.get('/api/v3/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeRewardSystem);
 
+    // 查询企业微信用户信息 股权查询平台模块获取消息 (网页授权)
+    router.get('/api/v4/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeStockSystem);
+
     // 根据用户账号、手机号、身份证后六位，校验用户是否存在
     router.get('/api/v3/user/checkinfo_mobile_certno/:username/:mobile/:certno', controller.user.queryUserInfoByUserMobileCertNO);
 

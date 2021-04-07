@@ -9,15 +9,19 @@ const config = {
             id: 'wx3b01d8bf4c588933',
             agentid: 1000077,
             reward: 1000079,
+            stock: 1000084,
             1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
             1000079: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
+            1000084: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
         },
         创达 /**创达*/: {
             id: 'ww3806b33a15a7d3fc',
             agentid: 1000013,
             reward: 1000015,
+            stock: 1000020,
             1000013: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
             1000015: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
+            1000020: 'pWFPtQtuO-JoFrgSiVoG8nb4DE-rJN1urTQHIVDcxGQ',
         },
     },
     enterprise: {
@@ -35,10 +39,15 @@ const config = {
         agent: {
             1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
             1000079: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
+            1000084: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
         },
         reward: {
             agentid: 1000079,
             secret: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
+        },
+        stock: {
+            agentid: 1000084,
+            secret: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
         },
         message: {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
@@ -77,10 +86,15 @@ const config = {
         agent: {
             1000013: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
             1000015: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
+            1000020: 'pWFPtQtuO-JoFrgSiVoG8nb4DE-rJN1urTQHIVDcxGQ',
         },
         reward: {
             agentid: 1000015,
             secret: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
+        },
+        stock: {
+            agentid: 1000020,
+            secret: 'pWFPtQtuO-JoFrgSiVoG8nb4DE-rJN1urTQHIVDcxGQ',
         },
         message: {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
