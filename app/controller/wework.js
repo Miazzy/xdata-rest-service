@@ -288,6 +288,8 @@ class WeworkController extends Controller {
             console.log('get token from redis :' + token);
         }
 
+        console.log(`stock token:`, token);
+
         return token;
     }
 
@@ -1052,6 +1054,7 @@ class WeworkController extends Controller {
             const token = await this.queryTokenByStockSystem();
             // 获取URL
             const queryURL = wxConfig.enterprise.user.queryCodeAPI.replace('ACCESS_TOKEN', token).replace('CODE', code);
+            console.log(`stock userinfo query url :`, queryURL);
             // 获取返回结果
             const result = await axios.get(queryURL);
             // 打印查询结果信息
