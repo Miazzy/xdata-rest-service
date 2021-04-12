@@ -38,9 +38,24 @@ class MailController extends Controller {
         const { ctx, app } = this;
         const query = ctx.query;
 
-        const companyInfo = query.company || ctx.params.company;
-        const stocks = query.stocks || ctx.params.stocks;
-        const qualification = query.qualification || ctx.params.qualification;
+        let companyInfo = query.company || ctx.params.company;
+        let stocks = query.stocks || ctx.params.stocks;
+        let qualification = query.qualification || ctx.params.qualification;
+
+        if (companyInfo && typeof companyInfo == 'string') {
+            companyInfo = JSON.parse(companyInfo);
+            console.log(`company info :`, companyInfo);
+        }
+
+        if (stocks && typeof stocks == 'string') {
+            stocks = JSON.parse(stocks);
+            console.log(`company stocks info :`, stocks);
+        }
+
+        if (qualification && typeof qualification == 'string') {
+            qualification = JSON.parse(qualification);
+            console.log(`company qualification info :`, qualification);
+        }
 
         const res = await tools.postMainDataInfoInc(companyInfo, stocks, qualification);
 

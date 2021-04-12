@@ -5,6 +5,7 @@
 
 const dayjs = require('dayjs');
 const superagent = require('superagent');
+const axios = require('axios');
 
 /**
  * @function 获取对象中属性
@@ -44,27 +45,6 @@ exports.queryUniqueID = (length = 32) => {
  */
 exports.postMainDataInfoInc = async(companyInfo, stocks = [{ "shareholder": "刘浩威", "ratioDetail": "0.30" }], qualification = [{ "qualificationType": "", "qualificationLevel": "", "qualificationNmber": "", "validityPeriod1": dayjs().format('YYYY-MM-DD HH:mm:ss'), "validityPeriod2": dayjs().format('YYYY-MM-DD HH:mm:ss'), "qualificationStatus": "有效", "cancellationReason": "" }, ], postURL = `http://mdm.leading-group.com:30012/api/inner/datahub/producer/serverApi`, resp = '') => {
 
-    const company = {
-        "sn": companyInfo.id,
-        "companyAreaCode": companyInfo.companyAreaCode,
-        "companyArea": companyInfo.companyArea,
-        "comPanyName": companyInfo.companyName,
-        "comPanyNum": companyInfo.id,
-        "registrationStatus": companyInfo.registrationStatus,
-        "businessScope": companyInfo.businessScope,
-        "registeredAddress": companyInfo.registeredAddress,
-        "registeredCapital": companyInfo.registeredCapital,
-        "legalRepresentative": companyInfo.legalRepresentative,
-        "directorChairman": companyInfo.directorChairman,
-        "director": companyInfo.director,
-        "directorExecutive": companyInfo.directorChairman || companyInfo.director ? "" : companyInfo.directorExecutive,
-        "manager": companyInfo.manager,
-        "supervisorChairman": companyInfo.supervisorChairman,
-        "supervisor": companyInfo.supervisor,
-        "validStatus": "0",
-        "dataStatus": "0",
-    };
-
     const stocklist = stocks;
     const qualificationlist = qualification;
 
@@ -73,16 +53,40 @@ exports.postMainDataInfoInc = async(companyInfo, stocks = [{ "shareholder": "刘
         "appCode": "de",
         "topicCode": "cor_c",
         "jsonData": [{
-            "single": [company],
-            "ShareholderInformation": stocklist,
-            "qualification": qualificationlist,
+            "single": [{
+                "sn": companyInfo.id,
+                "companyAreaCode": companyInfo.companyAreaCode,
+                "companyArea": companyInfo.companyArea,
+                "comPanyName": companyInfo.companyName,
+                "comPanyNum": companyInfo.id,
+                "registrationStatus": companyInfo.registrationStatus,
+                "businessScope": companyInfo.businessScope,
+                "registeredAddress": companyInfo.registeredAddress,
+                "registeredCapital": companyInfo.registeredCapital,
+                "legalRepresentative": companyInfo.legalRepresentative,
+                "directorChairman": companyInfo.directorChairman,
+                "director": companyInfo.director,
+                "directorExecutive": "",
+                "manager": companyInfo.manager,
+                "supervisorChairman": companyInfo.supervisorChairman,
+                "supervisor": companyInfo.supervisor,
+                "validStatus": "0",
+                "dataStatus": "0",
+            }],
+            "ShareholderInformation": [],
+            "qualification": [],
         }]
     };
 
+    console.log(`post url : `, postURL);
+    console.log(`post mdm data node info :`, JSON.parse(JSON.stringify(node)));
+
     try {
-        resp = await superagent.post(postURL).send(node).set('accept', 'json');
+        //resp = await superagent.post(postURL).send(JSON.stringify(node)).set('accept', '*/*').set('Content-Type', 'application/json');
+        resp = await axios.post(postURL, JSON.stringify(node));
     } catch (error) {
-        resp = await superagent.post(postURL).send(node).set('accept', 'json');
+        resp = await superagent.post(postURL).send(JSON.parse(JSON.stringify(node))).set('accept', '*/*').set('Content-Type', 'application/json');
+        console.log(`mdm data error:`, error);
     }
 
     //返回响应结果

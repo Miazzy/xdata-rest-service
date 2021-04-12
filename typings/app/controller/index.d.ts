@@ -12,6 +12,7 @@ import ExportEtcd = require('../../../app/controller/etcd');
 import ExportExcel = require('../../../app/controller/excel');
 import ExportFilebase = require('../../../app/controller/filebase');
 import ExportMail = require('../../../app/controller/mail');
+import ExportMaindata = require('../../../app/controller/maindata');
 import ExportMysql = require('../../../app/controller/mysql');
 import ExportRedis = require('../../../app/controller/redis');
 import ExportUpload = require('../../../app/controller/upload');
@@ -32,6 +33,7 @@ declare module 'egg' {
     excel: ExportExcel;
     filebase: ExportFilebase;
     mail: ExportMail;
+    maindata: ExportMaindata;
     mysql: ExportMysql;
     redis: ExportRedis;
     upload: ExportUpload;
