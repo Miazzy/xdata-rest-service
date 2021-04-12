@@ -8,7 +8,7 @@ const tools = require('../utils/tools');
 
 class MainDataController extends Controller {
 
-    async postMDMData() {
+    async postData() {
 
         const { ctx, app } = this;
         const query = ctx.query;
@@ -17,11 +17,10 @@ class MainDataController extends Controller {
         const stocks = query.stocks || ctx.params.stocks;
         const qualification = query.qualification || ctx.params.qualification;
 
-        const res = tools.postMainDataInfoInc(companyInfo, stocks, qualification);
+        const res = await tools.postMainDataInfoInc(companyInfo, stocks, qualification);
 
         ctx.body = res;
     }
 }
-
 
 module.exports = MainDataController;

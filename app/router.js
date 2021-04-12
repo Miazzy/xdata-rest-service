@@ -344,6 +344,9 @@ module.exports = app => {
     // elasticsearch 同步
     router.get('/api/es/elasticsearch/sync', controller.essync.index);
 
+    // 向主数据提交数据
+    router.post('/api/v1/mdm_company', controller.mail.postData);
+
     // 同步签到数据
     router.get('/api/v1/datasync_schedule_sign', controller.datasync.syncHRMScheduleSign);
 
