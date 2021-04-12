@@ -4,14 +4,16 @@
 'use strict';
 
 const dayjs = require('dayjs');
+const superagent = require('superagent');
 
 /**
  * @function 获取对象中属性
  * @param {*} obj 
  * @param {*} arr 
  */
-exports.pick = (obj, arr) =>
-    arr.reduce((iter, val) => (val in obj && (iter[val] = obj[val]), iter), {});
+exports.pick = (obj, arr) => {
+    return arr.reduce((iter, val) => (val in obj && (iter[val] = obj[val]), iter), {});
+};
 
 /**
  * @function 合成唯一编码
@@ -27,9 +29,62 @@ exports.queryUniqueID = (length = 32) => {
     // 定义随机编码
     const random = (Math.floor(Math.random() * 100000000000000000000) + '') + (Math.floor(Math.random() * 100000000000000000000) + '');
     // 打印随机编码
-    // console.log('随机编号 :' + random);
+    console.log('随机编号 :' + random);
     // 合成动态编码
     id = (id + random).replace(/\./g, '').substring(0, length);
     // 返回唯一编码
     return id;
+};
+
+/**
+ * 向主数据接口推送公司工商信息数据
+ * @param {*} companyInfo 
+ * @param {*} stocks 
+ * @param {*} qualification 
+ */
+exports.postMainDataInfoInc = async(companyInfo, stocks = [{ "shareholder": "刘浩威", "ratioDetail": "0.30" }], qualification = [{ "qualificationType": "", "qualificationLevel": "", "qualificationNmber": "", "validityPeriod1": dayjs().format('YYYY-MM-DD HH:mm:ss'), "validityPeriod2": dayjs().format('YYYY-MM-DD HH:mm:ss'), "qualificationStatus": "有效", "cancellationReason": "" }, ], postURL = `http://mdm.leading-group.com:30012/api/inner/datahub/producer/serverApi`, resp = '') => {
+
+    const company = {
+        "sn": companyInfo.id,
+        "companyAreaCode": companyInfo.companyAreaCode,
+        "companyArea": companyInfo.companyArea,
+        "comPanyName": companyInfo.companyName,
+        "comPanyNum": companyInfo.id,
+        "registrationStatus": companyInfo.registrationStatus,
+        "businessScope": companyInfo.businessScope,
+        "registeredAddress": companyInfo.registeredAddress,
+        "registeredCapital": companyInfo.registeredCapital,
+        "legalRepresentative": companyInfo.legalRepresentative,
+        "directorChairman": companyInfo.directorChairman,
+        "director": companyInfo.director,
+        "directorExecutive": companyInfo.directorChairman || companyInfo.director ? "" : companyInfo.directorExecutive,
+        "manager": companyInfo.manager,
+        "supervisorChairman": companyInfo.supervisorChairman,
+        "supervisor": companyInfo.supervisor,
+        "validStatus": "0",
+        "dataStatus": "0",
+    };
+
+    const stocklist = stocks;
+    const qualificationlist = qualification;
+
+    //待发送节点数据
+    const node = {
+        "appCode": "de",
+        "topicCode": "cor_c",
+        "jsonData": [{
+            "single": [company],
+            "ShareholderInformation": stocklist,
+            "qualification": qualificationlist,
+        }]
+    };
+
+    try {
+        resp = await superagent.post(postURL).send(node).set('accept', 'json');
+    } catch (error) {
+        resp = await superagent.post(postURL).send(node).set('accept', 'json');
+    }
+
+    //返回响应结果
+    return resp;
 };
