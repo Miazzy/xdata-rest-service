@@ -10,9 +10,11 @@ const config = {
             agentid: 1000077,
             reward: 1000079,
             stock: 1000084,
+            legal: 1000104,
             1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
             1000079: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
             1000084: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
+            1000104: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g',
         },
         创达 /**创达*/: {
             id: 'ww3806b33a15a7d3fc',
@@ -40,6 +42,7 @@ const config = {
             1000077: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
             1000079: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
             1000084: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
+            1000104: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g',
         },
         reward: {
             agentid: 1000079,
@@ -48,6 +51,10 @@ const config = {
         stock: {
             agentid: 1000084,
             secret: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
+        },
+        legal: {
+            agentid: 1000104,
+            secret: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g',
         },
         message: {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
