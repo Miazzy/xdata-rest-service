@@ -58,15 +58,15 @@ class WeworkMessageController extends Controller {
             console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
         }
 
-        // if (!response || response.length <= 1) {
-        //     let response = await app.mysql.query(`select * from bs_wework_user where mobile = '${mobile}'`, []);
+        if (!response || response.length <= 1) {
+            let response = await app.mysql.query(`select * from bs_wework_user where mobile = '${mobile}'`, []);
 
-        //     // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
-        //     for (const item of response) {
-        //         console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
-        //         await this.sendMessage(item.company || '融量', wxConfig.company[item.company || '融量'][type], item.userid, message, url);
-        //     }
-        // }
+            // 遍历用户数据，然后找到此用户数据的企业微信的agentid,secret，获取token，调用推送消息API
+            for (const item of response) {
+                console.log(`userid:${item.userid}, company:${item.company}, message: ${message}, url: ${url}`);
+                await this.sendMessage(item.company || '融量', wxConfig.company[item.company || '融量'][type], item.userid, message, url);
+            }
+        }
 
         return true;
     }
