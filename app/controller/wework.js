@@ -428,19 +428,23 @@ class WeworkController extends Controller {
                 item.id = tools.queryUniqueID();
                 item.company = '融量';
 
-                // 检查待存入的数据是否存在于数据库中，如果存在，则不存入(执行更新)，如果不存在，则插入数据
-                const response = await app.mysql.query(` select count(0) id from bs_wework_user where userid = '${item.userid}' and company = '${item.company}' `, []);
-
-                console.log('数据是否存在查询结果: ' + JSON.stringify(response));
-                if (response[0].id === 0) {
+                try {
                     item.department = item.department ? JSON.stringify(item.department) : '';
                     item.extattr = item.extattr ? JSON.stringify(item.extattr) : '';
                     item.is_leader_in_dept = item.is_leader_in_dept ? JSON.stringify(item.is_leader_in_dept) : '';
                     item.order = item.order ? JSON.stringify(item.order) : '';
                     item.external_position = item.external_position ? JSON.stringify(item.external_position) : '';
+                } catch (error) {
+                    console.error(error);
+                }
+
+                const response = await app.mysql.query(` select count(0) id from bs_wework_user where userid = '${item.userid}' and company = '${item.company}' `, []); // 检查待存入的数据是否存在于数据库中，如果存在，则不存入(执行更新)，如果不存在，则插入数据
+                console.log('数据是否存在查询结果: ' + JSON.stringify(response));
+
+                if (response[0].id === 0) {
                     await this.postTableData('bs_wework_user', item);
                 } else { // 执行更新操作，如果是晚上某点，则执行更新
-                    console.log(`id : ${item.userid} , company: ${item.company} is already exist !`);
+                    await this.patchTableData('bs_wework_user', response[0].id, item);
                 }
 
             }
@@ -1508,11 +1512,8 @@ class WeworkController extends Controller {
      */
     async postTableData(tableName, node) {
 
-        // 大写转小写
         tableName = tableName.toLowerCase();
-        // Post数据的URL地址
         const insertURL = `${wxConfig.wework.api_url}/${tableName}`;
-        // 设置node为value
         const value = node;
 
         // 设置时间格式
@@ -1528,6 +1529,32 @@ class WeworkController extends Controller {
             console.log(err);
         }
 
+    }
+
+    /**
+     * 更新数据
+     * @param {*} tableName
+     * @param {*} id
+     * @param {*} node
+     */
+    async patchTableData(tableName, id, node) {
+
+        tableName = tableName.toLowerCase();
+        const patchURL = `${wxconfig.wework.api_url}/${tableName}/${id}`;
+        let res = null;
+
+        //如果传入数据为空，则直接返回错误
+        if (typeof node == 'undefined' || node == null || node == '') {
+            return false;
+        }
+
+        try {
+            res = await superagent.patch(patchURL).send(node).set('accept', 'json');
+        } catch (err) {
+            console.log(err);
+        }
+
+        return res.body;
     }
 
 }

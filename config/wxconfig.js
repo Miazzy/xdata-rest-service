@@ -147,7 +147,7 @@ const config = {
             queryAPI: 'https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN&id=ID',
         },
         access_token: null,
-        api_url: 'https://api.yunwisdom.club:30443/api',
+        api_url: 'https://api.yunwisdom.club:30443/gateway-xmysql/api',
     },
     seal: {
         group: {

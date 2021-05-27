@@ -69,13 +69,19 @@ class DataSyncController extends Controller {
         sql = `select * from ${config.config.database}.dbo.hrmresource  where id > ${maxldID} order by id asc offset 0 row fetch next 10000 row only `;
         response = await pool.ld.query(sql);
         ldList = response.recordset;
-        ldList.map(item => { item.id = item.id + 1000000; });
+        ldList.map(item => {
+            item.id = item.id + 1000000;
+            item.company = '融量';
+        });
 
         // 查询创达表中大于cdID的所有员工数据 id + 2000000
         sql = `select * from ${config.configcd.database}.dbo.hrmresource  where id > ${maxcdID} order by id asc offset 0 row fetch next 10000 row only `;
         response = await pool.cd.query(sql);
         cdList = response.recordset;
-        cdList.map(item => { item.id = item.id + 2000000; });
+        cdList.map(item => {
+            item.id = item.id + 2000000;
+            item.company = '创达';
+        });
 
         // 合并查询到的员工数据
         list = [...ldList, ...cdList];
@@ -87,6 +93,56 @@ class DataSyncController extends Controller {
 
         // 返回查询数据
         ctx.body = { maxldID, maxcdID, list };
+
+    }
+
+    /**
+     * @function 同步泛微OA表hrmresource到MySQL数据库bs_hrmresource中(原数据全量修改)
+     */
+    async syncHRM_INC() {
+
+        await this.init();
+
+        const { ctx, app } = this;
+
+        let response = null;
+        let sql = null;
+        let maxldID = 0;
+        let maxcdID = 0;
+        let ldList = null;
+        let cdList = null;
+        let list = [];
+
+        /** **********  ********** */
+
+        // 查询领地表中大于ldID的所有员工数据 id + 1000000
+        sql = `select * from ${config.config.database}.dbo.hrmresource  where id > 0 order by id asc offset 0 row fetch next 10000 row only `;
+        response = await pool.ld.query(sql);
+        ldList = response.recordset;
+        ldList.map(item => {
+            item.id = item.id + 1000000;
+            item.company = '融量';
+        });
+
+        // 查询创达表中大于cdID的所有员工数据 id + 2000000
+        sql = `select * from ${config.configcd.database}.dbo.hrmresource  where id > 0 order by id asc offset 0 row fetch next 10000 row only `;
+        response = await pool.cd.query(sql);
+        cdList = response.recordset;
+        cdList.map(item => {
+            item.id = item.id + 2000000;
+            item.company = '创达';
+        });
+
+        // 合并查询到的员工数据
+        list = [...ldList, ...cdList];
+
+        // 合并查询到的员工数据，将数据insert到MySQL的bs_hrmresourse中
+        for (const node of list) {
+            await this.patchTableData('bs_hrmresource', node.id, node);
+        }
+
+        // 返回查询数据
+        ctx.body = { success: 'success' };
 
     }
 
@@ -176,6 +232,33 @@ class DataSyncController extends Controller {
             console.log(err);
         }
 
+    }
+
+    /**
+     * 更新数据
+     * @param {*} tableName
+     * @param {*} id
+     * @param {*} node
+     */
+    async patchTableData(tableName, id, node) {
+
+        //大写转小写
+        tableName = tableName.toLowerCase();
+        const patchURL = `${wxconfig.wework.api_url}/${tableName}/${id}`;
+        let res = null;
+
+        //如果传入数据为空，则直接返回错误
+        if (typeof node == 'undefined' || node == null || node == '') {
+            return false;
+        }
+
+        try {
+            res = await superagent.patch(patchURL).send(node).set('accept', 'json');
+        } catch (err) {
+            console.log(err);
+        }
+
+        return res.body;
     }
 
 }
