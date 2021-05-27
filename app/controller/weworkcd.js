@@ -373,9 +373,14 @@ class WeworkCDController extends Controller {
                 const response = await app.mysql.query(` select count(0) count , id , company from bs_wework_user where userid = '${item.userid}' and company = '${item.company}' group by id `, []);
 
                 console.log('数据是否存在查询结果: ' + JSON.stringify(response));
-                if (response[0].count === 0) {
+                if (response.length == 0 || response[0].count === 0) {
                     await this.postTableData('bs_wework_user', item);
                 } else { // 执行更新操作，如果是晚上某点，则执行更新
+                    delete item.department;
+                    delete item.extattr;
+                    delete item.is_leader_in_dept;
+                    delete item.order;
+                    delete item.external_position;
                     await this.patchTableData('bs_wework_user', response[0].id, item);
                 }
 
