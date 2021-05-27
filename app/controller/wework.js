@@ -444,6 +444,7 @@ class WeworkController extends Controller {
                 if (response.length == 0 || response[0].count === 0) {
                     await this.postTableData('bs_wework_user', item);
                 } else { // 执行更新操作，如果是晚上某点，则执行更新
+                    delete item.id;
                     delete item.department;
                     delete item.extattr;
                     delete item.is_leader_in_dept;
