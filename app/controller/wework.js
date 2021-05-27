@@ -444,7 +444,7 @@ class WeworkController extends Controller {
                 if (response[0].count === 0) {
                     await this.postTableData('bs_wework_user', item);
                 } else { // 执行更新操作，如果是晚上某点，则执行更新
-                    await this.patchTableData('bs_wework_user', response[0].rid, item);
+                    await this.patchTableData('bs_wework_user', response[0].id, item);
                 }
 
             }
