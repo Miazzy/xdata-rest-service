@@ -1031,7 +1031,7 @@ class WeworkCDController extends Controller {
     async patchTableData(tableName, id, node) {
 
         tableName = tableName.toLowerCase();
-        const patchURL = `${wxconfig.wework.api_url}/${tableName}/${id}`;
+        const patchURL = `${wxConfig.wework.api_url}/${tableName}/${id}`;
         let res = null;
 
         //如果传入数据为空，则直接返回错误
