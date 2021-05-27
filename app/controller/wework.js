@@ -450,6 +450,8 @@ class WeworkController extends Controller {
                     delete item.is_leader_in_dept;
                     delete item.order;
                     delete item.external_position;
+                    delete item.external_profile;
+                    delete item.external_corp_name;
                     await this.patchTableData('bs_wework_user', response[0].id, item);
                 }
 

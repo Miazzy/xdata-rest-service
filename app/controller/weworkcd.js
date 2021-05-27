@@ -371,8 +371,8 @@ class WeworkCDController extends Controller {
 
                 // 检查待存入的数据是否存在于数据库中，如果存在，则不存入(执行更新)，如果不存在，则插入数据
                 const response = await app.mysql.query(` select count(0) count , id , company from bs_wework_user where userid = '${item.userid}' and company = '${item.company}' group by id `, []);
-
                 console.log('数据是否存在查询结果: ' + JSON.stringify(response));
+
                 if (response.length == 0 || response[0].count === 0) {
                     await this.postTableData('bs_wework_user', item);
                 } else { // 执行更新操作，如果是晚上某点，则执行更新
@@ -382,6 +382,8 @@ class WeworkCDController extends Controller {
                     delete item.is_leader_in_dept;
                     delete item.order;
                     delete item.external_position;
+                    delete item.external_profile;
+                    delete item.external_corp_name;
                     await this.patchTableData('bs_wework_user', response[0].id, item);
                 }
 
