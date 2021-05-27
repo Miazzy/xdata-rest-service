@@ -170,7 +170,7 @@ module.exports = appInfo => {
     config.httpProxy = {
         '@nacos': {
             logger: console,
-            serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
+            serverList: ['172.18.1.51:8848', '172.18.1.51:8849', '172.18.1.51:8850'], // replace to real nacos serverList
             namespace: 'public',
         },
         '/apis': {
