@@ -107,8 +107,6 @@ class DataSyncController extends Controller {
 
         let response = null;
         let sql = null;
-        let maxldID = 0;
-        let maxcdID = 0;
         let ldList = null;
         let cdList = null;
         let list = [];
@@ -213,11 +211,8 @@ class DataSyncController extends Controller {
      */
     async postTableData(tableName, node) {
 
-        // 大写转小写
         tableName = tableName.toLowerCase();
-        // Post数据的URL地址
         const insertURL = `${wxconfig.wework.api_url}/${tableName}`;
-        // 设置node为value
         const value = node;
 
         // 设置时间格式
@@ -242,7 +237,6 @@ class DataSyncController extends Controller {
      */
     async patchTableData(tableName, id, node) {
 
-        //大写转小写
         tableName = tableName.toLowerCase();
         const patchURL = `${wxconfig.wework.api_url}/${tableName}/${id}`;
         let res = null;

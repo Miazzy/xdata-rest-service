@@ -329,6 +329,9 @@ module.exports = app => {
     // 同步人事数据
     router.get('/api/v1/datasync', controller.datasync.syncHRM);
 
+    // 同步人事数据
+    router.get('/api/v1/datasync_inc', controller.datasync.syncHRM_INC);
+
     // elasticsearch 新增
     router.get('/api/es/elasticsearch/index', controller.elasticsearch.index);
 
