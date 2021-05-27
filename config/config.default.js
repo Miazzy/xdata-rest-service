@@ -9,6 +9,7 @@ const redisStore = require('cache-manager-ioredis');
  * @param {Egg.EggAppInfo} appInfo app info
  */
 module.exports = appInfo => {
+
     /**
      * built-in config
      * @type {Egg.EggAppConfig}
@@ -17,14 +18,15 @@ module.exports = appInfo => {
 
     // use for cookie sign key, should change to your own and keep security
     config.keys = appInfo.name + '_0000_0000';
-
     // add your middleware config here
     config.middleware = [];
-
     // add your user config here
     const userConfig = {
         // myAppName: 'egg',
     };
+
+    const nacosIP = '172.18.1.51'; //nacos IP地址
+    const nacosList = [`${nacosIP}:8848`, `${nacosIP}:8849`, `${nacosIP}:8850`];
 
     config.security = {
         csrf: {
@@ -170,7 +172,7 @@ module.exports = appInfo => {
     config.httpProxy = {
         '@nacos': {
             logger: console,
-            serverList: ['172.18.1.51:8848', '172.18.1.51:8849', '172.18.1.51:8850'], // replace to real nacos serverList
+            serverList: nacosList, // replace to real nacos serverList
             namespace: 'public',
         },
         '/apis': {
@@ -199,7 +201,7 @@ module.exports = appInfo => {
     config.nacos = {
         register: true,
         logger: console,
-        serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
+        serverList: nacosList, // replace to real nacos serverList
         namespace: 'public',
         serviceName: 'xdata-rest-service',
     };
@@ -212,7 +214,7 @@ module.exports = appInfo => {
     config.elasticsearchsync = {
         register: true,
         logger: console,
-        serverList: ['172.18.1.50:8848', '172.18.1.50:8849', '172.18.1.50:8850'], // replace to real nacos serverList
+        serverList: nacosList, // replace to real nacos serverList
         namespace: 'public',
         serviceName: 'xdata-essync-service',
         es: {
@@ -267,9 +269,9 @@ module.exports = appInfo => {
 
     config.eggEtcd = {
         hosts: [
-            '172.18.1.50:32777',
-            '172.18.1.50:32776',
-            '172.18.1.50:32779',
+            '172.18.1.51:32777',
+            '172.18.1.51:32776',
+            '172.18.1.51:32779',
         ],
         auth: { //curl -L http://localhost:32777/v3/auth/user/add  -X POST -d '{"name": "root", "password": "ziyequma"}'
             username: 'root',
