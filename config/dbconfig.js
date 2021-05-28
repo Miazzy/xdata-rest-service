@@ -43,21 +43,14 @@ const configcd = {
 const mysql = {
     // database configuration
     client: {
-        // host
         host: '172.18.254.95',
-        // port
         port: '39090',
-        // username
         user: 'zhaoziyun',
-        // password
         password: 'ziyequma',
-        // database
         database: 'xdata',
     },
-    // load into app, default is open
-    app: true,
-    // load into agent, default is close
-    agent: false,
+    app: true, // load into app, default is open
+    agent: false, // load into agent, default is close
 };
 
 /**

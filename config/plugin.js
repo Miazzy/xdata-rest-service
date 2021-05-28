@@ -2,7 +2,6 @@
 /* eslint-disable eol-last */
 'use strict';
 
-/** @type Egg.EggPlugin */
 module.exports = {
 
     cors: {

@@ -5,7 +5,7 @@
 
 const config = {
     company: {
-        融量 /**融量*/: {
+        融量: { /**融量*/
             id: 'wx3b01d8bf4c588933',
             agentid: 1000077,
             reward: 1000079,
@@ -16,7 +16,7 @@ const config = {
             1000084: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
             1000104: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g',
         },
-        创达 /**创达*/: {
+        创达: { /**创达*/
             id: 'ww3806b33a15a7d3fc',
             agentid: 1000013,
             reward: 1000015,
