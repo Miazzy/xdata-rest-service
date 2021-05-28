@@ -25,7 +25,7 @@ module.exports = app => {
     // 执行初始化
     init();
 
-    /** ******************** 领地Wework(数据库操作) ******************** */
+    /** ******************** 领地Wework(数据库操作) start ******************** */
 
     /** **************** v1 版 **************** */
 
@@ -50,53 +50,8 @@ module.exports = app => {
     // 查询员工数据
     router.get('/api/v1/employeewid/:id', controller.database.queryEmployeeByWID);
 
-    /** **************** v2 版 **************** */
+    /** ******************** 领地Wework(数据库操作) end ******************** */
 
-    // 查询MSSQL数据库信息
-    // router.get('/api/v2/:table/:order', controller.database.where);
-
-    // 新增MSSQL数据库记录
-    // router.post('/api/v2/:table/:node', controller.database.insert);
-
-    // 更新MSSQL数据库记录
-    // router.patch('/api/v2/:table/:node', controller.database.update);
-
-    // 删除MSSQL数据库记录
-    // router.delete('/api/v2/:table/:node', controller.database.delete);
-
-    // 查询员工数据
-    // router.get('/api/v2/employee', controller.database.employee);
-
-    // 查询员工数据
-    // router.get('/api/v2/queryemployee/:id', controller.database.queryEmployeeByID);
-
-    // 查询员工数据
-    // router.get('/api/v2/employeewid/:id', controller.database.queryEmployeeByWID);
-
-    /** **************** v1_cd 创达版 **************** */
-
-    // 查询MSSQL数据库信息
-    // router.get('/api/v1_cd/:table/:order', controller.databasecd.where);
-
-    // 新增MSSQL数据库记录
-    // router.post('/api/v1_cd/:table/:node', controller.databasecd.insert);
-
-    // 更新MSSQL数据库记录
-    // router.patch('/api/v1_cd/:table/:node', controller.databasecd.update);
-
-    // 删除MSSQL数据库记录
-    // router.delete('/api/v1_cd/:table/:node', controller.databasecd.delete);
-
-    // 查询员工数据
-    // router.get('/api/v1_cd/employee', controller.databasecd.employee);
-
-    // 查询员工数据
-    // router.get('/api/v1_cd/queryemployee/:id', controller.databasecd.queryEmployeeByID);
-
-    // 查询员工数据
-    // router.get('/api/v1_cd/employeewid/:id', controller.databasecd.queryEmployeeByWID);
-
-    /** ******************** 领地Wework(数据库操作) ******************** */
 
     // 查询文件信息，并进行下载
     router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
@@ -107,7 +62,8 @@ module.exports = app => {
     // 推送EMAIL机器消息
     router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
 
-    /** ******************** 领地Wework ******************** */
+
+    /** ******************** 领地Wework start ******************** */
 
     /** **************** v1 版 **************** */
 
@@ -226,7 +182,9 @@ module.exports = app => {
     // 查询企业微信部门成员信息
     router.get('/api/v3/employee', controller.wework.queryWeWorkDepartUserSim);
 
-    /** ******************** 创达Wework ******************** */
+    /** ******************** 领地Wework end ******************** */
+
+    /** ******************** 创达Wework start ******************** */
 
     // 查询员工OpenID
     router.get('/api/v1_cd/wework/openid/:userid', controller.weworkcd.queryOpenIDByUserID);
@@ -267,27 +225,18 @@ module.exports = app => {
     // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
     router.get('/api/v3_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCodeRewardSystem);
 
-    /** ******************** 创达Wework ******************** */
+    /** ******************** 创达Wework end ******************** */
 
-    /** ******************** 推送企业微信消息 ******************** */
+    /** ******************** 推送企业微信消息 start ******************** */
 
-    router.post('/api/v5/wework_message/:mobile', controller.weworkmessage.message);
-    router.post('/api/v4/wework_message/:mobile', controller.weworkmessage.message);
-    router.post('/api/v3/wework_message/:mobile', controller.weworkmessage.message);
+    router.get('/api/v1/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.get('/api/v2/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.get('/api/v3/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.get('/api/v1_cd/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.post('/api/v5/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.get('/api/message/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
 
-    // 推送企业微信应用消息
-    router.get('/api/v1/weappms/:mobile/:message', controller.weworkmessage.message);
-
-    // 推送企业微信应用消息
-    router.get('/api/v2/weappms/:mobile/:message', controller.weworkmessage.message);
-
-    // 推送企业微信应用消息
-    router.get('/api/v3/weappms/:mobile/:message', controller.weworkmessage.message);
-
-    // 推送企业微信应用消息
-    router.get('/api/v1_cd/weappms/:mobile/:message', controller.weworkmessage.message);
-
-    /** ******************** 推送企业微信消息 ******************** */
+    /** ******************** 推送企业微信消息 end ******************** */
 
     // 数据库表serialid自动排序
     router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.updateSerialID); //autoSerialID change to updateSerialID
@@ -328,10 +277,10 @@ module.exports = app => {
     // 上传文档附件
     router.post('/api/v1/upload', controller.upload.upload);
 
-    // 同步人事数据
+    // 同步人事数据(insert)
     router.get('/api/v1/datasync', controller.datasync.syncHRM);
 
-    // 同步人事数据
+    // 同步人事数据(update)
     router.get('/api/v1/datasync_inc', controller.datasync.syncHRM_INC);
 
     // elasticsearch 新增
