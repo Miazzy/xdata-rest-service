@@ -73,8 +73,7 @@ exports.postMainDataInfoInc = async(companyInfo, stocks = [{ "shareholder": "刘
     console.log(`post mdm data node info :`, JSON.parse(JSON.stringify(node)));
 
     try {
-        //resp = await superagent.post(postURL).send(JSON.stringify(node)).set('accept', '*/*').set('Content-Type', 'application/json');
-        resp = await axios.post(postURL, JSON.stringify(node));
+        resp = await axios.post(postURL, JSON.stringify(node)); //resp = await superagent.post(postURL).send(JSON.stringify(node)).set('accept', '*/*').set('Content-Type', 'application/json');
     } catch (error) {
         resp = await superagent.post(postURL).send(JSON.parse(JSON.stringify(node))).set('accept', '*/*').set('Content-Type', 'application/json');
         console.log(`mdm data error:`, error);
