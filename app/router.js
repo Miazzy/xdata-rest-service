@@ -272,6 +272,8 @@ module.exports = app => {
     /** ******************** 推送企业微信消息 ******************** */
 
     router.post('/api/v5/wework_message/:mobile', controller.weworkmessage.message);
+    router.post('/api/v4/wework_message/:mobile', controller.weworkmessage.message);
+    router.post('/api/v3/wework_message/:mobile', controller.weworkmessage.message);
 
     // 推送企业微信应用消息
     router.get('/api/v1/weappms/:mobile/:message', controller.weworkmessage.message);

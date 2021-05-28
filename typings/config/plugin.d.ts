@@ -19,7 +19,6 @@ import 'egg-mailer';
 import 'egg-cache';
 import 'egg-mysql';
 import 'egg-mssql';
-import 'egg-gateway-proxy';
 import 'egg-redis';
 import 'egg-nacos';
 import 'egg-rate-limiters';

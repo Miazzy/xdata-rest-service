@@ -5,10 +5,6 @@
 /** @type Egg.EggPlugin */
 module.exports = {
 
-    // static: {
-    //   enable: true,
-    // }
-
     cors: {
         enable: true,
         package: 'egg-cors',
@@ -45,7 +41,7 @@ module.exports = {
     },
 
     httpProxy: {
-        enable: true,
+        enable: false,
         package: 'egg-gateway-proxy',
     },
 

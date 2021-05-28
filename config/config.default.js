@@ -178,7 +178,7 @@ module.exports = appInfo => {
         '/apis': {
             target: ['http://172.18.254.95:3000', 'http://172.18.254.96:3000'],
             serviceName: 'xdata-xmysql-service',
-            pathRewrite: { '^/apis': '/api' },
+            pathRewrite: { '^/apis': '/api_' },
         },
     };
 
