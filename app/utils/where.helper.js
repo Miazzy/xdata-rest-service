@@ -34,19 +34,14 @@ function prepareInClauseParams(input) {
             obj.whereQuery += ')';
         }
     }
-
-    // console.log(obj);
-
     return obj;
 }
 
 function prepareLikeValue(value) {
-    // return value.replace("~", "%");
     return value.replace(/~/g, '%');
 }
 
 function prepareIsValue(value) {
-    // return value.replace("~", "%");
     if (value === 'null') {
         return null;
     } else if (value === 'true') {
@@ -63,15 +58,11 @@ function prepareBetweenValue(value) {
     let obj = {};
     obj.whereQuery = '';
     obj.whereParams = [];
-
     if (values.length === 2) {
         obj.whereQuery = ' ? and ? ';
         obj.whereParams.push(values[0]);
         obj.whereParams.push(values[1]);
     }
-
-    // console.log('prepareBetweenValue', obj);
-
     return obj;
 }
 
@@ -120,59 +111,51 @@ function getComparisonOperator(operator) {
         case 'eq':
             return '=';
             break;
-
         case 'ne':
             return '!=';
             break;
-
         case 'lt':
             return '<';
             break;
-
         case 'lte':
             return '<=';
             break;
-
+        case 'le':
+            return '<=';
+            break;
         case 'gt':
             return '>';
             break;
-
         case 'gte':
             return '>=';
             break;
-
+        case 'ge':
+            return '>=';
+            break;
         case 'is':
             return ' is ';
             break;
-
         case 'isnot':
             return ' is not ';
             break;
-
         case 'isnull':
             return ' is NULL ';
             break;
-
         case 'isnnull':
             return ' is not NULL ';
             break;
-
         case 'like':
             return ' like ';
             break;
-
         case 'nlike':
             return ' not like ';
             break;
-
         case 'in':
             return ' in ';
             break;
-
         case 'bw':
             return ' between ';
             break;
-
         default:
             return null;
             break;
@@ -184,19 +167,15 @@ function getLogicalOperator(operator) {
         case '~or':
             return ' or ';
             break;
-
         case '~and':
             return ' and ';
             break;
-
         case '~not':
             return ' not ';
             break;
-
         case '~xor':
             return ' xor ';
             break;
-
         default:
             return null;
             break;
@@ -223,8 +202,6 @@ exports.getWhereSQL = function(whereInQueryParams, condType = ' where ') {
             logicalOperatorsInClause.length
         );
     } else {
-        // console.log('numOfConditions',numOfConditions,whereInQueryParams);
-        // console.log('logicalOperatorsInClause',logicalOperatorsInClause);
 
         for (var i = 0; i < numOfConditions.length; ++i) {
             let variable = '';
