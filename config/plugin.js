@@ -65,7 +65,7 @@ module.exports = {
     },
 
     eggEtcd: {
-        enable: true,
+        enable: false,
         package: 'egg-etcd',
     },
 
