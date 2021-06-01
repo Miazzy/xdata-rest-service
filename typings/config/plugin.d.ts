@@ -23,7 +23,6 @@ import 'egg-redis';
 import 'egg-nacos';
 import 'egg-rate-limiters';
 import 'egg-es';
-import 'egg-etcd';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
