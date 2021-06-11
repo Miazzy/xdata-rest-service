@@ -8,6 +8,7 @@ const config = {
         融量: { /**融量*/
             id: 'wx3b01d8bf4c588933',
             agentid: 1000077,
+            admin: 1000077,
             reward: 1000079,
             stock: 1000084,
             legal: 1000104,
@@ -21,9 +22,11 @@ const config = {
             agentid: 1000013,
             reward: 1000015,
             stock: 1000020,
+            legal: 1000104,
             1000013: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
             1000015: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
             1000020: 'pWFPtQtuO-JoFrgSiVoG8nb4DE-rJN1urTQHIVDcxGQ',
+            1000104: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g',
         },
     },
     enterprise: {
@@ -43,6 +46,10 @@ const config = {
             1000079: 'LIFpDJwSpcQfqRJ5RXe8HANfj4Tx-9b7gdII6qCGVGg',
             1000084: 'mLxbjeYf_J1FGx0NBPaUCi6QLlNGZYiVMeW_sjocdro',
             1000104: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g',
+        },
+        admin: {
+            agentid: 1000077,
+            secret: 'tEyLB2-JfFLDu5enDRlMDWss4DvfAeKuzztZTWYvluc',
         },
         reward: {
             agentid: 1000079,
@@ -94,6 +101,11 @@ const config = {
             1000013: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
             1000015: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
             1000020: 'pWFPtQtuO-JoFrgSiVoG8nb4DE-rJN1urTQHIVDcxGQ',
+            1000104: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g', // /** 创达的可能需要替换 */
+        },
+        admin: {
+            agentid: 1000013,
+            secret: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
         },
         reward: {
             agentid: 1000015,
@@ -102,6 +114,10 @@ const config = {
         stock: {
             agentid: 1000020,
             secret: 'pWFPtQtuO-JoFrgSiVoG8nb4DE-rJN1urTQHIVDcxGQ',
+        },
+        legal: { /** 创达的可能需要替换 */
+            agentid: 1000104,
+            secret: 'Mp5ITrIHiIpQKLdLJxAZpsEECvZ2j9eyQqfJ4oUOq9g',
         },
         message: {
             gettoken: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
@@ -157,23 +173,11 @@ const config = {
         },
         users: {
             //印章管理人员列表
-            management: [{
-                id: 'yanggc',
-                name: '杨高春',
-                phone: '13880556967',
-            }],
+            management: [{ id: 'yanggc', name: '杨高春', phone: '13880556967', }],
             //前台接待人员列表
-            reception: [{
-                id: 'zhouxueli',
-                name: '周雪丽',
-                phone: '18084917627',
-            }],
+            reception: [],
             //归档人员列表
-            archive: [{
-                id: 'chenyl0929',
-                name: '陈雅兰',
-                phone: '18628105773',
-            }],
+            archive: [],
         },
     },
     timestamp: {
