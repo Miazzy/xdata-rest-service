@@ -41,8 +41,7 @@ const configcd = {
 
 // MySQL数据库连接配置(Jeecg-Boot)
 const mysql = {
-    // database configuration
-    client: {
+    client: { // database configuration
         host: '172.18.254.95',
         port: '39090',
         user: 'zhaoziyun',

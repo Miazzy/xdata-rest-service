@@ -127,23 +127,15 @@ module.exports = appInfo => {
 
     // mysql数据库连接配置
     config.mysql = {
-        // database configuration
-        client: {
-            // host
+        client: { // database configuration
             host: '172.18.254.95',
-            // port
             port: '39090',
-            // username
             user: 'zhaoziyun',
-            // password
             password: 'ziyequma',
-            // database
             database: 'xdata',
         },
         procedure: false,
-        // load into app, default is open
         app: true,
-        // load into agent, default is close
         agent: false,
     };
 
