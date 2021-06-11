@@ -22,7 +22,7 @@ const config = {
             agentid: 1000013,
             reward: 1000015,
             stock: 1000020,
-            legal: 1000104,
+            legal: 1000104, // /** 创达的可能需要替换 */
             1000013: 'L1zd6Cn5leUOfmWWSiq0rn6lnWtddzdbo3XgV-6SxEA',
             1000015: 'jVlphxrx3rPnnsT9y3gl8iTU3kIkoNbiNraJ_Culv9I',
             1000020: 'pWFPtQtuO-JoFrgSiVoG8nb4DE-rJN1urTQHIVDcxGQ',
@@ -166,18 +166,15 @@ const config = {
         api_url: 'https://api.yunwisdom.club:30443/gateway-xmysql/api',
     },
     seal: {
-        group: {
+        group: { /** 群聊机器人 hook 目前已经未使用 */
             management: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=2da6821a-36d3-495b-8092-7220066a0cd8',
             reception: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=181fbd10-47c5-4c61-ba2d-3c4762d5a64f',
             archive: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07b69342-4b35-4b2e-ad69-249e23c57c21',
         },
         users: {
-            //印章管理人员列表
-            management: [{ id: 'yanggc', name: '杨高春', phone: '13880556967', }],
-            //前台接待人员列表
-            reception: [],
-            //归档人员列表
-            archive: [],
+            management: [{ id: 'yanggc', name: '杨高春', phone: '13880556967', }], //印章管理人员列表
+            reception: [], //前台接待人员列表
+            archive: [], //归档人员列表
         },
     },
     timestamp: {
