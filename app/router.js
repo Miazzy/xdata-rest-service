@@ -10,169 +10,69 @@ module.exports = app => {
 
     const { router, controller } = app;
 
-    /** ******************** 领地Wework start ******************** */
+    /** **************** 企业微信操作(领地) v1 版 **************** */
+    router.get('/api/v1/wework/openid/:userid', controller.wework.queryOpenIDByUserID); // 查询员工OpenID
+    router.get('/api/v1/wework/:title/:description', controller.wework.send); // 推送企业微信机器消息
+    router.get('/api/v1/wework_user/:userid', controller.wework.queryWeWorkUserInfo); // 查询企业微信用户信息
+    router.get('/api/v1/wework_mobile/:mobile', controller.wework.queryWeWorkUserInfoByMobile); // 查询企业微信用户信息
+    router.get('/api/v1/wework_user_page/:page/:size', controller.wework.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v1/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v1/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser); // 查询企业微信部门成员信息(simple)
+    router.get('/api/v1/wework_depart_list/:departid', controller.wework.queryWeWorkDepartlist); // 查询企业微信部门列表信息
+    router.get('/api/v1/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo); // 查询企业微信部门列表信息
+    router.get('/api/v1/wework_ip_list', controller.wework.queryIpList); // 查询企业微信用户信息(网页授权)
 
-    /** **************** v1 版 **************** */
+    /** **************** 企业微信操作(领地) v2 版 **************** */
+    router.get('/api/v2/wework/openid/:userid', controller.wework.queryOpenIDByUserID); // 查询员工OpenID
+    router.get('/api/v2/wework/:title/:description', controller.wework.send); // 推送企业微信机器消息
+    router.get('/api/v2/wework_user/:userid', controller.wework.queryWeWorkUserInfo); // 查询企业微信用户信息
+    router.get('/api/v2/wework_mobile/:mobile', controller.wework.queryWeWorkUserInfoByMobile); // 查询企业微信用户信息
+    router.get('/api/v2/wework_user_page/:page/:size', controller.wework.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v2/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v2/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser); // 查询企业微信部门成员信息(simple)
+    router.get('/api/v2/wework_depart_list/:departid', controller.wework.queryWeWorkDepartlist); // 查询企业微信部门列表信息
+    router.get('/api/v2/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo); // 查询企业微信部门列表信息
+    router.get('/api/v2/wework_ip_list', controller.wework.queryIpList); // 查询企业微信用户信息(网页授权)
 
-    // 查询员工OpenID
-    router.get('/api/v1/wework/openid/:userid', controller.wework.queryOpenIDByUserID);
+    /** **************** 企业微信操作(领地) v3 版 **************** */
+    router.get('/api/v3/wework/openid/:userid', controller.wework.queryOpenIDByUserID); // 查询员工OpenID
+    router.get('/api/v3/wework/:title/:description', controller.wework.send); // 推送企业微信机器消息
+    router.get('/api/v3/wework_user/:userid', controller.wework.queryWeWorkUserInfo); // 查询企业微信用户信息
+    router.get('/api/v3/wework_mobile/:mobile', controller.wework.queryWeWorkUserInfoByMobile); // 查询企业微信用户信息
+    router.get('/api/v3/wework_user_page/:page/:size', controller.wework.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v3/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v3/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser); // 查询企业微信部门成员信息(simple)
+    router.get('/api/v3/wework_depart_list/:departid', controller.wework.queryWeWorkDepartlist); // 查询企业微信部门列表信息
+    router.get('/api/v3/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo); // 查询企业微信部门列表信息
+    router.get('/api/v3/wework_ip_list', controller.wework.queryIpList); // 查询企业微信用户信息(网页授权)
 
-    // 推送企业微信机器消息
-    router.get('/api/v1/wework/:title/:description', controller.wework.send);
+    /** ******************** 企业微信操作(创达) ******************** */
+    router.get('/api/v1_cd/wework/openid/:userid', controller.weworkcd.queryOpenIDByUserID); // 查询员工OpenID
+    router.get('/api/v1_cd/wework/:title/:description', controller.weworkcd.send); // 推送企业微信机器消息
+    router.get('/api/v1_cd/wework_user/:userid', controller.weworkcd.queryWeWorkUserInfo); // 查询企业微信用户信息
+    router.get('/api/v1_cd/wework_mobile/:mobile', controller.weworkcd.queryWeWorkUserInfoByMobile); // 查询企业微信用户信息
+    router.get('/api/v1_cd/wework_user_page/:page/:size', controller.weworkcd.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v1_cd/wework_depart_user/:departid/:fetch', controller.weworkcd.queryWeWorkDepartUser); // 查询企业微信部门成员信息
+    router.get('/api/v1_cd/wework_sdepart_user/:departid/:fetch', controller.weworkcd.queryWeWorkSimpleDepartUser); // 查询企业微信部门成员信息(simple)
+    router.get('/api/v1_cd/wework_depart_list/:departid', controller.weworkcd.queryWeWorkDepartlist); // 查询企业微信部门列表信息
+    router.get('/api/v1_cd/wework_depart/:departid', controller.weworkcd.queryWeWorkDepartInfo); // 查询企业微信部门列表信息
+    router.get('/api/v1_cd/wework_ip_list', controller.weworkcd.queryIpList); // 查询企业微信用户信息(网页授权)
 
-    // 查询企业微信用户信息
-    router.get('/api/v1/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
 
-    // 查询企业微信用户信息
-    router.get('/api/v1/wework_mobile/:mobile', controller.wework.queryWeWorkUserInfoByMobile);
+    router.get('/api/v3/user/checkinfo_mobile_certno/:username/:mobile/:certno', controller.user.queryUserInfoByUserMobileCertNO); // 根据用户账号、手机号、身份证后六位，校验用户是否存在
 
-    // 查询企业微信部门成员信息
-    router.get('/api/v1/wework_user_page/:page/:size', controller.wework.queryWeWorkDepartUser);
+    /** **************** 企业微信用户信息操作 **************** */
+    router.get('/api/v3/employee', controller.wework.queryWeWorkDepartUserSim); // 查询企业微信部门成员信息
+    router.get('/api/v1_cd/employee', controller.weworkcd.queryWeWorkDepartUserSim); // 查询企业微信部门成员信息
 
-    // 查询企业微信部门成员信息
-    router.get('/api/v1/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser);
+    router.get('/api/v1/wework_user_code/:code', controller.wework.queryWeWorkUserByCode); // 查询企业微信用户信息 行政智能模块获取消息 (网页授权)
+    router.get('/api/v2/wework_user_code/:code', controller.wework.queryWeWorkUserByCode); // 查询企业微信用户信息 行政智能模块获取消息 (网页授权)
+    router.get('/api/v3/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeRewardSystem); // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
+    router.get('/api/v4/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeStockSystem); // 查询企业微信用户信息 股权查询平台模块获取消息 (网页授权)
+    router.get('/api/v5/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeLegalSystem); // 查询企业微信用户信息 股权查询平台模块获取消息 (网页授权)
 
-    // 查询企业微信部门成员信息(simple)
-    router.get('/api/v1/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v1/wework_depart_list/:departid', controller.wework.queryWeWorkDepartlist);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v1/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo);
-
-    // 查询企业微信用户信息 行政智能模块获取消息 (网页授权)
-    router.get('/api/v1/wework_user_code/:code', controller.wework.queryWeWorkUserByCode);
-
-    // 查询企业微信用户信息(网页授权)
-    router.get('/api/v1/wework_ip_list', controller.wework.queryIpList);
-
-    /** **************** v2 版 **************** */
-
-    // 查询员工OpenID
-    router.get('/api/v2/wework/openid/:userid', controller.wework.queryOpenIDByUserID);
-
-    // 推送企业微信机器消息
-    router.get('/api/v2/wework/:title/:description', controller.wework.send);
-
-    // 查询企业微信用户信息
-    router.get('/api/v2/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
-
-    // 查询企业微信用户信息
-    router.get('/api/v2/wework_mobile/:mobile', controller.wework.queryWeWorkUserInfoByMobile);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v2/wework_user_page/:page/:size', controller.wework.queryWeWorkDepartUser);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v2/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser);
-
-    // 查询企业微信部门成员信息(simple)
-    router.get('/api/v2/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v2/wework_depart_list/:departid', controller.wework.queryWeWorkDepartlist);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v2/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo);
-
-    // 查询企业微信用户信息 行政智能模块获取消息 (网页授权)
-    router.get('/api/v2/wework_user_code/:code', controller.wework.queryWeWorkUserByCode);
-
-    // 查询企业微信用户信息(网页授权)
-    router.get('/api/v2/wework_ip_list', controller.wework.queryIpList);
-
-    /** **************** v3 版 **************** */
-
-    // 查询员工OpenID
-    router.get('/api/v3/wework/openid/:userid', controller.wework.queryOpenIDByUserID);
-
-    // 推送企业微信机器消息
-    router.get('/api/v3/wework/:title/:description', controller.wework.send);
-
-    // 查询企业微信用户信息
-    router.get('/api/v3/wework_user/:userid', controller.wework.queryWeWorkUserInfo);
-
-    // 查询企业微信用户信息
-    router.get('/api/v3/wework_mobile/:mobile', controller.wework.queryWeWorkUserInfoByMobile);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v3/wework_user_page/:page/:size', controller.wework.queryWeWorkDepartUser);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v3/wework_depart_user/:departid/:fetch', controller.wework.queryWeWorkDepartUser);
-
-    // 查询企业微信部门成员信息(simple)
-    router.get('/api/v3/wework_sdepart_user/:departid/:fetch', controller.wework.queryWeWorkSimpleDepartUser);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v3/wework_depart_list/:departid', controller.wework.queryWeWorkDepartlist);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v3/wework_depart/:departid', controller.wework.queryWeWorkDepartInfo);
-
-    // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
-    router.get('/api/v3/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeRewardSystem);
-
-    // 查询企业微信用户信息 股权查询平台模块获取消息 (网页授权)
-    router.get('/api/v4/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeStockSystem);
-
-    // 查询企业微信用户信息 股权查询平台模块获取消息 (网页授权)
-    router.get('/api/v5/wework_user_code/:code', controller.wework.queryWeWorkUserByCodeLegalSystem);
-
-    // 根据用户账号、手机号、身份证后六位，校验用户是否存在
-    router.get('/api/v3/user/checkinfo_mobile_certno/:username/:mobile/:certno', controller.user.queryUserInfoByUserMobileCertNO);
-
-    // 查询企业微信用户信息(网页授权)
-    router.get('/api/v3/wework_ip_list', controller.wework.queryIpList);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v3/employee', controller.wework.queryWeWorkDepartUserSim);
-
-    /** ******************** 领地Wework end ******************** */
-
-    /** ******************** 创达Wework start ******************** */
-
-    // 查询员工OpenID
-    router.get('/api/v1_cd/wework/openid/:userid', controller.weworkcd.queryOpenIDByUserID);
-
-    // 推送企业微信机器消息
-    router.get('/api/v1_cd/wework/:title/:description', controller.weworkcd.send);
-
-    // 查询企业微信用户信息
-    router.get('/api/v1_cd/wework_user/:userid', controller.weworkcd.queryWeWorkUserInfo);
-
-    // 查询企业微信用户信息
-    router.get('/api/v1_cd/wework_mobile/:mobile', controller.weworkcd.queryWeWorkUserInfoByMobile);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v1_cd/wework_user_page/:page/:size', controller.weworkcd.queryWeWorkDepartUser);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v1_cd/wework_depart_user/:departid/:fetch', controller.weworkcd.queryWeWorkDepartUser);
-
-    // 查询企业微信部门成员信息
-    router.get('/api/v1_cd/employee', controller.weworkcd.queryWeWorkDepartUserSim);
-
-    // 查询企业微信部门成员信息(simple)
-    router.get('/api/v1_cd/wework_sdepart_user/:departid/:fetch', controller.weworkcd.queryWeWorkSimpleDepartUser);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v1_cd/wework_depart_list/:departid', controller.weworkcd.queryWeWorkDepartlist);
-
-    // 查询企业微信部门列表信息
-    router.get('/api/v1_cd/wework_depart/:departid', controller.weworkcd.queryWeWorkDepartInfo);
-
-    // 查询企业微信用户信息 行政智能模块获取消息 (网页授权)
-    router.get('/api/v1_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCode);
-
-    // 查询企业微信用户信息(网页授权)
-    router.get('/api/v1_cd/wework_ip_list', controller.weworkcd.queryIpList);
-
-    // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
-    router.get('/api/v3_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCodeRewardSystem);
-
-    /** ******************** 创达Wework end ******************** */
+    router.get('/api/v1_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCode); // 查询企业微信用户信息 行政智能模块获取消息 (网页授权)
+    router.get('/api/v3_cd/wework_user_code/:code', controller.weworkcd.queryWeWorkUserByCodeRewardSystem); // 查询企业微信用户信息 奖惩模块获取消息 (网页授权)
 
     /** **************** MSSQL数据库操作 **************** */
     router.get('/api/v1/:table/:order', controller.database.where); // 查询MSSQL数据库信息
