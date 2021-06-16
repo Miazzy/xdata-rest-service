@@ -36,17 +36,8 @@ module.exports = app => {
     router.get('/api/v1/employeewid/:id', controller.database.queryEmployeeByWID);
 
     /** ******************** 领地Wework(数据库操作) end ******************** */
-
-
-    // 查询文件信息，并进行下载
-    router.get('/api/v1/filebase/:file/:path', controller.filebase.query);
-
-    // 查询文件信息，并进行下载(根据FileID)
-    router.get('/api/v1/file/query/:file', controller.filebase.queryByFileID);
-
-
-
-
+    router.get('/api/v1/filebase/:file/:path', controller.filebase.query); // 查询文件信息，并进行下载
+    router.get('/api/v1/file/query/:file', controller.filebase.queryByFileID); // 查询文件信息，并进行下载(根据FileID)
     /** ******************** 领地Wework start ******************** */
 
     /** **************** v1 版 **************** */
@@ -211,41 +202,24 @@ module.exports = app => {
 
     /** ******************** 创达Wework end ******************** */
 
-    /** ******************** 推送企业微信消息 start ******************** */
-
+    /** ******************** 推送消息 start ******************** */
     router.get('/api/:version/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
     router.post('/api/:version/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
     router.get('/api/:version/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
-    router.get('/api/:version/mail/:title/:description/:receiver', controller.mail.send); // 推送EMAIL机器消息
+    router.get('/api/:version/mail/:title/:description/:receiver', controller.mail.send); // 推送EMAIL消息
+    router.post('/api/:version/mdm_company', controller.mail.postData); // 向主数据提交数据
+    /** ******************** 推送消息 end ******************** */
 
-    /** ******************** 推送企业微信消息 end ******************** */
+    router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.updateSerialID); // 数据库表serialid自动排序
+    router.get('/api/v2/mysql/serial_update/:tablename/:fieldid/:id', controller.mysql.updateSerialID); // 数据库表serialid自动排序
+    router.get('/api/v2/mysql/patchserial/:tablename/:fieldid/:id', controller.mysql.updateSerialID); // 数据库表serialid自动排序
 
-    // 数据库表serialid自动排序
-    router.get('/api/v2/mysql/serial/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
-
-    // 数据库表serialid自动排序
-    router.get('/api/v2/mysql/serial_update/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
-
-    // 数据库表serialid自动排序
-    router.get('/api/v2/mysql/patchserial/:tablename/:fieldid/:id', controller.mysql.updateSerialID);
-
-    // 将超过N天未领取办公用品的申请状态修改为已完成
-    router.get('/api/v2/mysql/goods_complete', controller.mysql.goodsComplete);
-
-    // 数据库表 用印数据定时更新
-    router.get('/api/v2/mysql/serial/update_seal_info', controller.mysql.updateSealInfo);
-
-    // 数据库表Row权限更新
-    router.get('/api/v3/mysql/:tablename/:username/:ids/:groupfieldname/:fieldname', controller.mysql.updateRowLimits);
-
-    // 数据库表Row权限更新
-    router.get('/api/v3/mysql/backup', controller.mysql.backupDatabase);
-
-    // 数据库表迁移数据
-    router.get('/api/v3/mysql/mtdata', controller.mysql.moveTableData);
-
-    // 数据库表更新zonename
-    router.get('/api/v2/mysql/updata_zonename', controller.mysql.updateSealZoneName);
+    router.get('/api/v2/mysql/goods_complete', controller.mysql.goodsComplete); // 将超过N天未领取办公用品的申请状态修改为已完成
+    router.get('/api/v2/mysql/serial/update_seal_info', controller.mysql.updateSealInfo); // 数据库表 用印数据定时更新
+    router.get('/api/v3/mysql/:tablename/:username/:ids/:groupfieldname/:fieldname', controller.mysql.updateRowLimits); // 数据库表Row权限更新
+    router.get('/api/v3/mysql/backup', controller.mysql.backupDatabase); // 数据库表Row权限更新
+    router.get('/api/v3/mysql/mtdata', controller.mysql.moveTableData); // 数据库表迁移数据
+    router.get('/api/v2/mysql/updata_zonename', controller.mysql.updateSealZoneName); // 数据库表更新zonename
 
     // 查询用印管理用户管理组信息
     router.get('/api/v2/bussiness/grouplimits/:username', controller.bussiness.queryGroupLimits);
@@ -255,12 +229,6 @@ module.exports = app => {
 
     // 查询企业微信部门成员信息
     router.get('/api/v5/excel/:title', controller.excel.parse);
-
-    // 同步人事数据(insert)
-    router.get('/api/v1/datasync', controller.datasync.syncHRM);
-
-    // 同步人事数据(update)
-    router.get('/api/v1/datasync_inc', controller.datasync.syncHRM_INC);
 
     // elasticsearch 新增
     router.get('/api/es/elasticsearch/index', controller.elasticsearch.index);
@@ -280,8 +248,11 @@ module.exports = app => {
     // elasticsearch 同步
     router.get('/api/es/elasticsearch/sync', controller.essync.index);
 
-    // 向主数据提交数据
-    router.post('/api/v1/mdm_company', controller.mail.postData);
+    // 同步人事数据(insert)
+    router.get('/api/v1/datasync', controller.datasync.syncHRM);
+
+    // 同步人事数据(update)
+    router.get('/api/v1/datasync_inc', controller.datasync.syncHRM_INC);
 
     // 同步签到数据
     router.get('/api/v1/datasync_schedule_sign', controller.datasync.syncHRMScheduleSign);

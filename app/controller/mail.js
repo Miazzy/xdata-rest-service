@@ -39,6 +39,7 @@ class MailController extends Controller {
         const { ctx, app } = this;
         const query = ctx.query;
 
+        const version = ctx.query.version || ctx.params.version || 'v1'; // 获取version
         let companyInfo = query.company || ctx.params.company;
         let stocks = query.stocks || ctx.params.stocks;
         let qualification = query.qualification || ctx.params.qualification;
