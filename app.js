@@ -6,6 +6,8 @@ const Sentinel = require('xdata-sentinel/lib');
 const ElasticSearchClient = require('elasticsearchclient');
 const rds = require('ali-rds');
 const elasticsearch = require('elasticsearch');
+const base64Config = require('./config/base64.config');
+const dbConfig = require('./config/dbconfig');
 
 const logger = console;
 logger.write = console.log;
@@ -82,6 +84,10 @@ function createESMySQLClient(config, app) {
 module.exports = app => {
     // 开始前执行
     app.beforeStart(async() => {
+
+        base64Config.init();
+        dbConfig.init();
+
         // 注册 xdata-rest-service 服务
         if (app.config.nacos.register) {
             console.log('egg service start & init nacos client :' + JSON.stringify(app.config.nacos));

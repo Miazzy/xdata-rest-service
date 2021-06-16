@@ -2,17 +2,16 @@
 /* eslint-disable indent */
 /* eslint-disable eol-last */
 'use strict';
-
-const base64Config = require('../config/base64.config');
-const dbConfig = require('../config/dbconfig');
+// const base64Config = require('../config/base64.config');
+// const dbConfig = require('../config/dbconfig');
 
 /**
  * @function init 执行初始化
  * @description Set up btoa/atob function with NodeJS
  */
 const init = () => {
-    base64Config.init();
-    dbConfig.init();
+    // base64Config.init();
+    // dbConfig.init();
 };
 
 /**
@@ -22,9 +21,7 @@ module.exports = app => {
 
     const { router, controller } = app;
 
-    // 执行初始化
-    init();
-
+    // 执行初始化 init();
     /** ******************** 领地Wework(数据库操作) start ******************** */
 
     /** **************** v1 版 **************** */
@@ -251,7 +248,7 @@ module.exports = app => {
     // 将超过N天未领取办公用品的申请状态修改为已完成
     router.get('/api/v2/mysql/goods_complete', controller.mysql.goodsComplete);
 
-    // 数据库表serialid自动排序
+    // 数据库表 用印数据定时更新
     router.get('/api/v2/mysql/serial/update_seal_info', controller.mysql.updateSealInfo);
 
     // 数据库表Row权限更新
