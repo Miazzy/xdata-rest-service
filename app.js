@@ -36,7 +36,7 @@ function doLimitTask(taskName, args, fn = () => {}) {
             console.log('block flowrule ... ');
             args.ctx.body = { err: 'block flowrule ...', code: -1 };
         }
-        // console.log('exec code error ... ', e);
+        console.log('exec code error ... ', e);
         throw new Error();
     } finally {
         if (entry) {
@@ -88,7 +88,7 @@ module.exports = app => {
         base64.init();
         dbConfig.init();
 
-        // 注册 xdata-rest-service 服务
+        // 注册 xdata-wework-service 服务 原xdata-rest-service 服务
         if (app.config.nacos.register) {
             console.log('egg service start & init nacos client :' + JSON.stringify(app.config.nacos));
             const client = new nacos.NacosNamingClient(app.config.nacos);

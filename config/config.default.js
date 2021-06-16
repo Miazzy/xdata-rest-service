@@ -193,7 +193,7 @@ module.exports = appInfo => {
     };
 
     config.elasticsearchsync = {
-        register: true,
+        register: false,
         logger: console,
         serverList: nacosList, // replace to real nacos serverList
         namespace: 'public',
