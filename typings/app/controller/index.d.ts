@@ -9,7 +9,6 @@ import ExportDatasync = require('../../../app/controller/datasync');
 import ExportElasticsearch = require('../../../app/controller/elasticsearch');
 import ExportEssync = require('../../../app/controller/essync');
 import ExportEtcd = require('../../../app/controller/etcd');
-import ExportExcel = require('../../../app/controller/excel');
 import ExportFilebase = require('../../../app/controller/filebase');
 import ExportMail = require('../../../app/controller/mail');
 import ExportMaindata = require('../../../app/controller/maindata');
@@ -30,7 +29,6 @@ declare module 'egg' {
     elasticsearch: ExportElasticsearch;
     essync: ExportEssync;
     etcd: ExportEtcd;
-    excel: ExportExcel;
     filebase: ExportFilebase;
     mail: ExportMail;
     maindata: ExportMaindata;
