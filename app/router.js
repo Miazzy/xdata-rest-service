@@ -260,9 +260,6 @@ module.exports = app => {
     // 查询企业微信部门成员信息
     router.get('/api/v5/excel/:title', controller.excel.parse);
 
-    // 上传文档附件
-    router.post('/api/v1/upload', controller.upload.upload);
-
     // 同步人事数据(insert)
     router.get('/api/v1/datasync', controller.datasync.syncHRM);
 
