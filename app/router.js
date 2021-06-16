@@ -58,7 +58,6 @@ module.exports = app => {
     router.get('/api/v1_cd/wework_depart/:departid', controller.weworkcd.queryWeWorkDepartInfo); // 查询企业微信部门列表信息
     router.get('/api/v1_cd/wework_ip_list', controller.weworkcd.queryIpList); // 查询企业微信用户信息(网页授权)
 
-
     router.get('/api/v3/user/checkinfo_mobile_certno/:username/:mobile/:certno', controller.user.queryUserInfoByUserMobileCertNO); // 根据用户账号、手机号、身份证后六位，校验用户是否存在
 
     /** **************** 企业微信用户信息操作 **************** */
