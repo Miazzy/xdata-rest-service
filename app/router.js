@@ -6,22 +6,12 @@
 // const dbConfig = require('../config/dbconfig');
 
 /**
- * @function init 执行初始化
- * @description Set up btoa/atob function with NodeJS
- */
-const init = () => {
-    // base64Config.init();
-    // dbConfig.init();
-};
-
-/**
  * @param {Egg.Application} app - egg application
  */
 module.exports = app => {
 
     const { router, controller } = app;
 
-    // 执行初始化 init();
     /** ******************** 领地Wework(数据库操作) start ******************** */
 
     /** **************** v1 版 **************** */
