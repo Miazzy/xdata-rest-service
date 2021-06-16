@@ -72,7 +72,7 @@
     "scripts": {
         "start": "egg-scripts start --daemon --title=xdata-wework-service --port=9001",
         "stop": "egg-scripts stop --title=xdata-wework-service",
-        "dev": "egg-bin dev",
+        "dev": "egg-bin dev --title=xdata-wework-service --port=9001",
         "debug": "egg-bin debug",
         "test": "npm run lint -- --fix && npm run test-local",
         "test-local": "egg-bin test",
