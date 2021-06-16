@@ -2,8 +2,6 @@
 /* eslint-disable indent */
 /* eslint-disable eol-last */
 'use strict';
-// const base64Config = require('../config/base64.config');
-// const dbConfig = require('../config/dbconfig');
 
 /**
  * @param {Egg.Application} app - egg application

@@ -26,11 +26,10 @@ const init = () => {
 
 };
 
-const config = {
+const base64 = {
     init,
 };
 
-
 module.exports = {
-    ...config,
+    ...base64,
 };

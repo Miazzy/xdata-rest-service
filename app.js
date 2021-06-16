@@ -6,7 +6,7 @@ const Sentinel = require('xdata-sentinel/lib');
 const ElasticSearchClient = require('elasticsearchclient');
 const rds = require('ali-rds');
 const elasticsearch = require('elasticsearch');
-const base64Config = require('./config/base64.config');
+const base64 = require('./app/utils/base64');
 const dbConfig = require('./config/dbconfig');
 
 const logger = console;
@@ -85,7 +85,7 @@ module.exports = app => {
     // 开始前执行
     app.beforeStart(async() => {
 
-        base64Config.init();
+        base64.init();
         dbConfig.init();
 
         // 注册 xdata-rest-service 服务
