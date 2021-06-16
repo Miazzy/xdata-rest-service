@@ -16,7 +16,7 @@ class MailController extends Controller {
         const title = query.title || ctx.params.title;
         const description = query.description || ctx.params.description;
         const receiver = query.receiver || ctx.params.receiver;
-        const rurl = query.rurl || ctx.params.rurl;
+        const rurl = query.rurl || ctx.params.rurl || query.url || ctx.params.url || '';
         const link = rurl ? `<div>链接：${rurl}</div>` : '';
 
         console.log(title + ':' + description + ':' + receiver + ':' + rurl);
