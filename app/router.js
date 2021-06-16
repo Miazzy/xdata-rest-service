@@ -44,8 +44,7 @@ module.exports = app => {
     // 查询文件信息，并进行下载(根据FileID)
     router.get('/api/v1/file/query/:file', controller.filebase.queryByFileID);
 
-    // 推送EMAIL机器消息
-    router.get('/api/v1/mail/:title/:description/:receiver', controller.mail.send);
+
 
 
     /** ******************** 领地Wework start ******************** */
@@ -217,6 +216,7 @@ module.exports = app => {
     router.get('/api/:version/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
     router.post('/api/:version/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
     router.get('/api/:version/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.get('/api/:version/mail/:title/:description/:receiver', controller.mail.send); // 推送EMAIL机器消息
 
     /** ******************** 推送企业微信消息 end ******************** */
 

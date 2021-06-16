@@ -11,6 +11,7 @@ class MailController extends Controller {
     async send() {
         const { ctx, app } = this;
 
+        const version = ctx.query.version || ctx.params.version || 'v1'; // 获取version
         const query = ctx.query;
         const title = query.title || ctx.params.title;
         const description = query.description || ctx.params.description;
