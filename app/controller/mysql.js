@@ -12,55 +12,6 @@ class MySQLController extends Controller {
     /**
      * @function 数据库serialID按时间进行排序
      */
-    async autoSerialID() {
-
-        const { ctx, app } = this;
-
-        // 获取表名称
-        const tablename = ctx.query.tablename || ctx.params.tablename || '';
-        // 设置排序值得字段
-        const fieldID = ctx.query.fieldid || ctx.params.fieldid || 'serialid';
-        // 进行排序的字段
-        const id = ctx.query.id || ctx.params.id || 'id';
-        // 具体ID的值
-        const value = ctx.query.key || ctx.params.key || ctx.query.value || ctx.params.value || '';
-        // 设置返回结果集
-        let response = null;
-
-        if (value == '' || value == null) { // 设置排序号 // await app.mysql.query('set @rank= 0;', []); // 执行排序过程
-            if (app.config.mysql.procedure) { //启用了存储过程，使用存储过程执行操作
-                response = await app.mysql.query(`call serial_id_seal('${tablename}','${fieldID}','${id}');`, []);
-                response.affectedRows = response.affectedRows == 0 ? 1 : response.affectedRows;
-            } else {
-                const ilist = response = await app.mysql.query(`select id from ${tablename} where ${fieldID} is null or ${fieldID} = '' `);
-                for (let item of ilist) {
-                    const result = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${item.id}'`);
-                    console.log(`result:${JSON.stringify(result)}`);
-                    const vIndex = result && result.length ? result[0].v : -1;
-                    app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
-                }
-            }
-        } else if (value == 'all_table_data' || value == 'all') {
-            const ilist = response = await app.mysql.query(`select id from ${tablename} `);
-            for (let item of ilist) {
-                const result = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${item.id}'`);
-                console.log(`result:${JSON.stringify(result)}`);
-                const vIndex = result && result.length ? result[0].v : -1;
-                app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
-            }
-        } else {
-            response = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${value}'`);
-            const vIndex = response && response.length ? response[0].v : -1;
-            app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${value}' `);
-            response = response && response.length ? response[0] : { v: -1 };
-        }
-        ctx.body = response;
-
-    }
-
-    /**
-     * @function 数据库serialID按时间进行排序
-     */
     async updateSerialID() {
 
         const { ctx, app } = this;
