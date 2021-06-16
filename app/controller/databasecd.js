@@ -6,7 +6,7 @@
 const Controller = require('egg').Controller;
 const sql = require('mssql');
 const dbconfig = require('../../config/dbconfig');
-const whereHelp = require('../utils/where.helper');
+const whereHelp = require('../utils/analyzer');
 
 // 设置数据库连接地址
 const config = dbconfig.configcd;
