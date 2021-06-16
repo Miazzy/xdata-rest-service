@@ -82,3 +82,81 @@
     
     ecology/web-inf/prop/weaver.properties
 
+16. 加密附件下载功能
+
+```js
+$('#rightBox').find('#null_box').find('input[title="打印"]').after('<input type="button" class="e8_btn_top" value="下载" title="下载" style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">')
+
+$('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').find('div span a[onmouseover="changefileaon(this)"]').attr('title')
+
+$('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').find('div span a[onmouseover="changefileaon(this)"]').attr('onClick').split(';')[1].split(',')[2].replace(/\"|\'/g, "")
+
+fetch('http://192.168.2.52:7001/api/v1/imagefile?_order=imagefileid&_where=(imagefileid,eq,1085461)~and(imagefilename,like,%27one.pdf%27)&_fields=TokenKey,fileSize,filerealpath,imagefilename,imagefileid,imagefiletype')
+  .then(function(response) {
+    return response.json();
+  })
+```
+
+http://172.18.1.202:7001/api/v1/filebase/cesi.xlsx/MjAyMDA4L0wvYmI0ZTMwZTQtNjFjZi00ZWNkLWIyOWQtMGRhYmZkMjIwYWMwLnppcA==
+
+<script async defer type="text/javascript" src=//cdn.jsdelivr.net/gh/Miazzy/yunwisdoms@v8.0.0/cdn/common/FileSaver.min.js></script>
+
+```js
+async saveAsFile(file , name){
+        try {
+          window.saveAs(file , name);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+//前端代码
+
+    setTimeout(function(){
+		downloadButton();
+	},3000);
+	setTimeout(function(){
+		downloadButton();
+	},5000);
+	setTimeout(function(){
+		downloadButton();
+	},7000);
+	setTimeout(function(){
+		downloadButton();
+	},9000);
+	setTimeout(function(){
+		downloadButton();
+	},11000);
+
+	function downloadButton(){
+		var bodyLength = $('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').length;
+		var downloadLength = $('#rightBox').find('#null_box').find('input[title="下载"]').length;
+		if(bodyLength > 0 && downloadLength <= 0){
+			var title = $('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').find('div span a[onmouseover="changefileaon(this)"]').attr('title')
+			var fileID = $('#bodyiframe').contents().find('table[_target="mainFileUploadField"]').find('div span a[onmouseover="changefileaon(this)"]').attr('onClick').split(';')[1].split(',')[2].replace(/\"|\'/g, "")
+			$('#rightBox').find('#null_box').find('input[title="打印"]').after('<input type="button" class="e8_btn_top" value="下载" title="下载" onclick="downloadFile(\''+title+'\','+fileID+')" style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">')
+		}
+	}
+
+	function downloadFile(title,fileID) {
+
+		let apiURL = `http://172.18.1.202:7001/api/v1`;
+		let downApiURL = `http://172.18.1.202:7001/api/v1/filebase/`;
+
+		let url = apiURL + `/imagefile?_order=imagefileid&_where=(imagefileid,eq,` + fileID + `)~and(imagefilename,like,%27` + title + `%27)&_fields=TokenKey,fileSize,filerealpath,imagefilename,imagefileid,imagefiletype`;
+		
+		fetch(url).then(function(response) {
+			return response.json();
+		}).then(function(arr){
+			let durl = downApiURL + window.btoa(window.encodeURIComponent(arr[0].imagefilename)) + '/'+ window.btoa(arr[0].TokenKey.replace('.wfile','.zip'));
+			try {
+				window.saveAs(durl , arr[0].imagefilename);
+			} catch (error) {
+				console.log(error);
+			}
+		})
+		
+		console.log(`title:${title} , fileID:${fileID}`);
+
+	}
+```
+<script async defer type="text/javascript" src=//cdn.jsdelivr.net/gh/Miazzy/yunwisdoms@v8.0.0/cdn/common/FileSaver.min.js></script>
