@@ -214,13 +214,9 @@ module.exports = app => {
 
     /** ******************** 推送企业微信消息 start ******************** */
 
-    router.get('/api/v1/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
-    router.get('/api/v2/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
-    router.get('/api/v3/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
-    router.get('/api/v1_cd/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
-    router.post('/api/v5/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
-    router.get('/api/message/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
-    router.post('/api/message/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.get('/api/:version/weappms/:mobile/:message', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.post('/api/:version/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
+    router.get('/api/:version/wework_message/:mobile', controller.weworkmessage.message); // 推送企业微信应用消息
 
     /** ******************** 推送企业微信消息 end ******************** */
 

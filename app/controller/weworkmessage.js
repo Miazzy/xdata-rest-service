@@ -15,6 +15,8 @@ class WeworkMessageController extends Controller {
 
         const { ctx } = this;
 
+        // 获取version
+        const version = ctx.query.version || ctx.params.version || 'v1';
         // 获取电话号码
         const mobile = ctx.query.mobile || ctx.params.mobile || '';
         // 获取推送消息
