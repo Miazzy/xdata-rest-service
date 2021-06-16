@@ -40,6 +40,14 @@ class MySQLController extends Controller {
                     app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
                 }
             }
+        } else if (value == 'all_table_data' || value == 'all') {
+            const ilist = response = await app.mysql.query(`select id from ${tablename} `);
+            for (let item of ilist) {
+                const result = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${item.id}'`);
+                console.log(`result:${JSON.stringify(result)}`);
+                const vIndex = result && result.length ? result[0].v : -1;
+                app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
+            }
         } else {
             response = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${value}'`);
             const vIndex = response && response.length ? response[0].v : -1;
@@ -81,6 +89,14 @@ class MySQLController extends Controller {
                     const vIndex = result && result.length ? result[0].v : -1;
                     app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
                 }
+            }
+        } else if (value == 'all_table_data' || value == 'all') {
+            const ilist = response = await app.mysql.query(`select id from ${tablename} `);
+            for (let item of ilist) {
+                const result = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${item.id}'`);
+                console.log(`result:${JSON.stringify(result)}`);
+                const vIndex = result && result.length ? result[0].v : -1;
+                app.mysql.query(`update ${tablename} set ${fieldID} = ${vIndex} where ${id} = '${item.id}' `);
             }
         } else {
             response = await app.mysql.query(`select count(1) v from ${tablename} where ${id} <= '${value}'`);
