@@ -10,19 +10,11 @@ const redisStore = require('cache-manager-ioredis');
  */
 module.exports = appInfo => {
 
-    /**
-     * built-in config
-     * @type {Egg.EggAppConfig}
-     **/
     const config = exports = {};
-
-    // use for cookie sign key, should change to your own and keep security
-    config.keys = appInfo.name + '_0000_0000';
-    // add your middleware config here
+    config.keys = appInfo.name + '_0000_5432';
     config.middleware = [];
-    // add your user config here
     const userConfig = {
-        // myAppName: 'egg',
+        myAppName: 'xdata-wework-service',
     };
 
     const nacosIP = '172.18.1.51'; //nacos IP地址
@@ -140,8 +132,7 @@ module.exports = appInfo => {
     };
 
     // mssql数据库连接配置
-    config.mssql = {
-        // Multi Databases
+    config.mssql = { // Multi Databases
         clients: {
             db1: {
                 server: '172.18.1.11',
@@ -174,11 +165,9 @@ module.exports = appInfo => {
         },
     };
 
-    config.multipart = {
-        // 设置支持的上传文件类型
+    config.multipart = { // 设置支持的上传文件类型
         whitelist: ['.apk', '.pptx', '.docx', '.xlsx', '.csv', '.doc', '.ppt', '.xls', '.pdf', '.pages', '.wav', '.mov', '.txt', '.png', '.jpeg', '.jpg', '.gif', '.tar.gz', '.tar', '.zip', '.mp3', '.mp4', '.avi'],
-        // 设置最大可以上传300M
-        fileSize: '1024mb',
+        fileSize: '1024mb', // 设置最大可以上传文件大小
     };
 
     config.redis = {
