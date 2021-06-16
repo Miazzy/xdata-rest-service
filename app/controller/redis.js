@@ -27,22 +27,14 @@ class RedisController extends Controller {
     }
 
     async set() {
-
         const { ctx, app } = this;
-
-        // 缓存控制器
-        const store = app.cache.store('redis');
-
+        const store = app.cache.store('redis'); // 缓存控制器
         ctx.body = store.get('key');
     }
 
     async get() {
-
         const { ctx, app } = this;
-
-        // 缓存控制器
-        const store = app.cache.store('redis');
-
+        const store = app.cache.store('redis'); // 缓存控制器
         ctx.body = store.get('key');
     }
 
