@@ -1,7 +1,7 @@
 {
-    "name": "xdata-rest-service",
+    "name": "xdata-wework-service",
     "version": "1.0.1",
-    "description": "rest service",
+    "description": "wework service",
     "private": true,
     "egg": {
         "declarations": true
@@ -70,7 +70,7 @@
         "node": ">=10.0.0"
     },
     "scripts": {
-        "start": "egg-scripts start --daemon --title=egg-server-egg-rest-service",
+        "start": "egg-scripts start --daemon --title=egg-server-egg-rest-service --port=9001",
         "start_7001": "egg-scripts start --daemon --title=egg-server-egg-rest-service --port=7001",
         "start_7002": "egg-scripts start --daemon --title=egg-server-egg-rest-service --port=7002",
         "start_7003": "egg-scripts start --daemon --title=egg-server-egg-rest-service --port=7003",

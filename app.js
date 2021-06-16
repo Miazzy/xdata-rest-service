@@ -88,7 +88,7 @@ module.exports = app => {
         base64.init();
         dbConfig.init();
 
-        // 注册 xdata-wework-service 服务 原xdata-rest-service 服务
+        // 注册 xdata-wework-service 服务 原xdata-wework-service 服务
         if (app.config.nacos.register) {
             console.log('egg service start & init nacos client :' + JSON.stringify(app.config.nacos));
             const client = new nacos.NacosNamingClient(app.config.nacos);
