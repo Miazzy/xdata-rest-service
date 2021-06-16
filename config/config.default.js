@@ -79,7 +79,7 @@ module.exports = appInfo => {
                 max: 100,
                 ttl: 0,
             },
-            redis: { // full config: https://github.com/dabroek/node-cache-manager-ioredis#single-store
+            redis: {
                 driver: redisStore,
                 host: '172.18.254.95',
                 port: 36379,
@@ -184,7 +184,7 @@ module.exports = appInfo => {
         logger: console,
         serverList: nacosList, // replace to real nacos serverList
         namespace: 'public',
-        serviceName: 'xdata-rest-service',
+        serviceName: 'xdata-wework-service',
     };
 
     config.elasticsearch = {
